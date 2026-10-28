@@ -58,6 +58,8 @@ public final class YouTubeMusicHitStore: @unchecked Sendable {
     var artist: String
     var thumb: String?
     var added: Date
+    /// Fork phase 5: the complete result for a retry of `POST /api/get` (optional, older entries lack it)
+    var json: Data?
   }
 
   private let lock = NSLock()
@@ -74,7 +76,12 @@ public final class YouTubeMusicHitStore: @unchecked Sendable {
 
   func remember(_ hit: SongpickerHit) {
     let data: Data? = lock.withLock {
-      let entry = Entry(artist: hit.artist, thumb: hit.thumbURL?.absoluteString, added: Date())
+      let entry = Entry(
+        artist: hit.artist,
+        thumb: hit.thumbURL?.absoluteString,
+        added: Date(),
+        json: hit.json
+      )
       entries[YouTubeMusic.playableId(videoId: hit.videoId)] = entry
       if entries.count > Self.maxEntries {
         let oldest = entries.sorted { $0.value.added < $1.value.added }
@@ -97,6 +104,15 @@ public final class YouTubeMusicHitStore: @unchecked Sendable {
   public func thumbURL(forArtworkId id: String) -> URL? {
     guard YouTubeMusic.isPlaceholderId(id) else { return nil }
     return lock.withLock { entries[id]?.thumb }.flatMap { URL(string: $0) }
+  }
+
+  /// The result as shown in an earlier search, e.g. for the download overview and its retry.
+  public func hit(forVideoId videoId: String) -> SongpickerHit? {
+    let json = lock.withLock { entries[YouTubeMusic.playableId(videoId: videoId)]?.json }
+    guard let json,
+          let dict = (try? JSONSerialization.jsonObject(with: json)) as? [String: Any]
+    else { return nil }
+    return SongpickerHit(dict: dict)
   }
 }
 
