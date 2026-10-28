@@ -236,8 +236,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   func restartByUser() {
     Task {
       await localNotificationManager.notifyDebugAndWait(
-        title: "Amperfy Restart",
-        body: "Tap to reopen Amperfy"
+        title: "\(ForkBrand.name) Restart",
+        body: "Tap to reopen \(ForkBrand.name)"
       )
       stopForInit()
       // close Amperfy

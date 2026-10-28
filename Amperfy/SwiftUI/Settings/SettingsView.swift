@@ -64,6 +64,8 @@ struct SettingsView: View {
           }
         }
 
+        ForkAboutSection() // Fork
+
         SettingsSection(
           content: {
             SettingsCheckBoxRow(title: "Offline Mode", isOn: $settings.isOfflineMode)

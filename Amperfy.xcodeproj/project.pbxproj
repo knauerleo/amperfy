@@ -107,6 +107,7 @@
 		5077F936221E6D0E0099CA91 /* DownloadsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5077F935221E6D0E0099CA91 /* DownloadsVC.swift */; };
 		5078AFB22B40CA5E0038FD17 /* DisplaySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5078AFB12B40CA5E0038FD17 /* DisplaySettingsView.swift */; };
 		55A01CEC841C5DC02FD9DBB7 /* NeutralAccentSettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A197FAE72EF28588A822B218 /* NeutralAccentSettingsSection.swift */; };
+		27E6CF97BB1BBF9F01A8F960 /* ForkAboutSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E572447E218324647108288 /* ForkAboutSection.swift */; };
 		5078AFB42B44AE260038FD17 /* AppIntentVocabulary.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5078AFB32B44AE260038FD17 /* AppIntentVocabulary.plist */; };
 		50791E7828D25845006CE6E5 /* AccountSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50791E7728D25845006CE6E5 /* AccountSettingsView.swift */; };
 		50791E7A28D31090006CE6E5 /* ServerURLsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50791E7928D31090006CE6E5 /* ServerURLsSettingsView.swift */; };
@@ -570,6 +571,7 @@
 		50F40A3B2C9088B30097FE63 /* IfritStatic in Frameworks */ = {isa = PBXBuildFile; productRef = 50F40A3A2C9088B30097FE63 /* IfritStatic */; };
 		50FA36532F560D670058AB56 /* SeekableTimeSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50FA36522F560D670058AB56 /* SeekableTimeSlider.swift */; };
 		50FF311B2BBC4D8000C2C3B9 /* NetworkMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50FF311A2BBC4D8000C2C3B9 /* NetworkMonitor.swift */; };
+		F6CB34D2BA9A9BAC1CB101C5 /* ForkBrand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A4AA282D0AFB515D0EB99FC /* ForkBrand.swift */; };
 		50RA71NG2F5A01240085CBB3 /* RatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50RA71NG2F5A01230085CBB3 /* RatingView.swift */; };
 		631C166B2C6D3D9A0085F62E /* SettingsRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631C166A2C6D3D9A0085F62E /* SettingsRow.swift */; };
 		631C166D2C6D61110085F62E /* NavigationTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631C166C2C6D61110085F62E /* NavigationTarget.swift */; };
@@ -840,6 +842,7 @@
 		5077F954222C58A10099CA91 /* GenericXmlParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericXmlParser.swift; sourceTree = "<group>"; };
 		5078AFB12B40CA5E0038FD17 /* DisplaySettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisplaySettingsView.swift; sourceTree = "<group>"; };
 		A197FAE72EF28588A822B218 /* NeutralAccentSettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NeutralAccentSettingsSection.swift"; sourceTree = "<group>"; };
+		4E572447E218324647108288 /* ForkAboutSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ForkAboutSection.swift"; sourceTree = "<group>"; };
 		5078AFB32B44AE260038FD17 /* AppIntentVocabulary.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = AppIntentVocabulary.plist; sourceTree = "<group>"; };
 		50791E7728D25845006CE6E5 /* AccountSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSettingsView.swift; sourceTree = "<group>"; };
 		50791E7928D31090006CE6E5 /* ServerURLsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerURLsSettingsView.swift; sourceTree = "<group>"; };
@@ -1236,6 +1239,7 @@
 		50FE808D26A55CEA00CB434D /* DownloadMO+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DownloadMO+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		50FF31192BBB27AC00C2C3B9 /* Amperfy v36.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Amperfy v36.xcdatamodel"; sourceTree = "<group>"; };
 		50FF311A2BBC4D8000C2C3B9 /* NetworkMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkMonitor.swift; sourceTree = "<group>"; };
+		4A4AA282D0AFB515D0EB99FC /* ForkBrand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ForkBrand.swift"; sourceTree = "<group>"; };
 		50RA71NG2F5A01230085CBB3 /* RatingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingView.swift; sourceTree = "<group>"; };
 		631C166A2C6D3D9A0085F62E /* SettingsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRow.swift; sourceTree = "<group>"; };
 		631C166C2C6D61110085F62E /* NavigationTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationTarget.swift; sourceTree = "<group>"; };
@@ -1431,6 +1435,7 @@
 				50AD70DA2D5FBAFB00E369BF /* AsyncOperation.swift */,
 				50BA92FD21CED4AF00E5901D /* Utilities.swift */,
 				50FF311A2BBC4D8000C2C3B9 /* NetworkMonitor.swift */,
+				4A4AA282D0AFB515D0EB99FC /* ForkBrand.swift */,
 				5086F87822397B2900546F5A /* StringHasher.swift */,
 				5029288826564F3600DA3A8F /* JSONConverter.swift */,
 				5029288626564C6800DA3A8F /* LogData.swift */,
@@ -1526,6 +1531,7 @@
 				631C166C2C6D61110085F62E /* NavigationTarget.swift */,
 				5078AFB12B40CA5E0038FD17 /* DisplaySettingsView.swift */,
 				A197FAE72EF28588A822B218 /* NeutralAccentSettingsSection.swift */,
+				4E572447E218324647108288 /* ForkAboutSection.swift */,
 				50AE79AB2C1CCBEC0085CBB3 /* DeveloperView.swift */,
 				50791E8428D36F1F006CE6E5 /* LibrarySettingsView.swift */,
 				D97719AF3534C7CFB4F4202A /* YouTubeMusicSettingsView.swift */,
@@ -2769,6 +2775,7 @@
 				50AAB9F32F0154EB004A39C6 /* SeekToPlaybackTimeIntent.swift in Sources */,
 				5078AFB22B40CA5E0038FD17 /* DisplaySettingsView.swift in Sources */,
 				55A01CEC841C5DC02FD9DBB7 /* NeutralAccentSettingsSection.swift in Sources */,
+				27E6CF97BB1BBF9F01A8F960 /* ForkAboutSection.swift in Sources */,
 				50DEEE07265E27070073FF20 /* DirectoryTableCell.swift in Sources */,
 				5019441B2B7A049A00082D2E /* PopupPlayer+Visuals.swift in Sources */,
 				7703D2AE3CE20DA6CE341F2F /* LyricsCardView.swift in Sources */,
@@ -2907,6 +2914,7 @@
 				50C9D6D2284FAB0C007F18D0 /* StringHasher.swift in Sources */,
 				50C9D667284FAA0B007F18D0 /* PlaylistSongsParserDelegate.swift in Sources */,
 				50FF311B2BBC4D8000C2C3B9 /* NetworkMonitor.swift in Sources */,
+				F6CB34D2BA9A9BAC1CB101C5 /* ForkBrand.swift in Sources */,
 				5087DE392EF0437F00644893 /* MetaManager.swift in Sources */,
 				50C9D696284FAA6C007F18D0 /* DownloadMO+CoreDataProperties.swift in Sources */,
 				50C9D6B7284FAA87007F18D0 /* UserStatistics.swift in Sources */,

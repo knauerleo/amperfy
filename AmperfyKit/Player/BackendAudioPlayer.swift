@@ -486,7 +486,7 @@ class BackendAudioPlayer: NSObject {
     eventLogger.info(
       topic: "Player Info",
       statusCode: .playerError,
-      message: "Content type \"\(contentType)\" of \"\(playableDisplayTitle)\" is not playable via Amperfy. Activating transcoding in Settings could resolve this issue.",
+      message: "Content type \"\(contentType)\" of \"\(playableDisplayTitle)\" is not playable via \(ForkBrand.name). Activating transcoding in Settings could resolve this issue.",
       displayPopup: true
     )
     responder?.notifyItemPreparationFinished()
