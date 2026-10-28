@@ -268,6 +268,10 @@ public struct UserSettings: Sendable, Codable {
   var _forkYouTubeMusicEnabled: Bool?
   var _forkSongpickerProxyURL: String?
 
+  // Fork: dark-first migration and neutral accent, see UserSettings+Appearance.swift (optional: older settings decode)
+  var _forkAppearanceVersion: Int?
+  var _forkNeutralAccent: Bool?
+
   private var _songsSortSetting: SongElementSortType = .defaultValue
   public var songsSortSetting: SongElementSortType {
     get { _songsSortSetting }

@@ -88,14 +88,29 @@ enum DS {
     /// Muted surface for generated placeholder artwork in dark mode.
     static let placeholderSurfaceDark = UIColor(white: 0.16, alpha: 1)
     static let placeholderIconDark = UIColor(white: 0.55, alpha: 1)
+    /// Dark-first surface levels (measure 14): gray steps instead of pure black in dark mode,
+    /// the matching semantic system colors in light mode.
+    static let background = dynamic(dark: 0x121212, light: .systemBackground)
+    static let surface = dynamic(dark: 0x1E1E1E, light: .secondarySystemBackground)
+    static let surfaceRaised = dynamic(dark: 0x2A2A2A, light: .tertiarySystemBackground)
     /// Background of compact tiles and the blocks of skeleton placeholders.
-    static let tileSurface = UIColor.tertiarySystemFill
-    static let skeleton = UIColor.tertiarySystemFill
+    static let tileSurface = dynamic(dark: 0x1E1E1E, light: .tertiarySystemFill)
+    static let skeleton = dynamic(dark: 0x2A2A2A, light: .tertiarySystemFill)
     /// Cover gradient of the Favorite Songs tile (top leading to bottom trailing).
     static let favoritesGradient = [
       UIColor(red: 0.91, green: 0.25, blue: 0.42, alpha: 1),
       UIColor(red: 0.45, green: 0.22, blue: 0.75, alpha: 1),
     ]
+
+    private static func dynamic(dark hex: Int, light: UIColor) -> UIColor {
+      let dark = UIColor(
+        red: CGFloat((hex >> 16) & 0xFF) / 255,
+        green: CGFloat((hex >> 8) & 0xFF) / 255,
+        blue: CGFloat(hex & 0xFF) / 255,
+        alpha: 1
+      )
+      return UIColor { $0.userInterfaceStyle == .dark ? dark : light.resolvedColor(with: $0) }
+    }
   }
 
   // MARK: - Haptics
