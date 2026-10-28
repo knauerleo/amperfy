@@ -104,6 +104,26 @@ xcrun devicectl device install app --device 2145C18E-BC23-508B-BAFD-2F3556A4C825
 | `Amperfy/Screens/ViewController/SearchVC.swift` | 300 ms Debounce, die vorherige Suche wird abgebrochen. Zuerst erscheinen die lokalen Treffer. Sobald alle drei Server-Anfragen fertig sind, folgen die Server-Treffer in Server-Reihenfolge, lokale Treffer ohne Server-Treffer werden hinten angehängt. Limits: 25 Songs, je 10 Alben, Künstler und Playlists. Der Scope „Cached“ sucht nur lokal. Die doppelte Logik für die beiden Scopes ist zusammengelegt. |
 | `AmperfyKitTests/Cases/Player/MusicPlayerTest.swift` | Mock an die neue Signatur angepasst. |
 
+### 2. Design Phase 1: Fundament und Player-Gefühl (Commits `589b4a88` bis `5597dca5`)
+
+Plan und Begründungen stehen in `DESIGN-AUDIT.md`.
+
+| Datei | Änderung |
+|---|---|
+| `Amperfy/Screens/Basics/DesignTokens.swift` (neu) | `DS`: Abstände, Radien, Schriften mit Dynamic Type, Farben, `DS.haptic(_:)` |
+| `Amperfy/Screens/Basics/ArtworkColorCache.swift` (neu) | Cover-Farben im Hintergrund berechnen und cachen |
+| `Amperfy/Screens/Player/PlayerControlView+ForkStyle.swift` (neu) | Slider in Label-Farbe statt Theme-Tint, Format/Bitrate kleiner und gedimmt |
+| `PlayerControlView.swift` | 1 Zeile: `applyForkStyle()` in `prepare` |
+| `PopupPlayer+Visuals.swift` | `dominantColors` nicht mehr synchron im Main-Thread, kein Theme-Farb-Blitz |
+| `PlayerUIHandler.swift`, `PopupPlayerVC.swift` | Haptik bei Play/Pause, Skip (nicht auf dem Mac), Favorit |
+| `MiniPlayerView.swift` | iOS: Titel 14 pt semibold über dem Künstler, linksbündig, semantische Farben, Fortschritt in Label-Farbe. Wisch links/rechts = Skip mit Slide-Animation, Wisch hoch = Player öffnen. Neuer Code als Extension am Dateiende |
+| `HomeVC.swift` (`SectionHeaderView`) | Titel bündig mit den Covern (doppelter 16-pt-Einzug entfernt), Schrift `DS.Font.sectionTitle` |
+| `AmperfyKit/Storage/EntityWrappers/Playlist.swift` | Collage nur aus verschiedenen Covern. Bei weniger als 4 verschiedenen Covern wird das erste allein gezeigt |
+| `PlayableTableCell.swift` | Auf der Albumseite entfällt die Künstlerzeile, wenn der Track vom Albumkünstler ist |
+
+Offen aus Phase 1: Die blaue Playlist-Platzhalterkachel ist ein vorgerendertes Asset (`getGeneratedArtwork`).
+Gedämpft wird sie in Phase 3 zusammen mit den neuen Home-Zellen.
+
 ### Hilfsskript
 
 `Helper/add-swift-file.py <Neu.swift> <Nachbar.swift>` trägt eine neue Datei ins Projekt ein, in dieselbe Gruppe und
@@ -123,7 +143,7 @@ Datei einzeln in `project.pbxproj` führt.
      das Ende von `path` abgleichen.
 3. **Einstellungen:** Songpicker-URL (Default `http://10.66.66.6:8781`), YouTube-Bereich an/aus.
 4. Später: Download-Übersicht, „Ähnliche Songs von YouTube“.
-5. Design-Überarbeitung Richtung moderner Streaming-Client.
+5. Design-Überarbeitung Richtung moderner Streaming-Client, in 5 Phasen laut `DESIGN-AUDIT.md`. Phase 1 ✅
 
 ## Arbeitsweise
 
