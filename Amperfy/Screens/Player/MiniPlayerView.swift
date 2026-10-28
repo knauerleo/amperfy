@@ -694,6 +694,7 @@ class MiniPlayerView: UIView {
     refreshPlayer()
     refreshForTraitChange(horizontalSizeClass: traitCollection.horizontalSizeClass)
     refreshForTabAccessoryTraitChange()
+    configureForkStyleForiOS()
   }
 
   public func refreshForTraitChange(horizontalSizeClass: UIUserInterfaceSizeClass) {
@@ -701,8 +702,9 @@ class MiniPlayerView: UIView {
       titleLabel.font = .systemFont(ofSize: 8.0)
       subtitleLabel.font = .systemFont(ofSize: 15.0)
     } else {
-      titleLabel.font = .systemFont(ofSize: 11.0)
-      subtitleLabel.font = .systemFont(ofSize: 13.0)
+      // Fork: song title is the primary line, artist secondary
+      titleLabel.font = DS.Font.miniPlayerTitle
+      subtitleLabel.font = DS.Font.miniPlayerSubtitle
     }
   }
 
@@ -825,13 +827,8 @@ class MiniPlayerView: UIView {
   }
 
   func refreshPlayer() {
-    if traitCollection.userInterfaceStyle == .dark {
-      titleLabel.textColor = .white
-      subtitleLabel.textColor = .lightGray
-    } else {
-      titleLabel.textColor = .black
-      subtitleLabel.textColor = .darkGray
-    }
+    titleLabel.textColor = .label
+    subtitleLabel.textColor = .secondaryLabel
     playerHandler?.refreshCurrentlyPlayingInfo(
       artworkImage: artworkImage,
       titleLabel: titleLabel,
@@ -974,4 +971,61 @@ extension MiniPlayerView: MusicPlayable {
   }
 
   func didPlaybackRateChange() {}
+}
+
+// MARK: - Fork: streaming-style mini player
+
+extension MiniPlayerView {
+  fileprivate func configureForkStyleForiOS() {
+    titleLabel.textAlignment = .natural
+    subtitleLabel.textAlignment = .natural
+    timeSlider.minimumTrackTintColor = DS.Color.onArtwork
+    timeSlider.maximumTrackTintColor = DS.Color.onArtworkTrack
+
+    let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(forkSwiped(_:)))
+    swipeLeft.direction = .left
+    let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(forkSwiped(_:)))
+    swipeRight.direction = .right
+    let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(forkSwiped(_:)))
+    swipeUp.direction = .up
+    [swipeLeft, swipeRight, swipeUp].forEach { addGestureRecognizer($0) }
+  }
+
+  @objc
+  fileprivate func forkSwiped(_ recognizer: UISwipeGestureRecognizer) {
+    guard player.currentlyPlaying != nil else { return }
+    switch recognizer.direction {
+    case .left:
+      animateTrackChange(towardsLeading: true)
+      playerHandler?.nextButtonPushed()
+    case .right:
+      animateTrackChange(towardsLeading: false)
+      playerHandler?.previousButtonPushed()
+    case .up:
+      DS.haptic(.light)
+      openPlayerView()
+    default:
+      break
+    }
+  }
+
+  /// Slides artwork and labels out in swipe direction and back in from the other side.
+  private func animateTrackChange(towardsLeading: Bool) {
+    let views: [UIView] = [artworkImage, titleLabel, subtitleLabel]
+    let offset: CGFloat = towardsLeading ? -DS.Space.l : DS.Space.l
+    UIView.animate(withDuration: 0.12, delay: 0, options: [.curveEaseIn]) {
+      views.forEach {
+        $0.transform = CGAffineTransform(translationX: offset, y: 0)
+        $0.alpha = 0
+      }
+    } completion: { _ in
+      views.forEach { $0.transform = CGAffineTransform(translationX: -offset, y: 0) }
+      UIView.animate(withDuration: 0.22, delay: 0, options: [.curveEaseOut]) {
+        views.forEach {
+          $0.transform = .identity
+          $0.alpha = 1
+        }
+      }
+    }
+  }
 }
