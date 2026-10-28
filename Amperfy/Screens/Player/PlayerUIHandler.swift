@@ -48,6 +48,7 @@ class PlayerUIHandler: NSObject {
   }
 
   func playButtonPushed() {
+    hapticFeedback(.soft)
     player.togglePlayPause()
   }
 
@@ -60,6 +61,7 @@ class PlayerUIHandler: NSObject {
   }
 
   func previousButtonPushed() {
+    hapticFeedback(.light)
     switch player.playerMode {
     case .music:
       player.playPreviousOrReplay()
@@ -69,12 +71,19 @@ class PlayerUIHandler: NSObject {
   }
 
   func nextButtonPushed() {
+    hapticFeedback(.light)
     switch player.playerMode {
     case .music:
       player.playNext()
     case .podcast:
       player.skipForward(interval: player.skipForwardPodcastInterval)
     }
+  }
+
+  /// Fork: tactile feedback for transport controls on iOS (not on the Mac mini player).
+  private func hapticFeedback(_ type: Haptics) {
+    guard style != .miniPlayerMac else { return }
+    DS.haptic(type)
   }
 
   func shuffleButtonPushed() {

@@ -233,6 +233,7 @@ class PopupPlayerVC: UIViewController, UIScrollViewDelegate {
     case .music:
       guard let playableInfo = player.currentlyPlaying else { return }
       if playableInfo.isSong, let account = playableInfo.account {
+        DS.haptic(.success)
         Task { @MainActor in
           do {
             try await playableInfo
