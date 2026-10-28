@@ -22,11 +22,43 @@
 import UIKit
 
 extension PlayableTableCell {
+  /// Cover size in song lists and in the queue of the player (measure 10).
+  static let forkArtworkSize: CGFloat = 56
+  static let forkQueueArtworkSize: CGFloat = 40
+  /// Size of the cover in the XIB, its height follows the row height (48 + margins).
+  private static let xibArtworkSize: CGFloat = 48
+
   func applyForkStyle() {
-    titleLabel.font = DS.Font.cellTitle
+    titleLabel.font = DS.Font.songTitle
     artistLabel.font = DS.Font.cellSubtitle
     titleLabel.adjustsFontForContentSizeCategory = true
     artistLabel.adjustsFontForContentSizeCategory = true
+  }
+
+  /// Cover size and radius, set on every refresh because `configureStyle` and
+  /// `EntityImageView.display` reset parts of it. The row height stays the same:
+  /// the cover reaches into the top and bottom margins.
+  func forkApplyLayout(isQueue: Bool, isTrackNumberStyle: Bool) {
+    #if !targetEnvironment(macCatalyst)
+      let size = isQueue ? Self.forkQueueArtworkSize : Self.forkArtworkSize
+      let overhang = (size - Self.xibArtworkSize) / 2
+      for constraint in entityImage.constraints
+        where constraint.firstAttribute == .width && constraint.secondItem == nil {
+        constraint.constant = size
+      }
+      for constraint in contentView.constraints {
+        if constraint.firstItem === entityImage, constraint.firstAttribute == .top {
+          constraint.constant = -overhang
+        } else if constraint.secondItem === entityImage, constraint.secondAttribute == .bottom,
+                  constraint.firstAttribute == .bottomMargin {
+          constraint.constant = -overhang
+        }
+      }
+      if !isTrackNumberStyle {
+        titleContainerLeadingConstraint.constant = 10 + size + 8 // heart + artwork + offset
+      }
+      entityImage.layer.cornerRadius = DS.Radius.small
+    #endif
   }
 }
 

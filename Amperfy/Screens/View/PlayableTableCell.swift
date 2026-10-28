@@ -254,7 +254,7 @@ class PlayableTableCell: BasicTableCell {
     isHovered = false
     register()
     tapGestureRecognizer.isEnabled = (displayMode == .normal)
-    backgroundColor = .systemBackground
+    backgroundColor = ForkSurface.isEnabled ? .clear : .systemBackground // Fork: dark-first surfaces
     refresh()
   }
 
@@ -288,6 +288,15 @@ class PlayableTableCell: BasicTableCell {
   }
 
   private func configurePlayIndicator(playable: AbstractPlayable?) {
+    // Fork: accent title + equalizer instead of the PlayIndicator (measure 10)
+    if forkDisplayNowPlaying(
+      playable: playable,
+      isTrackNumberStyle: isDislayAlbumTrackNumberStyle,
+      isQueue: playerIndexCb != nil
+    ) {
+      playIndicator?.reset()
+      return
+    }
     guard let playable = playable else {
       playIndicator?.reset()
       return
@@ -323,6 +332,7 @@ class PlayableTableCell: BasicTableCell {
       container: playable
     )
     configurePlayIndicator(playable: playable)
+    forkApplyLayout(isQueue: playerIndexCb != nil, isTrackNumberStyle: isDislayAlbumTrackNumberStyle)
 
     if displayMode == .selection {
       let img = UIImageView(image: isMarked ? .checkmark : .circle)
@@ -389,6 +399,8 @@ class PlayableTableCell: BasicTableCell {
           .isShowSongDuration || (traitCollection.horizontalSizeClass == .regular)
       )
     let cacheIconWidth = (traitCollection.horizontalSizeClass == .regular) ? 17.0 : 15.0
+    // Fork: the queue in the player shows no download icon (measure 10)
+    let isCacheIconVisible = playable.isCached && playerIndexCb == nil
     let durationWidth = (
       traitCollection.horizontalSizeClass == .regular &&
         traitCollection.userInterfaceIdiom != .mac
@@ -436,9 +448,9 @@ class PlayableTableCell: BasicTableCell {
       labelTrailingCellConstraint.constant = 80 + durationTrailing
     } else {
       var lableTrailing = durationTrailing
-      if playable.isCached, isDurationVisible {
+      if isCacheIconVisible, isDurationVisible {
         lableTrailing += 4 + cacheIconWidth + 4 + durationWidth
-      } else if playable.isCached {
+      } else if isCacheIconVisible {
         lableTrailing += 4 + cacheIconWidth
       } else if isDurationVisible {
         lableTrailing += 8 + durationWidth
@@ -451,7 +463,7 @@ class PlayableTableCell: BasicTableCell {
     }
 
     durationTrailingCellConstraint.constant = durationTrailing
-    cacheIconImage.isHidden = !playable.isCached
+    cacheIconImage.isHidden = !isCacheIconVisible
     cacheTrailingCellConstaint
       .constant = durationTrailing + (isDurationVisible ? (4.0 + durationWidth) : 0.0)
     durationLabel.isHidden = !isDurationVisible
