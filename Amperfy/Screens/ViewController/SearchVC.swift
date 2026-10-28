@@ -27,16 +27,24 @@ import UIKit
 
 public enum SearchSection: Int, CaseIterable {
   case History
+  case Genres // fork
+  case TopHit // fork
+  case Song
+  case YouTube // fork
   case Artist
   case Album
   case Playlist
-  case Song
 }
 
 // MARK: - SearchDiffableDataSource
 
-class SearchDiffableDataSource: BasicUITableViewDiffableDataSource {
+class SearchDiffableDataSource: UITableViewDiffableDataSource<Int, SearchItem> {
   public var searchVC: SearchVC!
+
+  // Fork: own item type (YouTube results are no managed objects), editable rows keep the swipes
+  override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+    true
+  }
 
   override func tableView(
     _ tableView: UITableView,
@@ -58,6 +66,8 @@ class SearchDiffableDataSource: BasicUITableViewDiffableDataSource {
       return "Albums"
     case .Song:
       return "Songs"
+    case .Genres, .TopHit, .YouTube:
+      return searchVC.forkTitle(for: SearchSection(rawValue: section)!)
     case .none:
       return ""
     }
@@ -75,17 +85,18 @@ class SearchVC: BasicTableViewController {
 
   private var diffableDataSource: SearchDiffableDataSource?
   fileprivate var searchHistory: [SearchHistoryItem] = []
-  fileprivate var artists: [Artist] = []
-  fileprivate var albums: [Album] = []
-  fileprivate var playlists: [Playlist] = []
-  fileprivate var songs: [Song] = []
+  var artists: [Artist] = []
+  var albums: [Album] = []
+  var playlists: [Playlist] = []
+  var songs: [Song] = []
+  let fork = SearchForkState()
 
   private var optionsButton: UIBarButtonItem = .createOptionsBarButton()
   private var userButton: UIButton?
   private var userBarButtonItem: UIBarButtonItem?
-  private var isSearchActive = false
+  private(set) var isSearchActive = false
   private var accountObjectId: NSManagedObjectID?
-  private let account: Account
+  let account: Account
   private var accountNotificationHandler: AccountNotificationHandler?
   private var searchTask: Task<Void, Never>?
 
@@ -100,7 +111,7 @@ class SearchVC: BasicTableViewController {
 
   func createDiffableDataSource() -> SearchDiffableDataSource {
     let source =
-      SearchDiffableDataSource(tableView: tableView) { tableView, indexPath, objectID -> UITableViewCell? in
+      SearchDiffableDataSource(tableView: tableView) { tableView, indexPath, item -> UITableViewCell? in
         return self.tableView(self.tableView, cellForRowAt: indexPath)
       }
     source.searchVC = self
@@ -110,34 +121,35 @@ class SearchVC: BasicTableViewController {
   func updateDataSource(animated: Bool) {
     guard let dataSource = tableView?.dataSource as? UITableViewDiffableDataSource<
       Int,
-      NSManagedObjectID
+      SearchItem
     > else {
       assertionFailure("The data source has not implemented snapshot support while it should")
       return
     }
-    var snapshot = dataSource.snapshot() as NSDiffableDataSourceSnapshot<Int, NSManagedObjectID>
+    var snapshot = dataSource.snapshot() as NSDiffableDataSourceSnapshot<Int, SearchItem>
     snapshot.deleteAllItems()
     snapshot.appendSections(SearchSection.allCases.compactMap { $0.rawValue })
     snapshot.appendItems(
-      searchHistory.compactMap { $0.managedObject.objectID },
+      searchHistory.compactMap { .object($0.managedObject.objectID) },
       toSection: SearchSection.History.rawValue
     )
     snapshot.appendItems(
-      artists.compactMap { $0.managedObject.objectID },
+      artists.compactMap { .object($0.managedObject.objectID) },
       toSection: SearchSection.Artist.rawValue
     )
     snapshot.appendItems(
-      albums.compactMap { $0.managedObject.objectID },
+      albums.compactMap { .object($0.managedObject.objectID) },
       toSection: SearchSection.Album.rawValue
     )
     snapshot.appendItems(
-      playlists.compactMap { $0.managedObject.objectID },
+      playlists.compactMap { .object($0.managedObject.objectID) },
       toSection: SearchSection.Playlist.rawValue
     )
     snapshot.appendItems(
-      songs.compactMap { $0.managedObject.objectID },
+      songs.compactMap { .object($0.managedObject.objectID) },
       toSection: SearchSection.Song.rawValue
     )
+    forkAppendItems(to: &snapshot)
     dataSource.apply(snapshot, animatingDifferences: animated)
   }
 
@@ -149,7 +161,8 @@ class SearchVC: BasicTableViewController {
     tableView.dataSource = diffableDataSource
 
     accountObjectId = account.managedObject.objectID
-    searchHistory = appDelegate.storage.main.library.getSearchHistory(for: account)
+    forkSetup()
+    searchHistory = forkLoadSearchHistory()
     updateDataSource(animated: false)
     navigationController?.navigationItem.searchBarPlacementAllowsExternalIntegration = true
 
@@ -175,6 +188,8 @@ class SearchVC: BasicTableViewController {
         return self.albums[indexPath.row]
       case .Song:
         return self.songs[indexPath.row]
+      case .Genres, .TopHit, .YouTube:
+        return self.forkContainable(at: indexPath)
       case .none:
         return nil
       }
@@ -197,6 +212,8 @@ class SearchVC: BasicTableViewController {
       case .Song:
         let entity = self.songs[indexPath.row]
         return PlayContext(containable: entity)
+      case .Genres, .TopHit, .YouTube:
+        return self.forkPlayContext(at: indexPath)
       case .none:
         return nil
       }
@@ -337,6 +354,8 @@ class SearchVC: BasicTableViewController {
     case .Song:
       let song = songs[indexPath.row]
       completionHandler(SwipeActionContext(containable: song))
+    case .Genres, .TopHit, .YouTube:
+      forkDetermSwipeActionContext(at: indexPath, completionHandler: completionHandler)
     case .none:
       completionHandler(nil)
     }
@@ -351,6 +370,8 @@ class SearchVC: BasicTableViewController {
       let history = searchHistory[indexPath.row]
       guard let song = history.searchedPlayableContainable as? Song else { return nil }
       return PlayContext(containable: song)
+    } else if SearchSection(rawValue: indexPath.section) == .YouTube {
+      return forkPlayContext(at: indexPath)
     }
     return nil
   }
@@ -399,6 +420,8 @@ class SearchVC: BasicTableViewController {
       let song = songs[indexPath.row]
       cell.display(playable: song, playContextCb: convertCellViewToPlayContext, rootView: self)
       return cell
+    case .Genres, .TopHit, .YouTube:
+      return forkCell(at: indexPath)
     case .none:
       return UITableViewCell()
     }
@@ -423,6 +446,8 @@ class SearchVC: BasicTableViewController {
         .tableSectionHeightLarge : 0
     case .Song:
       return (isSearchActive && !songs.isEmpty) ? CommonScreenOperations.tableSectionHeightLarge : 0
+    case .Genres, .TopHit, .YouTube:
+      return forkHeaderHeight(for: SearchSection(rawValue: section)!)
     case .none:
       return 0.0
     }
@@ -452,6 +477,8 @@ class SearchVC: BasicTableViewController {
       return GenericTableCell.rowHeight
     case .Song:
       return PlayableTableCell.rowHeight
+    case .Genres, .TopHit, .YouTube:
+      return forkRowHeight(at: indexPath)
     case .none:
       return 0.0
     }
@@ -490,9 +517,25 @@ class SearchVC: BasicTableViewController {
     case .Song:
       let song = songs[indexPath.row]
       let _ = appDelegate.storage.main.library.createOrUpdateSearchHistory(container: song)
+    case .Genres, .TopHit, .YouTube:
+      forkDidSelect(at: indexPath)
     case .none: break
     }
     appDelegate.storage.main.library.saveContext()
+  }
+
+  override func tableView(
+    _ tableView: UITableView,
+    contextMenuConfigurationForRowAt indexPath: IndexPath,
+    point: CGPoint
+  )
+    -> UIContextMenuConfiguration? {
+    // Fork: YouTube Music results have their own menu
+    forkContextMenuConfiguration(at: indexPath) ?? super.tableView(
+      tableView,
+      contextMenuConfigurationForRowAt: indexPath,
+      point: point
+    )
   }
 
   struct SearchResultObjectContainer: Sendable {
@@ -522,7 +565,8 @@ class SearchVC: BasicTableViewController {
     guard let searchText = searchController.searchBar.text, let accountObjectId else { return }
     guard !searchText.isEmpty else {
       isSearchActive = false
-      searchHistory = appDelegate.storage.main.library.getSearchHistory(for: account)
+      forkReset()
+      searchHistory = forkLoadSearchHistory()
       artists = []
       albums = []
       playlists = []
@@ -535,6 +579,7 @@ class SearchVC: BasicTableViewController {
     let onlyCached = searchController.searchBar.isCachedScopeSelected
     searchTask = Task { @MainActor in
       do { try await Task.sleep(for: Self.searchDebounce) } catch { return }
+      self.forkSearchWillStart(searchText: searchText, onlyCached: onlyCached)
 
       // Local results appear right away, server results replace them once all requests finished.
       guard let localResult = try? await self.searchLocally(
@@ -560,6 +605,7 @@ class SearchVC: BasicTableViewController {
       serverResult.albumsIDs = await albumsIDs
       serverResult.songsIDs = await songsIDs
       guard !Task.isCancelled else { return }
+      self.fork.isServerSearchRunning = false
       self.display(searchResult: serverResult.merged(withLocal: localResult))
     }
   }
@@ -635,6 +681,7 @@ class SearchVC: BasicTableViewController {
     songs = searchResult.songsIDs
       .compactMap { appDelegate.storage.main.context.object(with: $0) as? SongMO }
       .compactMap { Song(managedObject: $0) }
+    forkDidUpdateResults()
     tableView.separatorStyle = .singleLine
     updateDataSource(animated: false)
     updateContentUnavailable()
@@ -642,15 +689,23 @@ class SearchVC: BasicTableViewController {
 
   func updateContentUnavailable() {
     if isSearchActive {
-      if artists.isEmpty, albums.isEmpty, playlists.isEmpty, songs.isEmpty {
-        contentUnavailableConfiguration = UIContentUnavailableConfiguration.search()
+      if artists.isEmpty, albums.isEmpty, playlists.isEmpty, songs.isEmpty, !forkHasResults {
+        // Fork: no "No Results" while the server or YouTube Music search still runs
+        contentUnavailableConfiguration = forkIsSearching ? searchingConfig : UIContentUnavailableConfiguration.search()
       } else {
         contentUnavailableConfiguration = nil
       }
     } else {
-      contentUnavailableConfiguration = searchHistory.isEmpty ? noSearchHistoryConfig : nil
+      contentUnavailableConfiguration = (searchHistory.isEmpty && fork.genres.isEmpty) ?
+        noSearchHistoryConfig : nil
     }
   }
+
+  lazy var searchingConfig: UIContentUnavailableConfiguration = {
+    var config = UIContentUnavailableConfiguration.loading()
+    config.text = "Searching…"
+    return config
+  }()
 
   lazy var noSearchHistoryConfig: UIContentUnavailableConfiguration = {
     var config = UIContentUnavailableConfiguration.empty()
