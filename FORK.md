@@ -26,6 +26,8 @@ Erreichbar per VPN unter `10.66.66.6`, im LAN unter `192.168.188.23`.
 
 - `GET /api/search?q=<text>` → `{library: [...], youtube: [...], error}`.
   Ein YouTube-Treffer sieht so aus: `{source:"youtube", id, title, artist, artists, album, album_id, duration, thumb, kind, library}`.
+  `library` ist in der Praxis `null` (nicht in der Sammlung) oder der relative Pfad der vorhandenen Kopie
+  (`YouTube/<Künstler>/<Album>/NN - Titel.opus`), kein Boolean.
 - `POST /api/get` mit dem kompletten Treffer-JSON als Body → startet den Download nach
   `musik/YouTube/<Künstler>/<Album>/NN - Titel.opus`.
 - `GET /api/jobs` → `{<videoId>: {state, label, started, path?, error?}}`.
@@ -178,6 +180,49 @@ Shelves, Random-Sektionen am Ende. „Random Artists“ hat runde Zellen.
 **Nicht geändert:** `AlbumCollectionCell` und alle XIBs. Die Standard-Shelves nutzen weiter die alte Zelle.
 Die Zwischen-Commits wurden nicht einzeln gebaut, der letzte Stand (`651774d7`) baut und läuft auf dem iPhone.
 
+### 5. Design Phase 4: Suche + YouTube Music (Commits `69eb542d` bis `f8c4a9fe`)
+
+Maßnahmen 8 und 9 aus `DESIGN-AUDIT.md` und Roadmap Punkt 2.
+
+| Datei | Änderung |
+|---|---|
+| `AmperfyKit/Api/SongpickerClient.swift` (neu) | `SongpickerConfig` (URL-Konstante `http://10.66.66.6:8781`, Proxy-Port `4534`, Schalter `isEnabled`, beides zur Laufzeit setzbar für Phase 5). `SongpickerHit` behält das komplette Treffer-JSON für `POST /api/get`. `SongpickerClient`: `search`, `requestDownload`, `jobs` |
+| `AmperfyKit/Api/YouTubeMusicJobMonitor.swift` (neu) | Status je Treffer (`online`, `waiting`, `downloading`, `saving`, `inLibrary`, `failed`). Pollt `/api/jobs` alle 1,5 s, solange ein verfolgter Download läuft. Notification `.youTubeMusicStatusChanged`, Callback `onDownloadFinished` nur für neue `fertig`-Jobs |
+| `AmperfyKit/Api/YouTubeMusicLibrarySync.swift` (neu) | Nach `fertig`: `search3` nach dem Titel, Abgleich über die letzten 3 Pfadteile (Künstler/Album/Datei) von `path`, danach `librarySyncer.searchSongs`, damit Song, Album und `addedDate` lokal landen. Versuche nach 5 bis 60 s, etwa 4 min lang (Navidrome braucht ca. 35 s für den Scan) |
+| `AmperfyKit/Storage/LibraryStorage+YouTubeMusic.swift` (neu) | Platzhalter-Songs `ytm-<videoId>` ohne Album und ohne Größe, deshalb in keiner Bibliotheksliste. `YouTubeMusicHitStore` (UserDefaults, max. 500) merkt sich Künstlername und Cover-URL. Unbenutzte Platzhalter (nicht in Queue/Playlist/Verlauf/Cache) werden beim Start der Suche gelöscht |
+| `BackendProxy.swift` | Stream- und Download-URL für `ytm-…`: `stream.view?…&format=mp3` auf Port 4534 (Host bleibt der des Accounts). Lesezugriff `forkSubsonicServerApi` für das rohe search3 |
+| `SubsonicApi.swift`, `SubsonicArtworkDownloadDelegate.swift`, `Song.swift` | Je 1 bis 3 Zeilen: Zugriff auf die Server-API, Cover-URL des Treffers als Artwork, Künstlername aus dem HitStore |
+| `LibrarySyncerProxy.swift` | Kein `sync(song:)`, Scrobble, Now Playing, Rating, Favorit, Similar Songs für Platzhalter (Navidrome kennt die IDs nicht) |
+| `Amperfy/Screens/ViewController/SearchVC+Fork.swift` (neu) | `SearchItem` (eigener Item-Typ statt `NSManagedObjectID`), `SearchForkState`, Genres, Top-Treffer-Ranking, YouTube-Suche parallel zur Server-Suche, Zellen, Menü, Auswahl, Badge-Updates |
+| `.../View/SearchTopHitCell.swift`, `SearchGenreGridCell.swift`, `SearchStatusCell.swift`, `SourceBadgeView.swift` (neu) | Top-Treffer-Karte, Genre-Raster (TileCollectionCell + `ShelfLayout.tileGrid(columns: 2)` in einer Tabellenzeile), Ladezeile, Badge (Wolke, drehender Ring, Haken, Ausrufezeichen) |
+| `SearchVC.swift` | Hooks: 3 neue Sektionen, Item-Typ, je eine Zeile pro `switch`, Kontextmenü-Override, Aufrufe in `updateSearchResults`/`display`/`updateContentUnavailable`. Ergebnis-Arrays und `account` von `fileprivate`/`private` auf intern |
+
+**Verhalten:**
+
+- **Leeres Suchfeld:** die letzten 8 Suchen, darunter bis zu 12 Genre-Kacheln (meiste Alben zuerst). Kachel = erstes
+  gecachtes Albumcover des Genres, Hintergrund in dessen Farbe (`ArtworkColorCache`), sonst eine feste Farbe aus dem Namen.
+  Tap öffnet die Genre-Seite.
+- **Reihenfolge der Treffer:** Top Result, Songs, YouTube Music, Artists, Albums, Playlists.
+- **Top Result:** bester Kandidat aus erstem Künstler, Song, Album und YouTube-Treffer. Punkte = 2 × Anteil der
+  Suchwörter in Name + Künstler, +1 wenn der Name genau der Suche entspricht. Mindestens die Hälfte der Wörter muss
+  passen. Ein gezeigter Top-Treffer wird nur durch einen besseren ersetzt (kein Springen). YouTube-Treffer tragen
+  das Text-Label „YouTube Music“ und das Badge.
+- **Ladezustand:** Solange Server- oder YouTube-Suche laufen und noch nichts da ist, steht „Searching…“ mit Spinner
+  statt „No Results“. Gibt es schon lokale Treffer, zeigt die YouTube-Sektion eine Zeile „Searching YouTube Music…“,
+  bei Fehler „YouTube Music is not reachable“.
+- **YouTube-Sektion:** nur Treffer mit `library == null`, max. 15. Dieselbe `PlayableTableCell` wie lokale Songs
+  (Platzhalter-Song mit Cover), rechts das Badge. Tap spielt über die normale Warteschlange, der Proxy startet dabei
+  den Download, die App verfolgt den Job. Menü (lange drücken oder „…“): Play, Play Next, Add to Queue, Add to Library.
+- **Nach `fertig`:** Sync per search3 (siehe oben), danach erscheint das Album in „Recently Added“ auf Home.
+
+**Bekannte Grenzen:**
+
+- Läuft der Account nicht über Port 4533/4534 desselben Hosts (z. B. HTTPS-Reverse-Proxy), stimmt die Proxy-URL nicht.
+  Dann in Phase 5 eine eigene Proxy-URL in `SongpickerConfig` ergänzen.
+- Taucht ein per Abspielen gestarteter Download nicht innerhalb von 60 s in `/api/jobs` auf, fällt das Badge auf die Wolke zurück.
+- Der Platzhalter bleibt nach dem Sync ein eigener Song (z. B. im Verlauf). Er wird gelöscht, sobald ihn nichts mehr nutzt.
+- Ein in einer früheren Sitzung gezeigter Treffer, der aus dem Verlauf gespielt wird, wird nicht verfolgt (das Treffer-JSON fehlt).
+
 ### Hilfsskript
 
 `Helper/add-swift-file.py <Neu.swift> <Nachbar.swift>` trägt eine neue Datei ins Projekt ein, in dieselbe Gruppe und
@@ -189,7 +234,7 @@ Datei einzeln in `project.pbxproj` führt.
 ## Roadmap
 
 1. ~~Suche reparieren~~ ✅
-2. **YouTube-Music-Bereich in der Suche:** eigene Sektion mit den Songpicker-Treffern, die `library == false` haben.
+2. ~~**YouTube-Music-Bereich in der Suche**~~ ✅ (Design Phase 4): eigene Sektion mit den Songpicker-Treffern, die `library == false` haben.
    - Antippen spielt sofort über den Proxy (`ytm-<id>`) ab, über die normale Warteschlange.
    - Kontextmenü mit den Einträgen „In Sammlung laden“, „Als Nächstes spielen“, „Zur Warteschlange“.
    - Status-Badge pro Treffer (Wolke, Spinner, Haken), aktualisiert per Polling von `/api/jobs`.
@@ -197,7 +242,7 @@ Datei einzeln in `project.pbxproj` führt.
      das Ende von `path` abgleichen.
 3. **Einstellungen:** Songpicker-URL (Default `http://10.66.66.6:8781`), YouTube-Bereich an/aus.
 4. Später: Download-Übersicht, „Ähnliche Songs von YouTube“.
-5. Design-Überarbeitung Richtung moderner Streaming-Client, in 5 Phasen laut `DESIGN-AUDIT.md`. Phase 1 ✅, Phase 2 ✅, Phase 3 ✅
+5. Design-Überarbeitung Richtung moderner Streaming-Client, in 5 Phasen laut `DESIGN-AUDIT.md`. Phase 1 ✅, Phase 2 ✅, Phase 3 ✅, Phase 4 ✅
 
 ## Arbeitsweise
 
