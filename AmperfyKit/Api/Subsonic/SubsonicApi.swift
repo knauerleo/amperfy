@@ -45,6 +45,9 @@ final class SubsonicApi {
   @MainActor
   var authType: SubsonicApiAuthType { subsonicServerApi.authType.wrappedValue }
 
+  /// Fork: see `BackendProxy.forkSubsonicServerApi`.
+  var forkServerApi: SubsonicServerApi { subsonicServerApi }
+
   @MainActor
   func setAuthType(newAuthType: SubsonicApiAuthType) {
     subsonicServerApi.setAuthType(newAuthType: newAuthType)

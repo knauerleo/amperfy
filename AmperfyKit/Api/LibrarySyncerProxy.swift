@@ -67,6 +67,8 @@ extension LibrarySyncerProxy: LibrarySyncer {
 
   @MainActor
   func sync(song: Song) async throws {
+    // Fork: the server does not know YouTube Music placeholders (`ytm-<videoId>`)
+    guard !song.isYouTubeMusicPlaceholder else { return }
     try await activeSyncer.sync(song: song)
   }
 
@@ -177,7 +179,8 @@ extension LibrarySyncerProxy: LibrarySyncer {
 
   @MainActor
   func requestSimilarSongs(song: Song, count: Int) async throws -> [Song] {
-    try await activeSyncer.requestSimilarSongs(song: song, count: count)
+    guard !song.isYouTubeMusicPlaceholder else { return [] }
+    return try await activeSyncer.requestSimilarSongs(song: song, count: count)
   }
 
   @MainActor
@@ -187,16 +190,19 @@ extension LibrarySyncerProxy: LibrarySyncer {
 
   @MainActor
   func syncNowPlaying(song: Song, songPosition: NowPlayingSongPosition) async throws {
+    guard !song.isYouTubeMusicPlaceholder else { return }
     try await activeSyncer.syncNowPlaying(song: song, songPosition: songPosition)
   }
 
   @MainActor
   func scrobble(song: Song, date: Date?) async throws {
+    guard !song.isYouTubeMusicPlaceholder else { return }
     try await activeSyncer.scrobble(song: song, date: date)
   }
 
   @MainActor
   func setRating(song: Song, rating: Int) async throws {
+    guard !song.isYouTubeMusicPlaceholder else { return }
     try await activeSyncer.setRating(song: song, rating: rating)
   }
 
@@ -212,6 +218,7 @@ extension LibrarySyncerProxy: LibrarySyncer {
 
   @MainActor
   func setFavorite(song: Song, isFavorite: Bool) async throws {
+    guard !song.isYouTubeMusicPlaceholder else { return }
     try await activeSyncer.setFavorite(song: song, isFavorite: isFavorite)
   }
 

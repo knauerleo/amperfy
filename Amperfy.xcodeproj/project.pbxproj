@@ -322,6 +322,9 @@
 		50C9D644284FA9C7007F18D0 /* BackendProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B2B302249607B00D14EF4 /* BackendProxy.swift */; };
 		50C9D645284FA9C7007F18D0 /* BackendApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5086F87A22397B8400546F5A /* BackendApi.swift */; };
 		50C9D646284FA9C7007F18D0 /* LoginCredentials.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BA92EE21CBF45D00E5901D /* LoginCredentials.swift */; };
+		5A3947B11C5773BB52B7363B /* YouTubeMusicLibrarySync.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536B6FC73E1971DE991E3C70 /* YouTubeMusicLibrarySync.swift */; };
+		924C3A5106973CAF2D5E92BD /* YouTubeMusicJobMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E21FE95408900B8E814BD39 /* YouTubeMusicJobMonitor.swift */; };
+		8B4BAC794538A4B8AF01ED4B /* SongpickerClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42BFC033C14B5C648BE2F3D /* SongpickerClient.swift */; };
 		50C9D647284FAA02007F18D0 /* SsMusicFolderParserDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DEEDFF265D46CB0073FF20 /* SsMusicFolderParserDelegate.swift */; };
 		50C9D648284FAA02007F18D0 /* SsPingParserDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5086F884223A1E4600546F5A /* SsPingParserDelegate.swift */; };
 		50C9D649284FAA02007F18D0 /* SubsonicVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E964A925E8E20E00E3210F /* SubsonicVersion.swift */; };
@@ -362,6 +365,7 @@
 		50C9D66F284FAA4D007F18D0 /* LibrarySyncVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50223EF2264543EA007445BC /* LibrarySyncVersion.swift */; };
 		50C9D670284FAA4D007F18D0 /* LibraryStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BA930521D5715D00E5901D /* LibraryStorage.swift */; };
 		F9B8E090F2D0A66DE3BE1942 /* LibraryStorage+ForkHome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CBB663C5523D06770B559AE /* LibraryStorage+ForkHome.swift */; };
+		08120C7A1C58B09BA06DF1FA /* LibraryStorage+YouTubeMusic.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABDC99627E3CE2E1DF23163 /* LibraryStorage+YouTubeMusic.swift */; };
 		BF550BC084E4453B0CD9E164 /* LibraryStorage+MultiWordSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = C484BEC9AA43675ACBFA34D5 /* LibraryStorage+MultiWordSearch.swift */; };
 		50C9D671284FAA4D007F18D0 /* Identifyable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C16C2121E7A38A00F086F0 /* Identifyable.swift */; };
 		50C9D672284FAA4D007F18D0 /* BasicFetchedResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50FBE7DD262DD86500114278 /* BasicFetchedResultsController.swift */; };
@@ -992,6 +996,9 @@
 		50BA92EC21CBF45D00E5901D /* AlbumParserDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlbumParserDelegate.swift; sourceTree = "<group>"; };
 		50BA92ED21CBF45D00E5901D /* ArtistParserDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArtistParserDelegate.swift; sourceTree = "<group>"; };
 		50BA92EE21CBF45D00E5901D /* LoginCredentials.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginCredentials.swift; sourceTree = "<group>"; };
+		536B6FC73E1971DE991E3C70 /* YouTubeMusicLibrarySync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "YouTubeMusicLibrarySync.swift"; sourceTree = "<group>"; };
+		1E21FE95408900B8E814BD39 /* YouTubeMusicJobMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "YouTubeMusicJobMonitor.swift"; sourceTree = "<group>"; };
+		A42BFC033C14B5C648BE2F3D /* SongpickerClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SongpickerClient.swift"; sourceTree = "<group>"; };
 		50BA92F721CC318D00E5901D /* PlayableTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayableTableCell.swift; sourceTree = "<group>"; };
 		50BA92F921CC37F800E5901D /* SongsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongsVC.swift; sourceTree = "<group>"; };
 		50BA92FD21CED4AF00E5901D /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
@@ -1000,6 +1007,7 @@
 		50BA930321D10F0000E5901D /* SyncVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncVC.swift; sourceTree = "<group>"; };
 		50BA930521D5715D00E5901D /* LibraryStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryStorage.swift; sourceTree = "<group>"; };
 		4CBB663C5523D06770B559AE /* LibraryStorage+ForkHome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryStorage+ForkHome.swift"; sourceTree = "<group>"; };
+		CABDC99627E3CE2E1DF23163 /* LibraryStorage+YouTubeMusic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryStorage+YouTubeMusic.swift"; sourceTree = "<group>"; };
 		C484BEC9AA43675ACBFA34D5 /* LibraryStorage+MultiWordSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryStorage+MultiWordSearch.swift"; sourceTree = "<group>"; };
 		50BA930721D75C5600E5901D /* AuthentificationHandshake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthentificationHandshake.swift; sourceTree = "<group>"; };
 		50BE5D442850EFE100156FC6 /* PlayMediaIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayMediaIntentHandler.swift; sourceTree = "<group>"; };
@@ -1554,6 +1562,9 @@
 				50CDF201264BB1C000F83EF6 /* EventLogger.swift */,
 				5077F954222C58A10099CA91 /* GenericXmlParser.swift */,
 				50BA92EE21CBF45D00E5901D /* LoginCredentials.swift */,
+				536B6FC73E1971DE991E3C70 /* YouTubeMusicLibrarySync.swift */,
+				1E21FE95408900B8E814BD39 /* YouTubeMusicJobMonitor.swift */,
+				A42BFC033C14B5C648BE2F3D /* SongpickerClient.swift */,
 				509A7D8128059A0D009791D1 /* BackgroundLibrarySyncer.swift */,
 				5040B2C5269D947F00911451 /* BackgroundFetchTriggeredSyncer.swift */,
 				5086F87422384B5500546F5A /* Subsonic */,
@@ -1785,6 +1796,7 @@
 				50C3B9AB2EED848B00F5CAB7 /* LegacySettings.swift */,
 				50BA930521D5715D00E5901D /* LibraryStorage.swift */,
 				4CBB663C5523D06770B559AE /* LibraryStorage+ForkHome.swift */,
+				CABDC99627E3CE2E1DF23163 /* LibraryStorage+YouTubeMusic.swift */,
 				C484BEC9AA43675ACBFA34D5 /* LibraryStorage+MultiWordSearch.swift */,
 				50223EF2264543EA007445BC /* LibrarySyncVersion.swift */,
 				50073BDE22301D9A000130D8 /* DownloadRequestManager.swift */,
@@ -2786,6 +2798,7 @@
 				50D54B722E30FFDB0078631E /* FFT.swift in Sources */,
 				50C9D670284FAA4D007F18D0 /* LibraryStorage.swift in Sources */,
 				F9B8E090F2D0A66DE3BE1942 /* LibraryStorage+ForkHome.swift in Sources */,
+				08120C7A1C58B09BA06DF1FA /* LibraryStorage+YouTubeMusic.swift in Sources */,
 				BF550BC084E4453B0CD9E164 /* LibraryStorage+MultiWordSearch.swift in Sources */,
 				50C9D672284FAA4D007F18D0 /* BasicFetchedResultsController.swift in Sources */,
 				50C9D682284FAA6C007F18D0 /* PodcastEpisodeMO+CoreDataProperties.swift in Sources */,
@@ -2876,6 +2889,9 @@
 				50C9D65B284FAA0B007F18D0 /* PodcastParserDelegate.swift in Sources */,
 				50C9D67F284FAA6C007F18D0 /* LogEntryMO+CoreDataProperties.swift in Sources */,
 				50C9D646284FA9C7007F18D0 /* LoginCredentials.swift in Sources */,
+				5A3947B11C5773BB52B7363B /* YouTubeMusicLibrarySync.swift in Sources */,
+				924C3A5106973CAF2D5E92BD /* YouTubeMusicJobMonitor.swift in Sources */,
+				8B4BAC794538A4B8AF01ED4B /* SongpickerClient.swift in Sources */,
 				50C9D6EB284FAD51007F18D0 /* PodcastsShowType.swift in Sources */,
 				50C9D71828508005007F18D0 /* CommonString.swift in Sources */,
 				50C9D63F284FA9C7007F18D0 /* ScrobbleSyncer.swift in Sources */,

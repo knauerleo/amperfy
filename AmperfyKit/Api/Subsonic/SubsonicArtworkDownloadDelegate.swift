@@ -64,6 +64,10 @@ final class SubsonicArtworkDownloadDelegate: DownloadManagerDelegate {
       )
       return artwork.id
     }
+    // Fork: YouTube Music placeholders use the cover of the result
+    if let thumbURL = YouTubeMusicHitStore.shared.thumbURL(forArtworkId: artworkId) {
+      return thumbURL
+    }
     return try await subsonicServerApi.generateUrl(forArtworkId: artworkId)
   }
 

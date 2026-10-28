@@ -371,7 +371,11 @@ extension BackendProxy: BackendApi {
 
   public func generateUrl(forDownloadingPlayable playableInfo: AbstractPlayableInfo) async throws
     -> URL {
-    try await activeApi.generateUrl(forDownloadingPlayable: playableInfo)
+    // Fork: YouTube Music placeholders only exist on the proxy, which serves them as MP3
+    if YouTubeMusic.isPlaceholderId(playableInfo.id) {
+      return try await youTubeMusicProxyUrl(for: playableInfo)
+    }
+    return try await activeApi.generateUrl(forDownloadingPlayable: playableInfo)
   }
 
   public func generateUrl(
@@ -380,11 +384,29 @@ extension BackendProxy: BackendApi {
     formatPreference: StreamingFormatPreference
   ) async throws
     -> URL {
-    try await activeApi.generateUrl(
+    if YouTubeMusic.isPlaceholderId(playableInfo.id) {
+      return try await youTubeMusicProxyUrl(for: playableInfo)
+    }
+    return try await activeApi.generateUrl(
       forStreamingPlayable: playableInfo,
       maxBitrate: maxBitrate,
       formatPreference: formatPreference
     )
+  }
+
+  /// Fork: `:4534/rest/stream.view?id=ytm-<videoId>&format=mp3` with the account's credentials.
+  private func youTubeMusicProxyUrl(for playableInfo: AbstractPlayableInfo) async throws -> URL {
+    let url = try await activeApi.generateUrl(
+      forStreamingPlayable: playableInfo,
+      maxBitrate: .noLimit,
+      formatPreference: .mp3
+    )
+    return SongpickerConfig.proxyURL(rewriting: url)
+  }
+
+  /// Fork: raw Subsonic requests, e.g. search3 with the `path` of each song.
+  var forkSubsonicServerApi: SubsonicServerApi? {
+    (activeApi as? SubsonicApi)?.forkServerApi
   }
 
   public func generateUrl(forArtwork artwork: Artwork) async throws -> URL {
