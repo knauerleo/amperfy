@@ -182,6 +182,7 @@
 		50AE79C22C20709C0085CBB3 /* LyricsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AE79C12C20709C0085CBB3 /* LyricsView.swift */; };
 		50AE79C32C2070F40085CBB3 /* LyricTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AE79BF2C206EF10085CBB3 /* LyricTableCell.swift */; };
 		50AFA1492632E83100F198DD /* GenericDetailTableHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AFA1472632E83100F198DD /* GenericDetailTableHeader.swift */; };
+		919162FFACC445396DCC149E /* ArtistHighlightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68E69B299DC4D9122A64D868 /* ArtistHighlightsView.swift */; };
 		7EED89F4BA25AC95F52C336D /* ImmersiveDetailHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 020A1FB5284FF5F394C3C10C /* ImmersiveDetailHeaderView.swift */; };
 		50AFA14E2632E95900F198DD /* GenericDetailTableHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50AFA1482632E83100F198DD /* GenericDetailTableHeader.xib */; };
 		50B136FA2EFC36D500738475 /* PlayableContainerTypeAppEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B136F32EFC36D500738475 /* PlayableContainerTypeAppEnum.swift */; };
@@ -950,6 +951,7 @@
 		50AE79BF2C206EF10085CBB3 /* LyricTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTableCell.swift; sourceTree = "<group>"; };
 		50AE79C12C20709C0085CBB3 /* LyricsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricsView.swift; sourceTree = "<group>"; };
 		50AFA1472632E83100F198DD /* GenericDetailTableHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericDetailTableHeader.swift; sourceTree = "<group>"; };
+		68E69B299DC4D9122A64D868 /* ArtistHighlightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArtistHighlightsView.swift"; sourceTree = "<group>"; };
 		020A1FB5284FF5F394C3C10C /* ImmersiveDetailHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImmersiveDetailHeaderView.swift"; sourceTree = "<group>"; };
 		50AFA1482632E83100F198DD /* GenericDetailTableHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GenericDetailTableHeader.xib; sourceTree = "<group>"; };
 		50B053AC27BFADB200D9C1ED /* UIImageAssetsExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageAssetsExtension.swift; sourceTree = "<group>"; };
@@ -1875,6 +1877,7 @@
 				503E04472B98F42F0091D31E /* Collection */,
 				50AFA1482632E83100F198DD /* GenericDetailTableHeader.xib */,
 				50AFA1472632E83100F198DD /* GenericDetailTableHeader.swift */,
+				68E69B299DC4D9122A64D868 /* ArtistHighlightsView.swift */,
 				020A1FB5284FF5F394C3C10C /* ImmersiveDetailHeaderView.swift */,
 				500B7D4421EDB05F0083ED6F /* LibraryElementDetailTableHeaderView.xib */,
 				500B7D4621EDB0890083ED6F /* LibraryElementDetailTableHeaderView.swift */,
@@ -2563,6 +2566,7 @@
 				5020D51A2E3B6FF6000A6F85 /* WelcomePopupPresenter.swift in Sources */,
 				50AC4E5328D909730091FF33 /* EventLogSettingsView.swift in Sources */,
 				50AFA1492632E83100F198DD /* GenericDetailTableHeader.swift in Sources */,
+				919162FFACC445396DCC149E /* ArtistHighlightsView.swift in Sources */,
 				7EED89F4BA25AC95F52C336D /* ImmersiveDetailHeaderView.swift in Sources */,
 				5047B7082E3CB90C00D5090C /* PlayerUIHandler.swift in Sources */,
 				504B442228D8EBB20033982C /* MailView.swift in Sources */,

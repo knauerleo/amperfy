@@ -32,6 +32,7 @@ class ArtistDetailVC: MultiSourceTableViewController {
   private var songsFetchedResultsController: ArtistSongsItemsFetchedResultsController!
   private var optionsButton: UIBarButtonItem!
   private var detailOperationsView: ImmersiveDetailHeaderView?
+  private var highlightsView: ArtistHighlightsView?
 
   init(account: Account, artist: Artist) {
     self.artist = artist
@@ -91,6 +92,9 @@ class ArtistDetailVC: MultiSourceTableViewController {
     )
     detailOperationsView = ImmersiveDetailHeaderView
       .createTableHeader(configuration: detailHeaderConfig)
+    highlightsView = ArtistHighlightsView(artist: artist, rootView: self)
+    detailOperationsView?.radioAction = { [weak self] in self?.highlightsView?.playRadio() }
+    refreshHighlights()
 
     optionsButton = UIBarButtonItem.createOptionsBarButton()
     optionsButton.menu = UIMenu.lazyMenu {
@@ -192,7 +196,21 @@ class ArtistDetailVC: MultiSourceTableViewController {
         self.appDelegate.eventLogger.report(topic: "Artist Sync", error: error)
       }
       self.detailOperationsView?.refresh()
+      self.refreshHighlights()
     }
+  }
+
+  // Fork: "Popular" and the discography shelf live in the header; the album rows are
+  // collapsed then (kept in the data source so fetched results updates stay consistent).
+  private func refreshHighlights() {
+    highlightsView?.reload()
+    detailOperationsView?.setAccessoryView(highlightsView?.hasContent == true ? highlightsView : nil)
+    tableView.reloadData()
+  }
+
+  private var isAlbumSectionCollapsed: Bool {
+    highlightsView?.hasAlbums == true && (searchController.searchBar.text ?? "").isEmpty &&
+      !searchController.searchBar.isCachedScopeSelected
   }
 
   override func viewWillDisappear(_ animated: Bool) {
@@ -274,6 +292,7 @@ class ArtistDetailVC: MultiSourceTableViewController {
         section: 0
       ))
       cell.display(container: album, rootView: self)
+      cell.isHidden = isAlbumSectionCollapsed
       return cell
     case LibraryElement.Song.rawValue:
       let cell: PlayableTableCell = dequeueCell(for: tableView, at: indexPath)
@@ -295,6 +314,7 @@ class ArtistDetailVC: MultiSourceTableViewController {
     -> CGFloat {
     switch section + 1 {
     case LibraryElement.Album.rawValue:
+      if isAlbumSectionCollapsed { return 0 }
       return albumsFetchedResultsController.sections?[0]
         .numberOfObjects ?? 0 > 0 ? CommonScreenOperations.tableSectionHeightLarge : 0
     case LibraryElement.Song.rawValue:
@@ -312,7 +332,7 @@ class ArtistDetailVC: MultiSourceTableViewController {
     -> CGFloat {
     switch indexPath.section + 1 {
     case LibraryElement.Album.rawValue:
-      return GenericTableCell.rowHeight
+      return isAlbumSectionCollapsed ? 0 : GenericTableCell.rowHeight
     case LibraryElement.Song.rawValue:
       return PlayableTableCell.rowHeight
     default:
@@ -327,7 +347,7 @@ class ArtistDetailVC: MultiSourceTableViewController {
     -> CGFloat {
     switch indexPath.section + 1 {
     case LibraryElement.Album.rawValue:
-      return GenericTableCell.rowHeight
+      return isAlbumSectionCollapsed ? 0 : GenericTableCell.rowHeight
     case LibraryElement.Song.rawValue:
       return PlayableTableCell.rowHeight
     default:
