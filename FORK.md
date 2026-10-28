@@ -124,6 +124,21 @@ Plan und Begründungen stehen in `DESIGN-AUDIT.md`.
 Offen aus Phase 1: Die blaue Playlist-Platzhalterkachel ist ein vorgerendertes Asset (`getGeneratedArtwork`).
 Gedämpft wird sie in Phase 3 zusammen mit den neuen Home-Zellen.
 
+### 3. Design Phase 2: Detailseiten (Commits `c7047d01` bis `d45c6c51`)
+
+| Datei | Änderung |
+|---|---|
+| `Amperfy/Screens/View/ImmersiveDetailHeaderView.swift` (neu) | Header für Album, Playlist, Genre, Künstler. Großes Cover mit Schatten, Verlauf aus der Cover-Farbe, fetter Titel, Künstler antippbar, Aktionszeile (Favorit, Download, Radio, Shuffle, runder Play-Knopf). Stretch beim Überziehen, Titel blendet in die Nav-Bar über. Nutzt die bestehende `DetailHeaderConfiguration` |
+| `Amperfy/Screens/View/ArtistHighlightsView.swift` (neu) | Künstlerseite: „Popular“ (Top 5 nach `playCount`), Diskografie-Shelf (neueste zuerst), Künstler-Radio (meistgehörter Song + `getSimilarSongs2`) |
+| `Amperfy/Screens/View/TableCells+ForkStyle.swift` (neu) | Schriften für `PlayableTableCell` und `GenericTableCell`, kein Chevron mehr |
+| `AlbumDetailVC`, `PlaylistDetailVC`, `GenreDetailVC` | je 2 Zeilen: Typ und Erzeugung des Headers |
+| `ArtistDetailVC` | Header + Highlights. Die Albenzeilen der Tabelle werden auf Höhe 0 geklappt, solange die Shelf sichtbar ist (bei Suche wieder sichtbar). Die Datenquelle bleibt gleich, damit FRC-Updates konsistent sind |
+| `PlayableTableCell.swift`, `GenericTableCell.swift` | je 1 Zeile: `applyForkStyle()` |
+| `DesignTokens.swift` | `detailTitle`, `cellTitle`, `cellSubtitle` |
+
+`GenericDetailTableHeader` bleibt für Podcasts und den Playlist-Editor (`PlaylistEditVC`, Namensbearbeitung) im Einsatz.
+Die UI-Texte der neuen Views sind wie der Rest der App englisch („Popular“, „Discography“).
+
 ### Hilfsskript
 
 `Helper/add-swift-file.py <Neu.swift> <Nachbar.swift>` trägt eine neue Datei ins Projekt ein, in dieselbe Gruppe und
@@ -143,7 +158,7 @@ Datei einzeln in `project.pbxproj` führt.
      das Ende von `path` abgleichen.
 3. **Einstellungen:** Songpicker-URL (Default `http://10.66.66.6:8781`), YouTube-Bereich an/aus.
 4. Später: Download-Übersicht, „Ähnliche Songs von YouTube“.
-5. Design-Überarbeitung Richtung moderner Streaming-Client, in 5 Phasen laut `DESIGN-AUDIT.md`. Phase 1 ✅
+5. Design-Überarbeitung Richtung moderner Streaming-Client, in 5 Phasen laut `DESIGN-AUDIT.md`. Phase 1 ✅, Phase 2 ✅
 
 ## Arbeitsweise
 
