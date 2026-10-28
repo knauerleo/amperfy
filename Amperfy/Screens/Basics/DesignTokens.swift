@@ -58,6 +58,10 @@ enum DS {
     static var miniPlayerTitle: UIFont { scaled(14, .semibold, .subheadline, maximum: 18) }
     static var miniPlayerSubtitle: UIFont { scaled(12, .regular, .footnote, maximum: 16) }
     static var caption: UIFont { scaled(11, .medium, .caption2) }
+    /// Compact Home tiles (Recently Played grid) and shelf cells.
+    static var tileTitle: UIFont { scaled(13, .semibold, .footnote, maximum: 16) }
+    static var shelfTitle: UIFont { scaled(14, .semibold, .subheadline, maximum: 18) }
+    static var shelfSubtitle: UIFont { scaled(13, .regular, .footnote, maximum: 16) }
 
     private static func scaled(
       _ size: CGFloat,
@@ -84,6 +88,14 @@ enum DS {
     /// Muted surface for generated placeholder artwork in dark mode.
     static let placeholderSurfaceDark = UIColor(white: 0.16, alpha: 1)
     static let placeholderIconDark = UIColor(white: 0.55, alpha: 1)
+    /// Background of compact tiles and the blocks of skeleton placeholders.
+    static let tileSurface = UIColor.tertiarySystemFill
+    static let skeleton = UIColor.tertiarySystemFill
+    /// Cover gradient of the Favorite Songs tile (top leading to bottom trailing).
+    static let favoritesGradient = [
+      UIColor(red: 0.91, green: 0.25, blue: 0.42, alpha: 1),
+      UIColor(red: 0.45, green: 0.22, blue: 0.75, alpha: 1),
+    ]
   }
 
   // MARK: - Haptics

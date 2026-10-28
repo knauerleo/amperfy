@@ -517,6 +517,13 @@
 		50DEEE0A265E392C0073FF20 /* IndexesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DEEE09265E392C0073FF20 /* IndexesVC.swift */; };
 		50DEEE0C265E3F9D0073FF20 /* DirectoriesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DEEE0B265E3F9D0073FF20 /* DirectoriesVC.swift */; };
 		50DF1E5628DDE3FA00F3EA00 /* AlbumCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DF1E5428DDE3FA00F3EA00 /* AlbumCollectionCell.swift */; };
+		11E0C3F1032E9F81F9257445 /* LargeAlbumCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB2322046CFF4F078E858735 /* LargeAlbumCell.swift */; };
+		AFDF8C782CF8B9D13A0652EF /* ArtistCircleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F734454054C881519929E2D /* ArtistCircleCell.swift */; };
+		A5497150888C24673F4743E2 /* TileCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8372C19B6F3131C00C591E7 /* TileCollectionCell.swift */; };
+		BF3CD5794C8E7A6D03552DDA /* ShelfArtworkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6863B76122A4A5C7F48C6AD /* ShelfArtworkView.swift */; };
+		EF25EFAF126226DF80B686F9 /* ShelfLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E1D347AED0E569F5F7C3507 /* ShelfLayout.swift */; };
+		3FCA96B52D85483C312CDC01 /* GradientArtworkView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F9D50B96CDB1AD86EF708F8 /* GradientArtworkView.swift */; };
+		1BAE081A37D4F8F197EBB43C /* SkeletonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C00DD466E61D1E7B6149DBE /* SkeletonView.swift */; };
 		50DF1E5A28DDECEA00F3EA00 /* AlbumCollectionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50DF1E5928DDECEA00F3EA00 /* AlbumCollectionCell.xib */; };
 		50E1D3982B8A82BB0001A572 /* KeyCommandTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E1D3972B8A82BA0001A572 /* KeyCommandTableViewController.swift */; };
 		50E1D39A2B8BEA540001A572 /* SplitVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E1D3992B8BEA540001A572 /* SplitVC.swift */; };
@@ -1115,6 +1122,13 @@
 		50DEEE15265ED5790073FF20 /* MusicFolderMO+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MusicFolderMO+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		50DEEE1A265ED65B0073FF20 /* MusicFolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicFolder.swift; sourceTree = "<group>"; };
 		50DF1E5428DDE3FA00F3EA00 /* AlbumCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCollectionCell.swift; sourceTree = "<group>"; };
+		EB2322046CFF4F078E858735 /* LargeAlbumCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LargeAlbumCell.swift"; sourceTree = "<group>"; };
+		0F734454054C881519929E2D /* ArtistCircleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArtistCircleCell.swift"; sourceTree = "<group>"; };
+		C8372C19B6F3131C00C591E7 /* TileCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TileCollectionCell.swift"; sourceTree = "<group>"; };
+		A6863B76122A4A5C7F48C6AD /* ShelfArtworkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ShelfArtworkView.swift"; sourceTree = "<group>"; };
+		4E1D347AED0E569F5F7C3507 /* ShelfLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ShelfLayout.swift"; sourceTree = "<group>"; };
+		1F9D50B96CDB1AD86EF708F8 /* GradientArtworkView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GradientArtworkView.swift"; sourceTree = "<group>"; };
+		6C00DD466E61D1E7B6149DBE /* SkeletonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SkeletonView.swift"; sourceTree = "<group>"; };
 		50DF1E5928DDECEA00F3EA00 /* AlbumCollectionCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AlbumCollectionCell.xib; sourceTree = "<group>"; };
 		50DF56C727C7753A00F106BA /* Amperfy v21.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Amperfy v21.xcdatamodel"; sourceTree = "<group>"; };
 		50E15407261311590021F47D /* Amperfy v6.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Amperfy v6.xcdatamodel"; sourceTree = "<group>"; };
@@ -1346,6 +1360,13 @@
 				5005938A28E2D4FB008C8DF6 /* CommonCollectionSectionHeader.swift */,
 				50DF1E5928DDECEA00F3EA00 /* AlbumCollectionCell.xib */,
 				50DF1E5428DDE3FA00F3EA00 /* AlbumCollectionCell.swift */,
+				EB2322046CFF4F078E858735 /* LargeAlbumCell.swift */,
+				0F734454054C881519929E2D /* ArtistCircleCell.swift */,
+				C8372C19B6F3131C00C591E7 /* TileCollectionCell.swift */,
+				A6863B76122A4A5C7F48C6AD /* ShelfArtworkView.swift */,
+				4E1D347AED0E569F5F7C3507 /* ShelfLayout.swift */,
+				1F9D50B96CDB1AD86EF708F8 /* GradientArtworkView.swift */,
+				6C00DD466E61D1E7B6149DBE /* SkeletonView.swift */,
 			);
 			path = Collection;
 			sourceTree = "<group>";
@@ -2588,6 +2609,13 @@
 				50E936D92F0FF9F200C1C504 /* AmperfyAppShortcuts.swift in Sources */,
 				50CFB59A28D5009200A47D44 /* ArtworkDownloadSettingsView.swift in Sources */,
 				50DF1E5628DDE3FA00F3EA00 /* AlbumCollectionCell.swift in Sources */,
+				11E0C3F1032E9F81F9257445 /* LargeAlbumCell.swift in Sources */,
+				AFDF8C782CF8B9D13A0652EF /* ArtistCircleCell.swift in Sources */,
+				A5497150888C24673F4743E2 /* TileCollectionCell.swift in Sources */,
+				BF3CD5794C8E7A6D03552DDA /* ShelfArtworkView.swift in Sources */,
+				EF25EFAF126226DF80B686F9 /* ShelfLayout.swift in Sources */,
+				3FCA96B52D85483C312CDC01 /* GradientArtworkView.swift in Sources */,
+				1BAE081A37D4F8F197EBB43C /* SkeletonView.swift in Sources */,
 				502B98ED2D03A02D000FE187 /* PlaylistEditVC.swift in Sources */,
 				502041982E2A37F2003CE29A /* EqualizerSettingsView.swift in Sources */,
 				50E77DB928D21A9300BDF882 /* SettingsHostVC.swift in Sources */,
