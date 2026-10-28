@@ -1,0 +1,116 @@
+{
+  "fill-specializations": [
+    {
+      "value": {
+        "solid": "extended-srgb:0.07059,0.07059,0.07059,1.00000"
+      }
+    },
+    {
+      "appearance": "dark",
+      "value": {
+        "solid": "extended-srgb:0.07059,0.07059,0.07059,1.00000"
+      }
+    }
+  ],
+  "groups": [
+    {
+      "layers": [
+        {
+          "name": "Wave1",
+          "image-name": "Wave1.png",
+          "glass": false,
+          "hidden": false,
+          "blend-mode": "normal",
+          "opacity": 1.0,
+          "fill-specializations": [
+            {
+              "value": {
+                "solid": "extended-srgb:0.03922,0.51765,1.00000,1.00000"
+              }
+            },
+            {
+              "appearance": "tinted",
+              "value": {
+                "solid": "extended-gray:1.00000,1.00000"
+              }
+            }
+          ],
+          "position": {
+            "scale": 1,
+            "translation-in-points": [
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "name": "Wave2",
+          "image-name": "Wave2.png",
+          "glass": false,
+          "hidden": false,
+          "blend-mode": "normal",
+          "opacity": 0.65,
+          "fill-specializations": [
+            {
+              "value": {
+                "solid": "extended-srgb:0.03922,0.51765,1.00000,1.00000"
+              }
+            },
+            {
+              "appearance": "tinted",
+              "value": {
+                "solid": "extended-gray:1.00000,1.00000"
+              }
+            }
+          ],
+          "position": {
+            "scale": 1,
+            "translation-in-points": [
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "name": "Wave3",
+          "image-name": "Wave3.png",
+          "glass": false,
+          "hidden": false,
+          "blend-mode": "normal",
+          "opacity": 0.35,
+          "fill-specializations": [
+            {
+              "value": {
+                "solid": "extended-srgb:0.03922,0.51765,1.00000,1.00000"
+              }
+            },
+            {
+              "appearance": "tinted",
+              "value": {
+                "solid": "extended-gray:1.00000,1.00000"
+              }
+            }
+          ],
+          "position": {
+            "scale": 1,
+            "translation-in-points": [
+              0,
+              0
+            ]
+          }
+        }
+      ],
+      "shadow": {
+        "kind": "neutral",
+        "opacity": 0.5
+      },
+      "translucency": {
+        "enabled": false,
+        "value": 0.5
+      }
+    }
+  ],
+  "supported-platforms": {
+    "squares": "shared"
+  }
+}

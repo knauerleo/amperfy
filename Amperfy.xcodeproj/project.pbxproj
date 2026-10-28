@@ -530,7 +530,9 @@
 		50D54B702E30FFDB0078631E /* ShapeType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D54B652E30F9350078631E /* ShapeType.swift */; };
 		50D54B712E30FFDB0078631E /* WindowType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D54B662E30F9350078631E /* WindowType.swift */; };
 		50D54B722E30FFDB0078631E /* FFT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D54B632E30F9350078631E /* FFT.swift */; };
+		75532AC0DE73C0B02DA3E1F7 /* ForkAppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = EB2134F88BF752ABE500978E /* ForkAppIcon.icon */; };
 		50D7709F2E4F1D1C0075D3BF /* AmperfyAppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 50D7709E2E4F1D1C0075D3BF /* AmperfyAppIcon.icon */; };
+		6F1CD0543C4495CB3081871F /* ForkAppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = EB2134F88BF752ABE500978E /* ForkAppIcon.icon */; };
 		50D770A02E4F20000075D3BF /* AmperfyAppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 50D7709E2E4F1D1C0075D3BF /* AmperfyAppIcon.icon */; };
 		50DE29EB2B8FCEB700ABA78E /* LibraryNavigatorConfigurator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DE29EA2B8FCEB700ABA78E /* LibraryNavigatorConfigurator.swift */; };
 		50DE29ED2B8FCFC500ABA78E /* LibraryDisplayType+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DE29EC2B8FCFC500ABA78E /* LibraryDisplayType+Extension.swift */; };
@@ -1131,6 +1133,7 @@
 		50D54B642E30F9350078631E /* Magnitude.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Magnitude.swift; sourceTree = "<group>"; };
 		50D54B652E30F9350078631E /* ShapeType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShapeType.swift; sourceTree = "<group>"; };
 		50D54B662E30F9350078631E /* WindowType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowType.swift; sourceTree = "<group>"; };
+		EB2134F88BF752ABE500978E /* ForkAppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = ForkAppIcon.icon; sourceTree = "<group>"; };
 		50D7709E2E4F1D1C0075D3BF /* AmperfyAppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AmperfyAppIcon.icon; sourceTree = "<group>"; };
 		50D92CCA25E3ED700017E91D /* MappingModelV4toV5.xcmappingmodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcmappingmodel; path = MappingModelV4toV5.xcmappingmodel; sourceTree = "<group>"; };
 		50D92CCE25E3FE560017E91D /* MigrationPolicyV4toV5.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigrationPolicyV4toV5.swift; sourceTree = "<group>"; };
@@ -1915,6 +1918,7 @@
 			isa = PBXGroup;
 			children = (
 				50D7709E2E4F1D1C0075D3BF /* AmperfyAppIcon.icon */,
+				EB2134F88BF752ABE500978E /* ForkAppIcon.icon */,
 				508385EE21C5965E00C4BB32 /* Assets.xcassets */,
 				50B053AC27BFADB200D9C1ED /* UIImageAssetsExtension.swift */,
 				28168FE1278C816D02E4D5C5 /* UIImage+MutedArtwork.swift */,
@@ -2500,6 +2504,7 @@
 				50C16C2621E7CBA500F086F0 /* GenericTableCell.xib in Resources */,
 				508FDE3821F1E14F005A0724 /* NewPlaylistTableHeader.xib in Resources */,
 				50D7709F2E4F1D1C0075D3BF /* AmperfyAppIcon.icon in Resources */,
+				75532AC0DE73C0B02DA3E1F7 /* ForkAppIcon.icon in Resources */,
 				5007CE4521EF639200BC5CBA /* PlaylistTableCell.xib in Resources */,
 				50CCD0572B6C38670073793B /* PlainDetailsVC.xib in Resources */,
 				508EBB282850C8D90053D9F0 /* Assets.xcassets in Resources */,
@@ -2515,6 +2520,7 @@
 			files = (
 				50C9D71D2850880A007F18D0 /* EntityImageView.xib in Resources */,
 				50D770A02E4F20000075D3BF /* AmperfyAppIcon.icon in Resources */,
+				6F1CD0543C4495CB3081871F /* ForkAppIcon.icon in Resources */,
 				508EBB292850C8DF0053D9F0 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -3264,7 +3270,7 @@
 		5083860D21C5965E00C4BB32 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AmperfyAppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = ForkAppIcon;
 				CODE_SIGN_ENTITLEMENTS = Amperfy/Amperfy.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -3303,7 +3309,7 @@
 		5083860E21C5965E00C4BB32 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AmperfyAppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = ForkAppIcon;
 				CODE_SIGN_ENTITLEMENTS = Amperfy/Amperfy.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
