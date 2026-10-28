@@ -93,7 +93,7 @@ class PlaylistDetailVC: SingleSnapshotFetchedResultsTableViewController<Playlist
 
   private var editButton: UIBarButtonItem!
   private var optionsButton: UIBarButtonItem!
-  var detailOperationsView: GenericDetailTableHeader?
+  var detailOperationsView: ImmersiveDetailHeaderView?
 
   init(account: Account, playlist: Playlist) {
     self.playlist = playlist
@@ -177,7 +177,7 @@ class PlaylistDetailVC: SingleSnapshotFetchedResultsTableViewController<Playlist
       tableView: tableView,
       playShuffleInfoConfig: playShuffleInfoConfig
     )
-    detailOperationsView = GenericDetailTableHeader
+    detailOperationsView = ImmersiveDetailHeaderView
       .createTableHeader(configuration: detailHeaderConfig)
     refreshControl?.addTarget(
       self,

@@ -48,8 +48,9 @@ enum DS {
 
   /// Fixed base sizes that scale with Dynamic Type.
   enum Font {
+    static var detailTitle: UIFont { scaled(26, .bold, .title1) }
     static var sectionTitle: UIFont { scaled(22, .bold, .title2) }
-    static var rowTitle: UIFont { scaled(16, .semibold, .body) }
+    static var rowTitle: UIFont { scaled(16, .medium, .body) }
     static var rowSubtitle: UIFont { scaled(13, .regular, .subheadline) }
     static var miniPlayerTitle: UIFont { scaled(14, .semibold, .subheadline, maximum: 18) }
     static var miniPlayerSubtitle: UIFont { scaled(12, .regular, .footnote, maximum: 16) }

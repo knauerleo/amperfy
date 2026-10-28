@@ -32,7 +32,7 @@ class GenreDetailVC: MultiSourceTableViewController {
   private var albumsFetchedResultsController: GenreAlbumsFetchedResultsController!
   private var songsFetchedResultsController: GenreSongsFetchedResultsController!
   private var optionsButton: UIBarButtonItem!
-  private var detailOperationsView: GenericDetailTableHeader?
+  private var detailOperationsView: ImmersiveDetailHeaderView?
 
   init(account: Account, genre: Genre) {
     self.genre = genre
@@ -101,7 +101,7 @@ class GenreDetailVC: MultiSourceTableViewController {
       tableView: tableView,
       playShuffleInfoConfig: playShuffleInfoConfig
     )
-    detailOperationsView = GenericDetailTableHeader
+    detailOperationsView = ImmersiveDetailHeaderView
       .createTableHeader(configuration: detailHeaderConfig)
 
     optionsButton = UIBarButtonItem.createOptionsBarButton()

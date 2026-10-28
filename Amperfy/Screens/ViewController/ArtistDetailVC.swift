@@ -31,7 +31,7 @@ class ArtistDetailVC: MultiSourceTableViewController {
   private var albumsFetchedResultsController: ArtistAlbumsItemsFetchedResultsController!
   private var songsFetchedResultsController: ArtistSongsItemsFetchedResultsController!
   private var optionsButton: UIBarButtonItem!
-  private var detailOperationsView: GenericDetailTableHeader?
+  private var detailOperationsView: ImmersiveDetailHeaderView?
 
   init(account: Account, artist: Artist) {
     self.artist = artist
@@ -89,7 +89,7 @@ class ArtistDetailVC: MultiSourceTableViewController {
       tableView: tableView,
       playShuffleInfoConfig: playShuffleInfoConfig
     )
-    detailOperationsView = GenericDetailTableHeader
+    detailOperationsView = ImmersiveDetailHeaderView
       .createTableHeader(configuration: detailHeaderConfig)
 
     optionsButton = UIBarButtonItem.createOptionsBarButton()

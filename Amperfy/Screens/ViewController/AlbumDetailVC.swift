@@ -43,7 +43,7 @@ class AlbumDetailVC: SingleSnapshotFetchedResultsTableViewController<SongMO> {
   var songToScrollTo: Song?
   private var fetchedResultsController: AlbumSongsFetchedResultsController!
   private var optionsButton: UIBarButtonItem!
-  private var detailOperationsView: GenericDetailTableHeader?
+  private var detailOperationsView: ImmersiveDetailHeaderView?
   let album: Album
 
   init(account: Account, album: Album) {
@@ -115,7 +115,7 @@ class AlbumDetailVC: SingleSnapshotFetchedResultsTableViewController<SongMO> {
       tableView: tableView,
       playShuffleInfoConfig: playShuffleInfoConfig
     )
-    detailOperationsView = GenericDetailTableHeader
+    detailOperationsView = ImmersiveDetailHeaderView
       .createTableHeader(configuration: detailHeaderConfig)
 
     optionsButton = UIBarButtonItem.createOptionsBarButton()
