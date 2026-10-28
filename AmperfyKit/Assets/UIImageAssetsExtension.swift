@@ -433,6 +433,7 @@ extension UIImage {
     artworkType: ArtworkType
   )
     -> UIImage {
+    if artworkType == .playlist { return mutedPlaylistArtwork(theme: theme) } // Fork
     let resourceName = "\(theme.description)\(artworkType.description)"
     return UIImage(imageLiteralResourceName: resourceName)
   }

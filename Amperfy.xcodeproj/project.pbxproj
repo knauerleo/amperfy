@@ -454,6 +454,7 @@
 		50C9D6DD284FAB88007F18D0 /* BackendAudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDE4921F44E91005A0724 /* BackendAudioPlayer.swift */; };
 		50C9D6DE284FAB88007F18D0 /* PlayQueueHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5011712B2744FDD700B7C08D /* PlayQueueHandler.swift */; };
 		50C9D6E3284FAB96007F18D0 /* UIImageAssetsExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B053AC27BFADB200D9C1ED /* UIImageAssetsExtension.swift */; };
+		0557BCB9FBF932A75E8656DC /* UIImage+MutedArtwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28168FE1278C816D02E4D5C5 /* UIImage+MutedArtwork.swift */; };
 		50C9D6E6284FABCB007F18D0 /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C9D6E5284FABCB007F18D0 /* AudioPlayer.swift */; };
 		50C9D6E9284FACAF007F18D0 /* ArtworkCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C9D6E8284FACAF007F18D0 /* ArtworkCollection.swift */; };
 		50C9D6EB284FAD51007F18D0 /* PodcastsShowType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C9D6EA284FAD51007F18D0 /* PodcastsShowType.swift */; };
@@ -956,6 +957,7 @@
 		020A1FB5284FF5F394C3C10C /* ImmersiveDetailHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImmersiveDetailHeaderView.swift"; sourceTree = "<group>"; };
 		50AFA1482632E83100F198DD /* GenericDetailTableHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GenericDetailTableHeader.xib; sourceTree = "<group>"; };
 		50B053AC27BFADB200D9C1ED /* UIImageAssetsExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageAssetsExtension.swift; sourceTree = "<group>"; };
+		28168FE1278C816D02E4D5C5 /* UIImage+MutedArtwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+MutedArtwork.swift"; sourceTree = "<group>"; };
 		50B136F32EFC36D500738475 /* PlayableContainerTypeAppEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayableContainerTypeAppEnum.swift; sourceTree = "<group>"; };
 		50B136F42EFC36D500738475 /* PlayIDIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayIDIntent.swift; sourceTree = "<group>"; };
 		50B136F52EFC36D500738475 /* PlayRandomSongsIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayRandomSongsIntent.swift; sourceTree = "<group>"; };
@@ -1815,6 +1817,7 @@
 				50D7709E2E4F1D1C0075D3BF /* AmperfyAppIcon.icon */,
 				508385EE21C5965E00C4BB32 /* Assets.xcassets */,
 				50B053AC27BFADB200D9C1ED /* UIImageAssetsExtension.swift */,
+				28168FE1278C816D02E4D5C5 /* UIImage+MutedArtwork.swift */,
 			);
 			path = Assets;
 			sourceTree = "<group>";
@@ -2785,6 +2788,7 @@
 				50C9D651284FAA02007F18D0 /* SsPodcastEpisodeParserDelegate.swift in Sources */,
 				50C9D660284FAA0B007F18D0 /* AuthParserDelegate.swift in Sources */,
 				50C9D6E3284FAB96007F18D0 /* UIImageAssetsExtension.swift in Sources */,
+				0557BCB9FBF932A75E8656DC /* UIImage+MutedArtwork.swift in Sources */,
 				505CA1FE2B8739AE00AA81CD /* SearchHistoryItem.swift in Sources */,
 				50C9D69B284FAA6C007F18D0 /* PlayerMO+CoreDataClass.swift in Sources */,
 				50C9D69E284FAA6C007F18D0 /* AbstractLibraryEntityMO+CoreDataProperties.swift in Sources */,
