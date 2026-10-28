@@ -67,11 +67,14 @@ class HomeManager: NSObject {
   public var orderedVisibleSections: [HomeSection]
   public var data: [HomeSection: [HomeItem]] = [:]
   public var applySnapshotCB: VoidFunctionCallback?
+  // Fork: sections with a running remote sync (skeletons) and observers, see HomeManager+Fork
+  var loadingSections = Set<HomeSection>()
+  var forkObserver: HomeForkObserver?
 
-  private let account: Account
-  private let storage: PersistentStorage
-  private let getMeta: (_ accountInfo: AccountInfo) -> MetaManager
-  private let eventLogger: EventLogger
+  let account: Account
+  let storage: PersistentStorage
+  let getMeta: (_ accountInfo: AccountInfo) -> MetaManager
+  let eventLogger: EventLogger
 
   var isOfflineMode: Bool {
     storage.settings.user.isOfflineMode
@@ -94,6 +97,7 @@ class HomeManager: NSObject {
     self.storage = storage
     self.getMeta = getMeta
     self.eventLogger = eventLogger
+    HomeManager.migrateForkSections(storage: storage, account: account)
     self.orderedVisibleSections = storage.settings.accounts
       .getSetting(account.info).read.homeSections
   }
@@ -215,12 +219,15 @@ class HomeManager: NSObject {
       radiosFetchedController?.delegate = nil
       radiosFetchedController = nil
     }
+    createForkFetchControllers()
   }
 
   func updateFromRemote() {
     guard storage.settings.user.isOnlineMode else { return }
     if orderedVisibleSections.contains(where: { $0 == .newestAlbums }) {
+      beginLoading(.newestAlbums)
       Task { @MainActor in
+        defer { self.endLoading(.newestAlbums) }
         do {
           try await AutoDownloadLibrarySyncer(
             storage: self.storage,
@@ -236,7 +243,9 @@ class HomeManager: NSObject {
       }
     }
     if orderedVisibleSections.contains(where: { $0 == .recentlyPlayedAlbums }) {
+      beginLoading(.recentlyPlayedAlbums)
       Task { @MainActor in
+        defer { self.endLoading(.recentlyPlayedAlbums) }
         do {
           try await self.getMeta(self.account.info).librarySyncer
             .syncRecentAlbums(
@@ -249,7 +258,8 @@ class HomeManager: NSObject {
       }
     }
     if orderedVisibleSections.contains(where: { $0 == .lastTimePlayedPlaylists }) {
-      Task { @MainActor in do {
+      beginLoading(.lastTimePlayedPlaylists)
+      Task { @MainActor in defer { self.endLoading(.lastTimePlayedPlaylists) }; do {
         try await self.getMeta(self.account.info).librarySyncer
           .syncDownPlaylistsWithoutSongs()
       } catch {
@@ -257,7 +267,8 @@ class HomeManager: NSObject {
       }}
     }
     if orderedVisibleSections.contains(where: { $0 == .newestPodcastEpisodes }) {
-      Task { @MainActor in do {
+      beginLoading(.newestPodcastEpisodes)
+      Task { @MainActor in defer { self.endLoading(.newestPodcastEpisodes) }; do {
         let _ = try await AutoDownloadLibrarySyncer(
           storage: self.storage,
           account: self.account,
@@ -271,7 +282,9 @@ class HomeManager: NSObject {
       }}
     }
     if orderedVisibleSections.contains(where: { $0 == .radios }) {
+      beginLoading(.radios)
       Task { @MainActor in
+        defer { self.endLoading(.radios) }
         do {
           try await self.getMeta(self.account.info).librarySyncer
             .syncRadios()
@@ -280,6 +293,7 @@ class HomeManager: NSObject {
         }
       }
     }
+    forkUpdateFromRemote()
   }
 
   func updateAlbumsRecentlyPlayed() {

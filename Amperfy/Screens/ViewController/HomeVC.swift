@@ -29,16 +29,16 @@ import UIKit
 final class HomeVC: UICollectionViewController {
   // MARK: - Properties
 
-  private var dataSource: UICollectionViewDiffableDataSource<HomeSection, HomeItem>!
+  var dataSource: UICollectionViewDiffableDataSource<HomeSection, HomeCellItem>! // Fork: cell items, see HomeVC+Fork
   private let log = OSLog(subsystem: "Amperfy", category: "HomeVC")
 
-  private static let itemWidth: CGFloat = 160.0
+  static let itemWidth: CGFloat = 160.0
 
   private var userButton: UIButton?
   private var userBarButtonItem: UIBarButtonItem?
-  private let account: Account
+  let account: Account
   private var accountNotificationHandler: AccountNotificationHandler?
-  private let sharedHome: HomeManager
+  let sharedHome: HomeManager
 
   // MARK: - Init
 
@@ -93,6 +93,7 @@ final class HomeVC: UICollectionViewController {
     )
     configureCollectionView()
     configureDataSource()
+    configureForkLayout()
     sharedHome.createFetchController()
     applySnapshot(animated: false)
 
@@ -185,19 +186,9 @@ final class HomeVC: UICollectionViewController {
   private func configureDataSource() {
     dataSource = UICollectionViewDiffableDataSource<
       HomeSection,
-      HomeItem
+      HomeCellItem
     >(collectionView: collectionView) { collectionView, indexPath, item in
-      let cell = collectionView.dequeueReusableCell(
-        withReuseIdentifier: AlbumCollectionCell.typeName,
-        for: indexPath
-      ) as! AlbumCollectionCell
-      cell.display(
-        container: item.playableContainable,
-        rootView: self,
-        itemWidth: Self.itemWidth,
-        initialIndexPath: indexPath
-      )
-      return cell
+      self.forkCell(collectionView, indexPath: indexPath, item: item)
     }
 
     dataSource.supplementaryViewProvider = { collectionView, kind, indexPath in
@@ -207,7 +198,7 @@ final class HomeVC: UICollectionViewController {
               withReuseIdentifier: SectionHeaderView.reuseID,
               for: indexPath
             ) as? SectionHeaderView,
-            let section = self.sharedHome.orderedVisibleSections.element(at: indexPath.section)
+            let section = self.dataSource.sectionIdentifier(for: indexPath.section)
       else {
         return nil
       }
@@ -233,24 +224,7 @@ final class HomeVC: UICollectionViewController {
   }
 
   private func applySnapshot(animated: Bool = true) {
-    var snapshot = NSDiffableDataSourceSnapshot<HomeSection, HomeItem>()
-    snapshot.appendSections(sharedHome.orderedVisibleSections)
-    for section in sharedHome.orderedVisibleSections {
-      // Ids are stable per entity, so a repeated entity would be a duplicate identifier (assert).
-      var seenIds = Set<String>()
-      let items = (sharedHome.data[section] ?? []).filter { seenIds.insert($0.id).inserted }
-      snapshot.appendItems(items, toSection: section)
-    }
-    let oldItems = dataSource.snapshot().itemIdentifiers
-    let oldFingerprints = Dictionary(oldItems.map { ($0.id, $0.artworkFingerprint) }) { first, _ in
-      first
-    }
-    let changedItems = snapshot.itemIdentifiers.filter {
-      guard let old = oldFingerprints[$0.id] else { return false }
-      return old != $0.artworkFingerprint
-    }
-    snapshot.reconfigureItems(changedItems)
-    dataSource.apply(snapshot, animatingDifferences: animated)
+    applyForkSnapshot(animated: animated)
   }
 
   @objc
@@ -264,7 +238,7 @@ final class HomeVC: UICollectionViewController {
     presentSectionEditor()
   }
 
-  private func presentSectionEditor() {
+  func presentSectionEditor() {
     // Build a simple editor using a temporary UIViewController with a table view
     let editor = HomeEditorVC(
       order: appDelegate.storage.settings.accounts.getSetting(account.info).read.homeSectionOrder,
@@ -327,7 +301,8 @@ final class HomeVC: UICollectionViewController {
     _ collectionView: UICollectionView,
     didSelectItemAt indexPath: IndexPath
   ) {
-    guard let playableContainer = dataSource.itemIdentifier(for: indexPath)?.playableContainable
+    if handleForkSelection(at: indexPath) { return }
+    guard let playableContainer = dataSource.itemIdentifier(for: indexPath)?.containable
     else { return }
 
     if let album = playableContainer as? Album {
@@ -390,7 +365,7 @@ extension HomeVC {
     point: CGPoint
   )
     -> UIContextMenuConfiguration? {
-    guard let containable = dataSource.itemIdentifier(for: indexPath)?.playableContainable
+    guard let containable = dataSource.itemIdentifier(for: indexPath)?.containable
     else { return nil }
 
     let identifier = NSString(string: TableViewPreviewInfo(

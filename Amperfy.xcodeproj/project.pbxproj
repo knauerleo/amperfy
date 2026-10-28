@@ -165,6 +165,7 @@
 		50AB3B482F03119800556CE4 /* SpectrumBarsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AB3B432F03119800556CE4 /* SpectrumBarsView.swift */; };
 		50AB3B4B2F031D0C00556CE4 /* SetRatingForCurrentlyPlayingSongIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AB3B4A2F031D0C00556CE4 /* SetRatingForCurrentlyPlayingSongIntent.swift */; };
 		50AB3B4D2F032D6200556CE4 /* HomeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AB3B4C2F032D6200556CE4 /* HomeManager.swift */; };
+		66161320A7648B43CE0718FB /* HomeManager+Fork.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0B310929ACB07F6274C31A7 /* HomeManager+Fork.swift */; };
 		50AC4E5328D909730091FF33 /* EventLogSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AC4E5128D909720091FF33 /* EventLogSettingsView.swift */; };
 		50AC4E5428D909730091FF33 /* EventLogCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AC4E5228D909730091FF33 /* EventLogCellView.swift */; };
 		50AC4E5628D99A410091FF33 /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AC4E5528D99A410091FF33 /* ButtonStyles.swift */; };
@@ -196,6 +197,7 @@
 		50B137042EFC8A4800738475 /* SwitchAccountIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B137032EFC8A4800738475 /* SwitchAccountIntent.swift */; };
 		50B166AA2ED071EC00F7A1D6 /* AudioStreaming in Frameworks */ = {isa = PBXBuildFile; productRef = 50B166A92ED071EC00F7A1D6 /* AudioStreaming */; };
 		50B166AC2ED4E68400F7A1D6 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B166AB2ED4E68400F7A1D6 /* HomeVC.swift */; };
+		29DC507F6C81F479E198109E /* HomeVC+Fork.swift in Sources */ = {isa = PBXBuildFile; fileRef = F867DF37971AE42C8A6569CD /* HomeVC+Fork.swift */; };
 		50BA92F821CC318D00E5901D /* PlayableTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BA92F721CC318D00E5901D /* PlayableTableCell.swift */; };
 		50BA92FA21CC37F800E5901D /* SongsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BA92F921CC37F800E5901D /* SongsVC.swift */; };
 		50BA930021CFDEBD00E5901D /* LibraryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BA92FF21CFDEBD00E5901D /* LibraryVC.swift */; };
@@ -920,6 +922,7 @@
 		50AB3B442F03119800556CE4 /* WaveformView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveformView.swift; sourceTree = "<group>"; };
 		50AB3B4A2F031D0C00556CE4 /* SetRatingForCurrentlyPlayingSongIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetRatingForCurrentlyPlayingSongIntent.swift; sourceTree = "<group>"; };
 		50AB3B4C2F032D6200556CE4 /* HomeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeManager.swift; sourceTree = "<group>"; };
+		C0B310929ACB07F6274C31A7 /* HomeManager+Fork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeManager+Fork.swift"; sourceTree = "<group>"; };
 		50AB92BB26660FD800DCE45C /* artists_example_1.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = artists_example_1.xml; sourceTree = "<group>"; };
 		50AB92BD26660FE000DCE45C /* SsArtistParserTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SsArtistParserTest.swift; sourceTree = "<group>"; };
 		50AB92BF2666126300DCE45C /* album_example_1.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = album_example_1.xml; sourceTree = "<group>"; };
@@ -977,6 +980,7 @@
 		50B137012EFC85D700738475 /* AccountAppEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountAppEntity.swift; sourceTree = "<group>"; };
 		50B137032EFC8A4800738475 /* SwitchAccountIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchAccountIntent.swift; sourceTree = "<group>"; };
 		50B166AB2ED4E68400F7A1D6 /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
+		F867DF37971AE42C8A6569CD /* HomeVC+Fork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeVC+Fork.swift"; sourceTree = "<group>"; };
 		50B7989B23B6C77700551E62 /* Amperfy v4.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Amperfy v4.xcdatamodel"; sourceTree = "<group>"; };
 		50B798A023B6CA5400551E62 /* Song.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Song.swift; sourceTree = "<group>"; };
 		50B798A223B6CCE800551E62 /* AbstractLibraryEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbstractLibraryEntity.swift; sourceTree = "<group>"; };
@@ -1893,7 +1897,9 @@
 				508FDE4F21F64ED6005A0724 /* TabBarVC.swift */,
 				50BA92FF21CFDEBD00E5901D /* LibraryVC.swift */,
 				50B166AB2ED4E68400F7A1D6 /* HomeVC.swift */,
+				F867DF37971AE42C8A6569CD /* HomeVC+Fork.swift */,
 				50AB3B4C2F032D6200556CE4 /* HomeManager.swift */,
+				C0B310929ACB07F6274C31A7 /* HomeManager+Fork.swift */,
 				50E59A4A2ED747F000F2B65C /* HomeEditorVC.swift */,
 				50E77DB828D21A9300BDF882 /* SettingsHostVC.swift */,
 				50E1D39B2B8BED4C0001A572 /* SideBarVC.swift */,
@@ -2656,6 +2662,7 @@
 				50C1714A2D106A5500C0C53A /* PlaylistAddArtistsVC.swift in Sources */,
 				505362D32C2425C200846C53 /* AlbumsCommonVCInteractions.swift in Sources */,
 				50AB3B4D2F032D6200556CE4 /* HomeManager.swift in Sources */,
+				66161320A7648B43CE0718FB /* HomeManager+Fork.swift in Sources */,
 				504262B12BF5FBDE00B5EF38 /* Intents.intentdefinition in Sources */,
 				504262B42BF5FC3D00B5EF38 /* NSUserActivity+IntentData.swift in Sources */,
 				50C16C1021E5463E00F086F0 /* ArtistsVC.swift in Sources */,
@@ -2694,6 +2701,7 @@
 				27EB1C38402CA80F8B0B537D /* SearchDebouncer.swift in Sources */,
 				507414A12F004C07007AEC5D /* NextPreviousTrackIntent.swift in Sources */,
 				50B166AC2ED4E68400F7A1D6 /* HomeVC.swift in Sources */,
+				29DC507F6C81F479E198109E /* HomeVC+Fork.swift in Sources */,
 				50C16C1C21E7051700F086F0 /* AlbumDetailVC.swift in Sources */,
 				50C171502D10718C00C0C53A /* PlaylistAddGenreDetailVC.swift in Sources */,
 				507BA5C92F01CED000B4EA8B /* SetOnlineOfflineModeIntent.swift in Sources */,
