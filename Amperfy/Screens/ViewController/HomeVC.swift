@@ -459,7 +459,8 @@ final class SectionHeaderView: UICollectionReusableView {
   private let titleLabel: UILabel = {
     let lbl = UILabel()
     lbl.translatesAutoresizingMaskIntoConstraints = false
-    lbl.font = UIFont.preferredFont(forTextStyle: .title3).withWeight(.semibold)
+    lbl.font = DS.Font.sectionTitle
+    lbl.adjustsFontForContentSizeCategory = true
     lbl.textColor = .label
     return lbl
   }()
@@ -484,14 +485,14 @@ final class SectionHeaderView: UICollectionReusableView {
     addSubview(titleLabel)
     addSubview(refreshButton)
     NSLayoutConstraint.activate([
-      titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+      titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor), // Fork: section inset already applies
       titleLabel.trailingAnchor.constraint(
         lessThanOrEqualTo: refreshButton.leadingAnchor,
         constant: -8
       ),
       titleLabel.topAnchor.constraint(equalTo: topAnchor),
       titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
-      refreshButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+      refreshButton.trailingAnchor.constraint(equalTo: trailingAnchor),
       refreshButton.centerYAnchor.constraint(equalTo: centerYAnchor),
     ])
   }
@@ -501,14 +502,14 @@ final class SectionHeaderView: UICollectionReusableView {
     addSubview(titleLabel)
     addSubview(refreshButton)
     NSLayoutConstraint.activate([
-      titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+      titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor), // Fork: section inset already applies
       titleLabel.trailingAnchor.constraint(
         lessThanOrEqualTo: refreshButton.leadingAnchor,
         constant: -8
       ),
       titleLabel.topAnchor.constraint(equalTo: topAnchor),
       titleLabel.bottomAnchor.constraint(equalTo: bottomAnchor),
-      refreshButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
+      refreshButton.trailingAnchor.constraint(equalTo: trailingAnchor),
       refreshButton.centerYAnchor.constraint(equalTo: centerYAnchor),
     ])
   }
