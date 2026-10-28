@@ -103,7 +103,9 @@ public final class YouTubeMusicJobMonitor {
     hits[hit.videoId] = hit
     let current = jobs[hit.videoId]
     if current?.state == .done { return }
-    if current?.state.isFinished ?? true, pending[hit.videoId] == nil {
+    if let current, !current.state.isFinished {
+      running.insert(hit.videoId)
+    } else if pending[hit.videoId] == nil {
       pending[hit.videoId] = (Date(), current)
       postChange()
     }
