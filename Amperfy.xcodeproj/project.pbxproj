@@ -156,6 +156,7 @@
 		50A30E592B75026100722894 /* ContextQueueNextSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50A30E582B75026100722894 /* ContextQueueNextSectionHeader.xib */; };
 		50A30E5C2B7556FB00722894 /* PopupPlayer+TableViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A30E5B2B7556FB00722894 /* PopupPlayer+TableViewExtension.swift */; };
 		50A30E622B756CA400722894 /* CurrentlyPlayingTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A30E612B756CA400722894 /* CurrentlyPlayingTableCell.swift */; };
+		06E22EF7616A511ADFE36DF2 /* CurrentlyPlayingTableCell+Fork.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3687DB9FA02B3728E2BF33 /* CurrentlyPlayingTableCell+Fork.swift */; };
 		50A30E642B756CF100722894 /* CurrentlyPlayingTableCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50A30E632B756CE700722894 /* CurrentlyPlayingTableCell.xib */; };
 		50AAB9F12F013F68004A39C6 /* NextPreviousTrackAppEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AAB9F02F013F68004A39C6 /* NextPreviousTrackAppEnum.swift */; };
 		50AAB9F32F0154EB004A39C6 /* SeekToPlaybackTimeIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AAB9F22F0154EB004A39C6 /* SeekToPlaybackTimeIntent.swift */; };
@@ -925,6 +926,7 @@
 		50A30E582B75026100722894 /* ContextQueueNextSectionHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContextQueueNextSectionHeader.xib; sourceTree = "<group>"; };
 		50A30E5B2B7556FB00722894 /* PopupPlayer+TableViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PopupPlayer+TableViewExtension.swift"; sourceTree = "<group>"; };
 		50A30E612B756CA400722894 /* CurrentlyPlayingTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentlyPlayingTableCell.swift; sourceTree = "<group>"; };
+		CC3687DB9FA02B3728E2BF33 /* CurrentlyPlayingTableCell+Fork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CurrentlyPlayingTableCell+Fork.swift"; sourceTree = "<group>"; };
 		50A30E632B756CE700722894 /* CurrentlyPlayingTableCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CurrentlyPlayingTableCell.xib; sourceTree = "<group>"; };
 		50A738802244B03700D3F2D4 /* SsPlayableParserDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SsPlayableParserDelegate.swift; sourceTree = "<group>"; };
 		50A7388222451ED200D3F2D4 /* SsPlaylistParserDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SsPlaylistParserDelegate.swift; sourceTree = "<group>"; };
@@ -1739,6 +1741,7 @@
 				507148AC2B767FE200557904 /* ContextQueuePrevSectionHeader.swift */,
 				50A30E632B756CE700722894 /* CurrentlyPlayingTableCell.xib */,
 				50A30E612B756CA400722894 /* CurrentlyPlayingTableCell.swift */,
+				CC3687DB9FA02B3728E2BF33 /* CurrentlyPlayingTableCell+Fork.swift */,
 				502E56BA27561AD900638BD2 /* UserQueueSectionHeader.xib */,
 				502E56BB27561AD900638BD2 /* UserQueueSectionHeader.swift */,
 				50A30E582B75026100722894 /* ContextQueueNextSectionHeader.xib */,
@@ -2726,6 +2729,7 @@
 				50B137042EFC8A4800738475 /* SwitchAccountIntent.swift in Sources */,
 				5005938B28E2D4FB008C8DF6 /* CommonCollectionSectionHeader.swift in Sources */,
 				50A30E622B756CA400722894 /* CurrentlyPlayingTableCell.swift in Sources */,
+				06E22EF7616A511ADFE36DF2 /* CurrentlyPlayingTableCell+Fork.swift in Sources */,
 				50C9D70C2850759B007F18D0 /* PlayIndicator.swift in Sources */,
 				50CFBC542E464EEF00EAA7BC /* AppDelegateMainMenuExtension.swift in Sources */,
 				50C1714C2D106BEE00C0C53A /* PlaylistAddArtistDetailVC.swift in Sources */,

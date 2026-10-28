@@ -58,6 +58,7 @@ class CurrentlyPlayingTableCell: BasicTableCell {
     )
     rootView?.refreshFavoriteButton(button: favoriteButton)
     rootView?.refreshOptionButton(button: optionsButton, rootView: rootView)
+    forkRefreshNowPlayingCard() // Fork: current song stands out in the queue
   }
 
   func refreshArtwork() {
