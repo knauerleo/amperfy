@@ -371,6 +371,7 @@ class LargeCurrentlyPlayingPlayerView: UIView, UIGestureRecognizerDelegate {
       almostHideArtwork()
       showVisualizer()
     }
+    rootView?.forkRefreshLyricsCard() // Fork: lyrics card under the cover
   }
 
   public func almostHideArtwork() {

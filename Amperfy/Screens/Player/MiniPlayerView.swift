@@ -718,6 +718,11 @@ class MiniPlayerView: UIView {
   public func openPlayerView(completion: (() -> ())? = nil) {
     guard let hostVC = AppDelegate.mainWindowHostVC as? UIViewController else { return }
     let popupPlayer = PopupPlayerVC()
+    // Fork: the player zooms out of the cover (phase 5), the sheet stays on iPad and Mac
+    if ForkPlayerTransition.prepare(popupPlayer, sourceView: artworkImage) {
+      hostVC.present(popupPlayer, animated: true, completion: completion)
+      return
+    }
     popupPlayer.modalPresentationStyle = .pageSheet
     if let sheet = popupPlayer.sheetPresentationController {
       sheet.detents = [.large()]

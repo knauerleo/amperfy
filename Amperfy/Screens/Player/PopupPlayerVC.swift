@@ -169,6 +169,7 @@ class PopupPlayerVC: UIViewController, UIScrollViewDelegate {
         self.refresh()
       }
     )
+    forkConfigurePlayer() // Fork: zoom, lyrics card, queue swipe (phase 5)
   }
 
   override func viewDidLayoutSubviews() {
@@ -405,6 +406,7 @@ extension PopupPlayerVC: MusicPlayable {
   func didStartPlayingFromBeginning() {
     fetchSongInfoAndUpdateViews()
     largeCurrentlyPlayingView?.initializeLyrics()
+    forkReloadLyricsCard()
   }
 
   func didStartPlaying() {
@@ -427,6 +429,7 @@ extension PopupPlayerVC: MusicPlayable {
 
   func didLyricsTimeChange(time: CMTime) {
     largeCurrentlyPlayingView?.refreshLyricsTime(time: time)
+    forkUpdateLyricsCard(time: time)
   }
 
   func didArtworkChange() {
