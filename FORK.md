@@ -1,4 +1,4 @@
-# Amperfy-Fork mit YouTube-Music-Integration
+# Amperfy-Fork mit YouTube-Music-Integration (App-Name: Drift)
 
 Persönlicher Fork von [Amperfy](https://github.com/BLeeEZ/amperfy) (GPL-3.0, © Maximilian Bauer und Mitwirkende).
 Der Fork bleibt unter GPL-3.0. Lizenz- und Quellenhinweise des Originals bleiben unverändert erhalten.
@@ -313,6 +313,54 @@ Maßnahme 14 aus `DESIGN-AUDIT.md` und der Rest von Maßnahme 10. Davor Upstream
   Wer vor Phase 6 bewusst „System“ gewählt hatte, landet einmalig auf „Dark“ und muss neu wählen.
 - Mit Neutral Accent ist der Titel des laufenden Songs weiß wie die übrigen, nur die Balken zeigen ihn an.
 - Der Mac behält Flächen, Zellmaße und den `VYPlayIndicator` des Originals.
+
+### 8. Rebranding: Drift (Commits `50594cb3` bis `c0938f6c`)
+
+Davor Upstream gemergt (`66a11512`, ohne Konflikte). Grundsatz: Nur was der Nutzer sieht, heißt jetzt „Drift“.
+Alles, woran Daten, Logins und Downloads hängen, bleibt „Amperfy“.
+
+| Datei | Änderung |
+|---|---|
+| `AmperfyKit/Common/ForkBrand.swift` (neu) | `ForkBrand.name = "Drift"` und die Angaben zum Original (Name, Autor, Repo-URL). Liegt in AmperfyKit, weil auch dort ein sichtbarer Text steht |
+| `Amperfy/Info.plist` | `CFBundleDisplayName` = `Drift` (neu) und `CFBundleName` = `Drift` (statt `$(PRODUCT_NAME)`, daraus baut Mac Catalyst das App-Menü). Siri: alternative Namen „Drift Music“ und „Amperfy“, damit alte Sprachbefehle weiter funktionieren. `UILaunchScreen` statt `UILaunchStoryboardName` |
+| `Amperfy/AppIntentVocabulary.plist` | Beispielsätze „… in Drift“ |
+| `AppDelegate`, `MiniPlayerSceneDelegate`, `LoginVC`, `WelcomePopupPresenter`, `IntentManager`, `XCallbackURLsSetttingsView`, `SupportSettingsView`, `PlayerSettingsView`, `BackendAudioPlayer` | Je 1 bis 2 Zeilen: „Amperfy“ im sichtbaren Text → `ForkBrand.name` (Neustart-Notification, Mini-Player-Fenstertitel, Login-Titel, Notification-Onboarding, X-Callback-Doku, Mail-Alert und Mail-Betreff, Transcoding-Hinweis, Fehlermeldung „nicht abspielbar“) |
+| `Amperfy/SwiftUI/Settings/ForkAboutSection.swift` (neu) | Settings-Hauptseite (auf dem Mac Tab „General“), Sektion „About Drift“: „Based on Amperfy by Maximilian Bauer, licensed under GPLv3“ mit Link auf github.com/BLeeEZ/amperfy. Hook: 1 Zeile in `SettingsView` |
+| `AmperfyKit/Assets/ForkAppIcon.icon` (neu) | Icon-Composer-Datei: drei Wellen (Ebenen `Wave1`–`Wave3`, Deckkraft 100/65/35 %) in Theme-Blau `#0A84FF` auf `#121212`, Default und Dark gleich, Tinted in Weiß. Ebenen-Quellen als SVG in `Design/ForkAppIcon/` |
+| `project.pbxproj` | `ForkAppIcon.icon` in denselben Resources-Phasen wie `AmperfyAppIcon.icon`, `ASSETCATALOG_COMPILER_APPICON_NAME = ForkAppIcon` (Debug und Release) |
+| `Assets.xcassets/LaunchBackground.colorset`, `LaunchGlyph.imageset` (neu) | Splash: Hintergrund dunkel `#121212`, hell `systemBackground`, Wellen-Glyph 96 pt ohne Hintergrund (1x/2x/3x aus `Design/ForkAppIcon/launch-glyph.svg`) |
+| `SceneDelegate.swift` | 1 Zeile: Fenster-Hintergrund `DS.Color.background`, damit zwischen Splash und Home nichts aufblitzt |
+
+**Bleibt bewusst „Amperfy“:**
+
+- **Bundle-ID** `de.knauerleo.amperfy-music`, `PRODUCT_NAME`, Target-, Scheme- und Modulnamen (`Amperfy`, `AmperfyKit`),
+  Typnamen (`AmperfyImage`, `AmperfyAppShortcuts` usw.). Die Bundle-ID bestimmt Container, UserDefaults und Keychain.
+  Bei einer Änderung wären Login, Datenbank und Downloads weg. Der Rest würde jeden Upstream-Merge zum Konflikt machen.
+- **Core-Data-Modell** „Amperfy“ und die Versionsnamen in `CoreDataMigrationVersion`. Eine Umbenennung würde die
+  vorhandene Datenbank nicht mehr finden.
+- **Technische IDs:** Background-Task-ID `de.familie-zimba.Amperfy.RefreshTask`, Notification-Namen, Activity-Types,
+  URL-Schema `amperfy://` (X-Callback). Steht teils in Shortcuts der Nutzer und in der Info.plist.
+- **Subsonic-Client-ID** `c=Amperfy`. Navidrome legt pro Client-Name einen Player an. Ein neuer Name hieße neuer Player,
+  und dessen Einstellungen (z. B. Transcoding) gingen verloren.
+- **Logs:** OSLog-Subsystem, „Cache Location“, `LogData.appName`, Dateiname `AmperfyLog.json`.
+- **Lizenz:** Alle Lizenz-Header, der Copyright-Text in `LicenseSettingsView` und `NSHumanReadableCopyright` von AmperfyKit.
+  Die GPL verlangt, dass Copyright- und Lizenzhinweise erhalten bleiben.
+- `AmperfyAppIcon.icon` bleibt im Projekt und wird weiter mitkompiliert, ist aber nicht mehr das App-Icon.
+  `LaunchScreen.storyboard` bleibt unverändert im Projekt, ist aber nicht mehr eingetragen. `AppDelegate.name` wird nirgends verwendet.
+
+**Mac Catalyst:**
+
+- Das Icon kompiliert `actool` für macOS fehlerfrei zu `ForkAppIcon.icns` und `Assets.car`.
+- Einen Splash zeigt macOS bei Catalyst-Apps nicht. Der Wechsel auf `UILaunchScreen` ist dort also folgenlos,
+  ein Storyboard muss für den Mac nicht bleiben.
+- Menü „About/Hide/Quit Drift“ über `CFBundleName`. Die Datei heißt weiter `Amperfy.app` (Finder zeigt den Dateinamen).
+
+**Bekannte Grenzen:**
+
+- Der Splash folgt dem Systemmodus, nicht der Darstellung in der App. Ist das System hell, die App aber dunkel
+  (Standard seit Phase 6), wechselt der Splash von Weiß auf `#121212`. Abhilfe wäre ein Splash, der in beiden Modi dunkel ist.
+- iOS speichert den Splash zwischen. Nach dem Update erscheint der neue manchmal erst nach einem Neustart des iPhones.
+- Das Icon zeigt immer Blau, unabhängig von der Theme-Farbe in der App.
 
 ### Hilfsskript
 
