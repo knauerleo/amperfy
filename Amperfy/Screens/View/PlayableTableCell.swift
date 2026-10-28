@@ -135,6 +135,7 @@ class PlayableTableCell: BasicTableCell {
       selectionStyle = .none
       downloadProgress.isHidden = true
       setupRatingStars()
+      applyForkStyle()
       resetForReuse()
     }
   }

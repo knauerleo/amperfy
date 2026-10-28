@@ -76,5 +76,6 @@ class GenericTableCell: BasicTableCell {
     }
     accessoryType = .disclosureIndicator
     backgroundColor = .systemBackground
+    applyForkStyle()
   }
 }

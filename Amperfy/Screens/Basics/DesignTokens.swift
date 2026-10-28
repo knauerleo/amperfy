@@ -52,6 +52,9 @@ enum DS {
     static var sectionTitle: UIFont { scaled(22, .bold, .title2) }
     static var rowTitle: UIFont { scaled(16, .medium, .body) }
     static var rowSubtitle: UIFont { scaled(13, .regular, .subheadline) }
+    /// List cells have a fixed row height, so their fonts only grow a little with Dynamic Type.
+    static var cellTitle: UIFont { scaled(16, .regular, .body, maximum: 19) }
+    static var cellSubtitle: UIFont { scaled(13, .regular, .subheadline, maximum: 15) }
     static var miniPlayerTitle: UIFont { scaled(14, .semibold, .subheadline, maximum: 18) }
     static var miniPlayerSubtitle: UIFont { scaled(12, .regular, .footnote, maximum: 16) }
     static var caption: UIFont { scaled(11, .medium, .caption2) }
