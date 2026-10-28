@@ -33,12 +33,20 @@ public enum HomeSection: Int, Sendable, CaseIterable, Codable {
   case randomArtists
   case randomGenres
   case randomSongs
+  // Fork: mixed grid of albums, playlists and artists by lastPlayedDate
+  case recentlyPlayed
+  // Fork: albums of the newest songs by addedDate, filled up with the server's newest albums
+  case recentlyAdded
 
+  // Fork: what the user played comes first, random sections go to the end
   static let defaultValue: [HomeSection] = [
-    .randomAlbums,
+    .recentlyPlayed,
+    .recentlyAdded,
     .recentlyPlayedAlbums,
     .lastTimePlayedPlaylists,
     .newestAlbums,
+    .randomArtists,
+    .randomAlbums,
   ]
 
   public var title: String {
@@ -53,6 +61,8 @@ public enum HomeSection: Int, Sendable, CaseIterable, Codable {
     case .randomArtists: return "Random Artists"
     case .randomGenres: return "Random Genres"
     case .randomSongs: return "Random Songs"
+    case .recentlyPlayed: return "Recently Played"
+    case .recentlyAdded: return "Recently Added"
     }
   }
 
@@ -72,6 +82,8 @@ public enum HomeSection: Int, Sendable, CaseIterable, Codable {
     case .randomArtists: return true
     case .randomGenres: return true
     case .randomSongs: return true
+    case .recentlyPlayed: return false
+    case .recentlyAdded: return false
     }
   }
 }

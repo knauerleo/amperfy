@@ -342,6 +342,9 @@ public struct AccountSetting: Sendable, Codable {
     set { _homeSectionOrder = newValue }
   }
 
+  // Fork: version of the one-time Home migration, see HomeSection+ForkMigration.swift
+  var _forkHomeSectionsVersion: Int?
+
   private var _initialSyncCompletionStatus: SyncCompletionStatus = .defaultValue
   public var initialSyncCompletionStatus: SyncCompletionStatus {
     get { _initialSyncCompletionStatus }
