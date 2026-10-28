@@ -131,7 +131,7 @@ final class ForkLibraryVC: UICollectionViewController {
     super.viewDidLoad()
     title = "Library"
     navigationController?.navigationBar.prefersLargeTitles = true
-    collectionView.backgroundColor = .systemBackground
+    collectionView.backgroundColor = ForkSurface.background
     collectionView.collectionViewLayout = createLayout()
     configureDataSource()
     configureNavigationItems()
@@ -282,7 +282,7 @@ final class ForkLibraryVC: UICollectionViewController {
   )
     -> NSCollectionLayoutSection {
     var config = UICollectionLayoutListConfiguration(appearance: .plain)
-    config.backgroundColor = .systemBackground
+    config.backgroundColor = ForkSurface.background
     config.headerMode = withHeader ? .supplementary : .none
     let section = NSCollectionLayoutSection.list(using: config, layoutEnvironment: environment)
     if withHeader {
@@ -337,12 +337,18 @@ final class ForkLibraryVC: UICollectionViewController {
       guard let self, let entry = jobEntries[videoId] else { return }
       cell.display(entry: entry)
       cell.onRetry = { [weak self] in self?.retry(videoId: videoId) }
+      cell.configurationUpdateHandler = { cell, state in
+        cell.backgroundConfiguration = ForkSurface.listCellBackground(for: state)
+      }
     }
     let rowRegistration = UICollectionView.CellRegistration<UICollectionViewListCell, Item> {
       cell, _, item in
       var content = UIListContentConfiguration.cell()
       content.textProperties.font = DS.Font.rowTitle
       cell.accessories = []
+      cell.configurationUpdateHandler = { cell, state in
+        cell.backgroundConfiguration = ForkSurface.listCellBackground(for: state)
+      }
       switch item {
       case let .showAll(filter):
         content.text = "All \(filter.title)"

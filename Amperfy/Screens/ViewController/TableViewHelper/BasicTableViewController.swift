@@ -121,6 +121,7 @@ class BasicTableViewController: KeyCommandTableViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     tableView.keyboardDismissMode = .onDrag
+    applyForkSurface() // Fork: dark-first surfaces
   }
 
   #if targetEnvironment(macCatalyst)

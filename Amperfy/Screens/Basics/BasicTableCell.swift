@@ -27,6 +27,7 @@ class BasicTableCell: UITableViewCell {
   required init?(coder: NSCoder) {
     super.init(coder: coder)
     self.layoutMargins = BasicTableCell.margin
+    if ForkSurface.isEnabled { backgroundColor = .clear } // Fork: list background shows through
   }
 
   override var layoutMargins: UIEdgeInsets { get { BasicTableCell.margin } set {} }

@@ -337,7 +337,7 @@ final class ImmersiveDetailHeaderView: UIView {
   }
 
   private func applyBackdropColors() {
-    let base = UIColor.systemBackground.resolvedColor(with: traitCollection)
+    let base = ForkSurface.background.resolvedColor(with: traitCollection)
     let top = (backdropColors.first ?? .secondarySystemBackground).resolvedColor(with: traitCollection)
     // darken the cover color so white text stays readable in dark mode, lighten in light mode
     let tinted = traitCollection.userInterfaceStyle == .dark ?
