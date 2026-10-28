@@ -33,6 +33,7 @@ enum NavigationTarget: String, CaseIterable, @MainActor Identifiable {
   case support
   case license
   case xcallback
+  case youTubeMusic // Fork
   #if DEBUG
     case developer = "developer"
   #endif
@@ -52,6 +53,7 @@ enum NavigationTarget: String, CaseIterable, @MainActor Identifiable {
     case .support: SupportSettingsView()
     case .license: LicenseSettingsView()
     case .xcallback: XCallbackURLsSetttingsView()
+    case .youTubeMusic: YouTubeMusicSettingsView()
     #if DEBUG
       case .developer: DeveloperView()
     #endif
@@ -71,6 +73,7 @@ enum NavigationTarget: String, CaseIterable, @MainActor Identifiable {
     case .equalizer: "Equalizer"
     case .player: "Player, Stream & Scrobble"
     case .xcallback: "X-Callback-URL Documentation"
+    case .youTubeMusic: "YouTube Music"
     #if DEBUG
       case .developer: "Developer"
     #endif
@@ -91,6 +94,7 @@ enum NavigationTarget: String, CaseIterable, @MainActor Identifiable {
     case .support: .person
     case .license: .doc
     case .xcallback: .arrowTurnUp
+    case .youTubeMusic: UIImage(systemName: "play.rectangle.on.rectangle.fill") ?? .musicLibrary
     #if DEBUG
       case .developer: .hammer
     #endif
@@ -110,6 +114,7 @@ enum NavigationTarget: String, CaseIterable, @MainActor Identifiable {
     case .support: "person.circle"
     case .license: "doc.fill"
     case .xcallback: "arrowshape.turn.up.backward.circle.fill"
+    case .youTubeMusic: "play.rectangle.on.rectangle.fill"
     #if DEBUG
       case .developer: "hammer.circle.fill"
     #endif

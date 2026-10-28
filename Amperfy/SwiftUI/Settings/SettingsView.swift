@@ -100,6 +100,7 @@ struct SettingsView: View {
             navigationLink(.equalizer)
             navigationLink(.swipe)
             navigationLink(.artwork)
+            navigationLink(.youTubeMusic) // Fork
           }
 
           SettingsSection {

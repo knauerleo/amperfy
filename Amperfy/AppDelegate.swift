@@ -267,6 +267,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // Fork: everyday swipe defaults (measure 9), once
     var userSettings = storage.settings.user
     if userSettings.migrateForkSwipeDefaults() { storage.settings.user = userSettings }
+    // Fork: Songpicker address, YouTube Music switch and proxy from the settings (phase 5)
+    SongpickerConfig.apply(storage.settings.user)
     libraryUpdater.performAccountCleanUpIfNeccessaryInBackground()
 
     configureDefaultNavigationBarStyle()

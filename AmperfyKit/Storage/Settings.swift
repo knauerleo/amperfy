@@ -263,6 +263,11 @@ public struct UserSettings: Sendable, Codable {
   // Fork: version of the one-time swipe migration, see SwipeActionSettings+Fork.swift
   var _forkSwipeDefaultsVersion: Int?
 
+  // Fork: Songpicker / YouTube Music, see UserSettings+Songpicker.swift (optional: older settings decode)
+  var _forkSongpickerURL: String?
+  var _forkYouTubeMusicEnabled: Bool?
+  var _forkSongpickerProxyURL: String?
+
   private var _songsSortSetting: SongElementSortType = .defaultValue
   public var songsSortSetting: SongElementSortType {
     get { _songsSortSetting }

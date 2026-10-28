@@ -23,7 +23,7 @@ import Foundation
 
 // MARK: - SongpickerConfig
 
-/// All Songpicker and proxy addresses in one place, so the settings (phase 5) only need to set `baseURL`.
+/// All Songpicker and proxy addresses in one place. Set at start from the settings (see `apply`).
 public enum SongpickerConfig {
   public static let defaultBaseURL = URL(string: "http://10.66.66.6:8781")!
   /// Port of the Subsonic proxy (nginx) that understands the `ytm-<videoId>` IDs.
@@ -31,6 +31,7 @@ public enum SongpickerConfig {
 
   private static let _baseURL = Atomic<URL>(wrappedValue: defaultBaseURL)
   private static let _isEnabled = Atomic<Bool>(wrappedValue: true)
+  private static let _customProxyURL = Atomic<URL?>(wrappedValue: nil)
 
   public static var baseURL: URL {
     get { _baseURL.wrappedValue }
@@ -43,11 +44,50 @@ public enum SongpickerConfig {
     set { _isEnabled.wrappedValue = newValue }
   }
 
+  /// Own address of the proxy, e.g. behind an HTTPS reverse proxy. `nil`: host of the account + `proxyPort`.
+  public static var customProxyURL: URL? {
+    get { _customProxyURL.wrappedValue }
+    set { _customProxyURL.wrappedValue = newValue }
+  }
+
+  /// Takes over the values stored in the settings (phase 5).
+  public static func apply(_ settings: UserSettings) {
+    baseURL = settings.songpickerURL
+    isEnabled = settings.isYouTubeMusicEnabled
+    customProxyURL = settings.songpickerProxyURL
+  }
+
+  /// A typed address with scheme, e.g. "10.66.66.6:8781" → "http://10.66.66.6:8781".
+  public static func normalizedURL(from text: String) -> URL? {
+    var trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+    guard !trimmed.isEmpty else { return nil }
+    if !trimmed.contains("://") { trimmed = "http://" + trimmed }
+    while trimmed.hasSuffix("/") { trimmed.removeLast() }
+    guard let url = URL(string: trimmed), let scheme = url.scheme?.lowercased(),
+          scheme == "http" || scheme == "https", url.host?.isEmpty == false
+    else { return nil }
+    return url
+  }
+
   /// Same host as the Subsonic server of the account, but the proxy port.
+  /// With a custom proxy URL: its scheme, host, port and path, followed by the `rest/…` part.
   public static func proxyURL(rewriting url: URL) -> URL {
     guard var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
     else { return url }
-    components.port = proxyPort
+    guard let custom = customProxyURL,
+          let customComponents = URLComponents(url: custom, resolvingAgainstBaseURL: false)
+    else {
+      components.port = proxyPort
+      return components.url ?? url
+    }
+    components.scheme = customComponents.scheme
+    components.host = customComponents.host
+    components.port = customComponents.port
+    let restPart = components.path.range(of: "/rest/").map { String(components.path[$0.lowerBound...]) }
+      ?? components.path
+    var basePath = customComponents.path
+    while basePath.hasSuffix("/") { basePath.removeLast() }
+    components.path = basePath + restPart
     return components.url ?? url
   }
 }
@@ -130,12 +170,25 @@ public struct SongpickerJob: Sendable, Equatable {
   public let label: String?
   public let path: String?
   public let error: String?
+  /// Start of the job, sent as Unix time or ISO 8601 text.
+  public let started: Date?
 
   init(dict: [String: Any]) {
     self.state = SongpickerJobState(rawValue: (dict["state"] as? String) ?? "")
     self.label = dict["label"] as? String
     self.path = dict["path"] as? String
     self.error = dict["error"] as? String
+    switch dict["started"] {
+    case let number as NSNumber:
+      let seconds = number.doubleValue
+      // milliseconds, if the value is too large for seconds
+      self.started = Date(timeIntervalSince1970: seconds > 100_000_000_000 ? seconds / 1000 : seconds)
+    case let text as String:
+      self.started = ISO8601DateFormatter().date(from: text)
+        ?? Double(text).map { Date(timeIntervalSince1970: $0) }
+    default:
+      self.started = nil
+    }
   }
 }
 
