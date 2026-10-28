@@ -101,6 +101,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
     guard let windowScene = scene as? UIWindowScene else { return }
     window = UIWindow(windowScene: windowScene)
+    window?.backgroundColor = DS.Color.background // Fork: no flash between launch screen and first page
     appDelegate.window = window
     var initialViewController: UIViewController?
 
