@@ -55,6 +55,8 @@ struct DisplaySettingsView: View {
           }
         }
 
+        NeutralAccentSettingsSection() // Fork: measure 14
+
         #if !targetEnvironment(macCatalyst)
           SettingsSection(
             content: {
