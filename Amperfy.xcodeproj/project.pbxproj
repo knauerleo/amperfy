@@ -460,6 +460,7 @@
 		50C9D70C2850759B007F18D0 /* PlayIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509D55E6280FD5E000E0E0B5 /* PlayIndicator.swift */; };
 		50C9D70D2850759B007F18D0 /* NotificationBannerCustomization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501999DB26806B8600F72D37 /* NotificationBannerCustomization.swift */; };
 		50C9D70F2850759B007F18D0 /* BasicButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5009863D2208CC1E0057A1A6 /* BasicButton.swift */; };
+		1ECF2B8AE2C18C3F54EE7703 /* DesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEAA9A1F04DC510CCE1521D8 /* DesignTokens.swift */; };
 		50C9D7102850759B007F18D0 /* OptionsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5009863B2208CB650057A1A6 /* OptionsButton.swift */; };
 		50C9D7112850759B007F18D0 /* BasicTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50675E6C25F61163005737FD /* BasicTableCell.swift */; };
 		50C9D7142850759B007F18D0 /* Corners.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500EB36725F8B3EB00B4B998 /* Corners.swift */; };
@@ -626,6 +627,7 @@
 		5007CE4621EF6A8E00BC5CBA /* PlaylistDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistDetailVC.swift; sourceTree = "<group>"; };
 		5009863B2208CB650057A1A6 /* OptionsButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsButton.swift; sourceTree = "<group>"; };
 		5009863D2208CC1E0057A1A6 /* BasicButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicButton.swift; sourceTree = "<group>"; };
+		FEAA9A1F04DC510CCE1521D8 /* DesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DesignTokens.swift"; sourceTree = "<group>"; };
 		500B2B302249607B00D14EF4 /* BackendProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackendProxy.swift; sourceTree = "<group>"; };
 		500B7D4221ECFCDD0083ED6F /* LibraryElementEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryElementEnum.swift; sourceTree = "<group>"; };
 		500B7D4421EDB05F0083ED6F /* LibraryElementDetailTableHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LibraryElementDetailTableHeaderView.xib; sourceTree = "<group>"; };
@@ -1230,6 +1232,7 @@
 			children = (
 				5009863B2208CB650057A1A6 /* OptionsButton.swift */,
 				5009863D2208CC1E0057A1A6 /* BasicButton.swift */,
+				FEAA9A1F04DC510CCE1521D8 /* DesignTokens.swift */,
 				5002565625E69DC700674CE1 /* SpinnerViewController.swift */,
 				50675E6C25F61163005737FD /* BasicTableCell.swift */,
 				5005939028E42F66008C8DF6 /* BasicCollectionCell.swift */,
@@ -2563,6 +2566,7 @@
 				501DBE9F2632D2D000B31128 /* GenreDetailVC.swift in Sources */,
 				504B441928D6F0920033982C /* LicenseSettingsView.swift in Sources */,
 				50C9D70F2850759B007F18D0 /* BasicButton.swift in Sources */,
+				1ECF2B8AE2C18C3F54EE7703 /* DesignTokens.swift in Sources */,
 				50BA930021CFDEBD00E5901D /* LibraryVC.swift in Sources */,
 				50AB3B4B2F031D0C00556CE4 /* SetRatingForCurrentlyPlayingSongIntent.swift in Sources */,
 				5074149B2EFFC6D9007AEC5D /* ContinuePlaybackIntent.swift in Sources */,
