@@ -58,7 +58,9 @@ public class Playlist: Identifyable {
   public func updateArtworkItems() {
     var updatedArtworkItems = [PlaylistItemMO]()
     for (index, playlistItem) in managedObject.items.enumerated() {
-      if playlistItem.playable.artwork != nil {
+      // Fork: only distinct covers, so the collage doesn't repeat the same album
+      if let artwork = playlistItem.playable.artwork,
+         !updatedArtworkItems.contains(where: { $0.playable.artwork == artwork }) {
         updatedArtworkItems.append(playlistItem)
         if updatedArtworkItems.count >= 4 || index > Self.artworkItemMaxLookCount {
           break
@@ -547,11 +549,17 @@ extension Playlist: PlayableContainable {
   }
 
   public func getArtworkCollection(theme: ThemePreference) -> ArtworkCollection {
-    let artworkItems = artworkItems
+    // Fork: drop repeated covers (also for artwork items stored before the distinct check)
+    var seenArtworkIds = Set<String>()
+    let artworkItems = artworkItems.filter {
+      guard let id = $0.playable.artwork?.id else { return true }
+      return seenArtworkIds.insert(id).inserted
+    }
 
     if artworkItems.isEmpty {
       return ArtworkCollection(defaultArtworkType: getDefaultArtworkType(), singleImageEntity: nil)
-    } else if artworkItems.count == 1 {
+    } else if artworkItems.count < 4 {
+      // Fork: a collage with empty slots looks broken, use the first cover instead
       return ArtworkCollection(
         defaultArtworkType: getDefaultArtworkType(),
         singleImageEntity: artworkItems[0].playable
