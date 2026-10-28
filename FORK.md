@@ -278,6 +278,42 @@ Maßnahmen 12 und 13 aus `DESIGN-AUDIT.md`, Roadmap Punkte 3 und 4 (Download-Üb
 - Die Zwischen-Commits `d3c1ec2b` bis `be5d7705` haben die neuen Dateien unvollständig im Projekt eingetragen,
   erst `9165849a` baut. Der Stand `9165849a` baut und startet auf dem iPhone.
 
+### 7. Design Phase 6: Dark-first und Zellen (Commits `353607f9` bis `c5b5f5a6`)
+
+Maßnahme 14 aus `DESIGN-AUDIT.md` und der Rest von Maßnahme 10. Davor Upstream gemergt (`965e7284`, ohne Konflikte).
+
+| Datei | Änderung |
+|---|---|
+| `AmperfyKit/Storage/UserSettings+Appearance.swift` (neu) | Einmalige Migration `migrateForkDarkFirst()` (Feld `_forkAppearanceVersion`): steht `appearanceMode` noch auf „System“, wird es „Dark“. „Light“ bleibt, eine spätere Wahl bleibt ebenfalls. `isNeutralAccent` (Default aus) und `ForkAccent.isNeutral` als globaler Schalter |
+| `AmperfyKit/Storage/Settings.swift` | 2 optionale Felder `_forkAppearanceVersion`, `_forkNeutralAccent` |
+| `AmperfyKit/Storage/SettingEnumerations.swift` | je 1 Zeile in `asColor` und `contrastColor`: bei Neutral Accent `label` bzw. `systemBackground` statt Theme-Farbe |
+| `AppDelegate.swift` | Migration und `ForkAccent.isNeutral` beim Start, vor `setAppTheme` |
+| `Amperfy/SwiftUI/Settings/NeutralAccentSettingsSection.swift` (neu) | Settings › Display › „Neutral Accent“, speichert sofort und färbt die geladenen Views neu (wie der Theme-Wechsel im Original). Hook: 1 Zeile in `DisplaySettingsView` |
+| `DesignTokens.swift` | `DS.Color.background` / `surface` / `surfaceRaised` (#121212 / #1E1E1E / #2A2A2A, hell: `systemBackground` / `secondarySystemBackground` / `tertiarySystemBackground`). `tileSurface` (#1E1E1E) und `skeleton` (#2A2A2A) auf den Graustufen, hell weiter `tertiarySystemFill`. `DS.Font.songTitle` (16 semibold) |
+| `Amperfy/Screens/Basics/ForkSurface.swift` (neu) | Alle Plain-Listen (`BasicTableViewController`: Library-Listen, Suche, Detailseiten) auf `DS.Color.background`, angeheftete Sektionsköpfe in derselben Farbe, Listenzellen durchsichtig. Auf dem Mac aus |
+| `BasicTableViewController`, `BasicTableCell`, `HomeVC`, `ForkLibraryVC`, `ImmersiveDetailHeaderView`, `SearchStatusCell` | Hooks: Flächenfarbe statt `systemBackground`, Verlauf im Header endet in der Flächenfarbe |
+| `TableCells+ForkStyle.swift` | `PlayableTableCell`: Cover 56 pt (Queue 40 pt), Radius 4, Titel 16 semibold, Untertitel 13. Das Cover ragt in die Zellränder, die Zeilenhöhe (66 pt) bleibt, `rowHeight` und XIB unverändert |
+| `Amperfy/Screens/View/NowPlayingBarsView.swift` (neu) | Kleines animiertes Equalizer-Icon (4 Balken). Bewegt sich nur beim Abspielen, steht still bei Pause und bei „Bewegung reduzieren“ (reagiert auch auf Umschalten zur Laufzeit) |
+| `Amperfy/Screens/View/PlayableTableCell+NowPlaying.swift` (neu) | „Läuft gerade“: Titel in Akzentfarbe, Balken über dem abgedunkelten Cover bzw. statt der Tracknummer (Albumseite). Ersetzt auf iPhone/iPad den `VYPlayIndicator`, folgt Play/Pause/Stop selbst |
+| `PlayableTableCell.swift` | Nur Hooks: Layout nach `refresh`, Now-Playing statt PlayIndicator, Hintergrund, Download-Icon in der Queue aus |
+| `Amperfy/Screens/Player/SectionHeader/CurrentlyPlayingTableCell+Fork.swift` (neu) | Queue im Player: aktueller Song oben auf einer abgerundeten Karte, Cover-Radius 8, Balken-Badge auf dem Cover. Hook: 1 Zeile in `refresh` |
+
+**Verhalten:**
+
+- **Erststart nach dem Update:** Wer die Darstellung nie geändert hat, sieht die App dunkel. „Light“ bleibt hell.
+  Eine danach gewählte Einstellung (auch „System“) bleibt erhalten, die Migration läuft nur einmal.
+- **Neutral Accent:** Knöpfe, Links, Schalter und der Titel des laufenden Songs in Weiß (Dunkel) bzw. Schwarz (Hell).
+  Die Theme-Farbe bleibt gespeichert und gilt wieder, sobald der Schalter aus ist. Farben aus Covern bleiben.
+- **Queue im Player:** Zeilen mit 40-pt-Cover ohne Download-Icon, rechts weiter der Griff zum Sortieren.
+- **Suche:** Das YouTube-Badge sitzt weiter als `accessoryView` rechts in der Zeile und ist vom größeren Cover links nicht betroffen.
+
+**Bekannte Grenzen:**
+
+- Die Migration kann „nie geändert“ und „bewusst System gewählt“ nicht unterscheiden (beides `.unspecified`).
+  Wer vor Phase 6 bewusst „System“ gewählt hatte, landet einmalig auf „Dark“ und muss neu wählen.
+- Mit Neutral Accent ist der Titel des laufenden Songs weiß wie die übrigen, nur die Balken zeigen ihn an.
+- Der Mac behält Flächen, Zellmaße und den `VYPlayIndicator` des Originals.
+
 ### Hilfsskript
 
 `Helper/add-swift-file.py <Neu.swift> <Nachbar.swift>` trägt eine neue Datei ins Projekt ein, in dieselbe Gruppe und
@@ -301,7 +337,7 @@ Datei einzeln in `project.pbxproj` führt.
      (Wiedergabezahlen, Favoriten, oft gehörte Künstler über die Subsonic-API von Navidrome), Karaoke- und Cover-Versionen
      nach unten. In der App nur ein kleiner Bonus im Top-Treffer-Ranking (`forkScore` in `SearchVC+Fork.swift`) aus
      `playCount`, `isFavorite` und `lastPlayedDate`, die schon lokal vorliegen.
-5. Design-Überarbeitung Richtung moderner Streaming-Client, in 5 Phasen laut `DESIGN-AUDIT.md`. Phase 1 ✅, Phase 2 ✅, Phase 3 ✅, Phase 4 ✅, Phase 5 ✅
+5. Design-Überarbeitung Richtung moderner Streaming-Client, in 5 Phasen laut `DESIGN-AUDIT.md`. Phase 1 ✅, Phase 2 ✅, Phase 3 ✅, Phase 4 ✅, Phase 5 ✅, Phase 6 ✅ (Maßnahmen 10 und 14 abgeschlossen)
 
 ## Arbeitsweise
 
