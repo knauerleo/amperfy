@@ -215,6 +215,19 @@ Maßnahmen 8 und 9 aus `DESIGN-AUDIT.md` und Roadmap Punkt 2.
   den Download, die App verfolgt den Job. Menü (lange drücken oder „…“): Play, Play Next, Add to Queue, Add to Library.
 - **Nach `fertig`:** Sync per search3 (siehe oben), danach erscheint das Album in „Recently Added“ auf Home.
 
+**Maßnahme 9: Menüs und Swipes in Alltagssprache (Commit `c0fd0dc1`)**
+
+| Datei | Änderung |
+|---|---|
+| `AmperfyKit/Storage/SwipeActionSettings+Fork.swift` (neu) | Neue Swipe-Defaults: links (leading) Play Next / Add to Queue, rechts (trailing) Favorite / Download. Einmalige Migration `migrateForkSwipeDefaults()`, ersetzt nur die unveränderten Original-Defaults. `ForkMenuText.relabel` benennt Menüeinträge um, ohne die Literale im Upstream-Code zu ändern |
+| `EntityPreviewVC.swift` | „Play Next“ und „Add to Queue“ direkt im Menü (ein Tap), Context-Queue unter „More Queue Options“ („Play Next in Current List“, „Add to End of Current List“). Podcast-Queue ebenfalls „Play Next“ / „Add to Queue“. „Song Radio“ statt „Instant Mix“ im Wiedergabe-Namen und Hinweis. Aufruf von `relabel` vor dem `return` |
+| `PlayerControlView.swift` | 1 Zeile: `relabel` für das Player-Menü |
+| `SwipeActionSettings.swift` | Neue Texte für Swipe-Knöpfe und Einstellungen, `defaultSettings` zeigt auf die Fork-Defaults, die alten als `upstreamDefaultSettings` |
+| `Settings.swift`, `AppDelegate.swift` | Feld `_forkSwipeDefaultsVersion` (optional), Migration beim Start |
+
+Umbenannt: Song Radio, Go to Album/Artist/Podcast, Add to / Remove from Favorites, Remove Download, Shuffle,
+Clear Queue (statt Clear User Queue), Add Current List to Playlist, Scroll to Now Playing.
+
 **Bekannte Grenzen:**
 
 - Läuft der Account nicht über Port 4533/4534 desselben Hosts (z. B. HTTPS-Reverse-Proxy), stimmt die Proxy-URL nicht.
