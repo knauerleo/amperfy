@@ -97,6 +97,7 @@ class PlayerControlView: UIView {
     playerModeButton.tintColor = .label
     volumeButton.tintColor = .label
     optionsButton.imageView?.tintColor = .label
+    applyForkStyle()
     refreshPlayer()
     playerHandler?.refreshPlayerOptions(
       optionsButton: optionsButton,

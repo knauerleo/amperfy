@@ -146,6 +146,7 @@
 		509357522E3BF48900CD4075 /* MiniPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509357512E3BF47800CD4075 /* MiniPlayerView.swift */; };
 		509D55F8281274F500E0E0B5 /* VYPlayIndicator in Frameworks */ = {isa = PBXBuildFile; productRef = 509D55F7281274F500E0E0B5 /* VYPlayIndicator */; };
 		50A30E4F2B73DDC800722894 /* PlayerControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A30E4D2B73DDC800722894 /* PlayerControlView.swift */; };
+		2D69D9DCA868CD1021CDA25B /* PlayerControlView+ForkStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54C10004A73F6F66D3091A0A /* PlayerControlView+ForkStyle.swift */; };
 		50A30E502B73DFE500722894 /* PlayerControlView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50A30E4E2B73DDC800722894 /* PlayerControlView.xib */; };
 		50A30E542B7408DB00722894 /* ContextQueueNextSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A30E532B7408DB00722894 /* ContextQueueNextSectionHeader.swift */; };
 		50A30E592B75026100722894 /* ContextQueueNextSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50A30E582B75026100722894 /* ContextQueueNextSectionHeader.xib */; };
@@ -460,6 +461,7 @@
 		50C9D70C2850759B007F18D0 /* PlayIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509D55E6280FD5E000E0E0B5 /* PlayIndicator.swift */; };
 		50C9D70D2850759B007F18D0 /* NotificationBannerCustomization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501999DB26806B8600F72D37 /* NotificationBannerCustomization.swift */; };
 		50C9D70F2850759B007F18D0 /* BasicButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5009863D2208CC1E0057A1A6 /* BasicButton.swift */; };
+		79F473098113F79A9F321743 /* ArtworkColorCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54E3DA20351584F03B4F56F /* ArtworkColorCache.swift */; };
 		1ECF2B8AE2C18C3F54EE7703 /* DesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEAA9A1F04DC510CCE1521D8 /* DesignTokens.swift */; };
 		50C9D7102850759B007F18D0 /* OptionsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5009863B2208CB650057A1A6 /* OptionsButton.swift */; };
 		50C9D7112850759B007F18D0 /* BasicTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50675E6C25F61163005737FD /* BasicTableCell.swift */; };
@@ -627,6 +629,7 @@
 		5007CE4621EF6A8E00BC5CBA /* PlaylistDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistDetailVC.swift; sourceTree = "<group>"; };
 		5009863B2208CB650057A1A6 /* OptionsButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsButton.swift; sourceTree = "<group>"; };
 		5009863D2208CC1E0057A1A6 /* BasicButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicButton.swift; sourceTree = "<group>"; };
+		A54E3DA20351584F03B4F56F /* ArtworkColorCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArtworkColorCache.swift"; sourceTree = "<group>"; };
 		FEAA9A1F04DC510CCE1521D8 /* DesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DesignTokens.swift"; sourceTree = "<group>"; };
 		500B2B302249607B00D14EF4 /* BackendProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackendProxy.swift; sourceTree = "<group>"; };
 		500B7D4221ECFCDD0083ED6F /* LibraryElementEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryElementEnum.swift; sourceTree = "<group>"; };
@@ -873,6 +876,7 @@
 		50A12F4527392B2400E7B2AA /* EmbeddedArtwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmbeddedArtwork.swift; sourceTree = "<group>"; };
 		50A12F47273BBF7300E7B2AA /* Amperfy v16.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Amperfy v16.xcdatamodel"; sourceTree = "<group>"; };
 		50A30E4D2B73DDC800722894 /* PlayerControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerControlView.swift; sourceTree = "<group>"; };
+		54C10004A73F6F66D3091A0A /* PlayerControlView+ForkStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlayerControlView+ForkStyle.swift"; sourceTree = "<group>"; };
 		50A30E4E2B73DDC800722894 /* PlayerControlView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PlayerControlView.xib; sourceTree = "<group>"; };
 		50A30E532B7408DB00722894 /* ContextQueueNextSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextQueueNextSectionHeader.swift; sourceTree = "<group>"; };
 		50A30E582B75026100722894 /* ContextQueueNextSectionHeader.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ContextQueueNextSectionHeader.xib; sourceTree = "<group>"; };
@@ -1232,6 +1236,7 @@
 			children = (
 				5009863B2208CB650057A1A6 /* OptionsButton.swift */,
 				5009863D2208CC1E0057A1A6 /* BasicButton.swift */,
+				A54E3DA20351584F03B4F56F /* ArtworkColorCache.swift */,
 				FEAA9A1F04DC510CCE1521D8 /* DesignTokens.swift */,
 				5002565625E69DC700674CE1 /* SpinnerViewController.swift */,
 				50675E6C25F61163005737FD /* BasicTableCell.swift */,
@@ -1367,6 +1372,7 @@
 				501944172B78F97F00082D2E /* LargeCurrentlyPlayingPlayerView.swift */,
 				50A30E4E2B73DDC800722894 /* PlayerControlView.xib */,
 				50A30E4D2B73DDC800722894 /* PlayerControlView.swift */,
+				54C10004A73F6F66D3091A0A /* PlayerControlView+ForkStyle.swift */,
 				50FA36522F560D670058AB56 /* SeekableTimeSlider.swift */,
 			);
 			path = Player;
@@ -2511,6 +2517,7 @@
 				50CCD0592B6C388B0073793B /* PlainDetailsVC.swift in Sources */,
 				6333C8E12C6FDB5200CCA50A /* SecondaryText.swift in Sources */,
 				50A30E4F2B73DDC800722894 /* PlayerControlView.swift in Sources */,
+				2D69D9DCA868CD1021CDA25B /* PlayerControlView+ForkStyle.swift in Sources */,
 				632F51262C83A8400032860D /* LyricsVC.swift in Sources */,
 				509001B82716C8F400A8056D /* AppDelegateNotificationExtensions.swift in Sources */,
 				50A30E5C2B7556FB00722894 /* PopupPlayer+TableViewExtension.swift in Sources */,
@@ -2566,6 +2573,7 @@
 				501DBE9F2632D2D000B31128 /* GenreDetailVC.swift in Sources */,
 				504B441928D6F0920033982C /* LicenseSettingsView.swift in Sources */,
 				50C9D70F2850759B007F18D0 /* BasicButton.swift in Sources */,
+				79F473098113F79A9F321743 /* ArtworkColorCache.swift in Sources */,
 				1ECF2B8AE2C18C3F54EE7703 /* DesignTokens.swift in Sources */,
 				50BA930021CFDEBD00E5901D /* LibraryVC.swift in Sources */,
 				50AB3B4B2F031D0C00556CE4 /* SetRatingForCurrentlyPlayingSongIntent.swift in Sources */,

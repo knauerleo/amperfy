@@ -135,10 +135,21 @@ extension PopupPlayerVC {
     }
     guard let artwork = artwork else { return }
     backgroundImage.image = artwork
-    artworkGradientColors = (try? artwork.dominantColors(max: 2)) ?? [
-      themePreference.asColor,
-      UIColor.systemBackground,
-    ]
+    // Fork: colors are extracted off the main thread and cached; until then keep the previous
+    // colors (or a neutral fallback) instead of flashing the theme color.
+    if let cachedColors = ArtworkColorCache.shared.cachedColors(for: artwork) {
+      artworkGradientColors = cachedColors
+    } else {
+      if artworkGradientColors.isEmpty {
+        artworkGradientColors = [.secondarySystemBackground, .systemBackground]
+      }
+      Task { @MainActor in
+        guard let colors = await ArtworkColorCache.shared.colors(for: artwork),
+              self.backgroundImage.image === artwork else { return }
+        self.artworkGradientColors = colors
+        self.applyGradientBackground()
+      }
+    }
     applyGradientBackground()
   }
 
