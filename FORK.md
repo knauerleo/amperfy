@@ -231,10 +231,52 @@ Clear Queue (statt Clear User Queue), Add Current List to Playlist, Scroll to No
 **Bekannte Grenzen:**
 
 - Läuft der Account nicht über Port 4533/4534 desselben Hosts (z. B. HTTPS-Reverse-Proxy), stimmt die Proxy-URL nicht.
-  Dann in Phase 5 eine eigene Proxy-URL in `SongpickerConfig` ergänzen.
+  Erledigt in Phase 5: Settings › YouTube Music › „Custom Proxy URL“.
 - Taucht ein per Abspielen gestarteter Download nicht innerhalb von 60 s in `/api/jobs` auf, fällt das Badge auf die Wolke zurück.
 - Der Platzhalter bleibt nach dem Sync ein eigener Song (z. B. im Verlauf). Er wird gelöscht, sobald ihn nichts mehr nutzt.
 - Ein in einer früheren Sitzung gezeigter Treffer, der aus dem Verlauf gespielt wird, wird nicht verfolgt (das Treffer-JSON fehlt).
+
+### 6. Design Phase 5: Library und Player-Feinschliff (Commits `d3c1ec2b` bis `9165849a`)
+
+Maßnahmen 12 und 13 aus `DESIGN-AUDIT.md`, Roadmap Punkte 3 und 4 (Download-Übersicht).
+
+| Datei | Änderung |
+|---|---|
+| `AmperfyKit/Storage/UserSettings+Songpicker.swift` (neu) | `songpickerURL` (Default `http://10.66.66.6:8781`), `isYouTubeMusicEnabled` (Default an), `songpickerProxyURL` (optional). `nil` bedeutet jeweils Default |
+| `AmperfyKit/Storage/Settings.swift` | 3 optionale Felder `_forkSongpickerURL`, `_forkYouTubeMusicEnabled`, `_forkSongpickerProxyURL` (alte Settings decodieren weiter) |
+| `AmperfyKit/Api/SongpickerClient.swift` | `SongpickerConfig.customProxyURL`, `apply(_:)` aus den Settings, `normalizedURL(from:)` (ergänzt `http://`). `proxyURL(rewriting:)` nimmt mit eigener Proxy-URL deren Schema, Host, Port und Pfad, gefolgt vom `rest/…`-Teil. `SongpickerJob.started` (Unix-Zeit oder ISO 8601) |
+| `AmperfyKit/Api/YouTubeMusicJobMonitor.swift` | `jobList` (`YouTubeMusicJobEntry`: laufende zuerst, dann neueste), `startObserving`/`stopObserving`, `retry(videoId:)`, `hasLoadedJobs`, `lastError`. Gepollt wird nur, solange ein verfolgter Download läuft oder die Übersicht sichtbar ist (1,5 s, ohne laufenden Job 5 s) |
+| `AmperfyKit/Storage/LibraryStorage+YouTubeMusic.swift` | `YouTubeMusicHitStore` merkt sich zusätzlich das Treffer-JSON (optional), `hit(forVideoId:)` für Übersicht und Retry |
+| `AmperfyKit/Storage/LibraryStorage+ForkLibrary.swift` (neu) | Alben, Künstler, Playlists für das Raster: nach `lastPlayedDate` absteigend, nie gespielte alphabetisch dahinter, max. 150 |
+| `Amperfy/Screens/ViewController/ForkLibraryVC.swift` (neu) | Library-Raster: Chips, angeheftete Kachel „Favorite Songs“ + 7 zuletzt genutzte (TileCollectionCell, `ShelfLayout.tileGrid`), „Browse“ mit den übrigen Kategorien aus den Library-Einstellungen. Filter-Raster mit `LargeAlbumCell` (2 Spalten) bzw. `ArtistCircleCell` (3 Spalten), oben „All Albums/Artists/Playlists“ zur alten, sortierbaren Liste. Kontextmenü wie auf Home. Listen-Knopf oben rechts öffnet die alte Kategorienliste (inkl. Bearbeiten) |
+| `.../View/Collection/FilterChipCell.swift`, `.../View/DownloadJobCell.swift` (neu) | Chip (ausgewählt = in Label-Farbe gefüllt), Job-Zeile mit Cover, Status, `SourceBadgeView` und „Retry“ |
+| `AppStoryboard.swift` | `segueToLibrary` liefert auf dem iPhone `ForkLibraryVC`, `segueToLibraryList` die alte `LibraryVC` (iPad/Mac unverändert) |
+| `Amperfy/SwiftUI/Settings/YouTubeMusicSettingsView.swift` (neu) | Seite „YouTube Music“: Schalter, Songpicker-URL mit „Test Connection“ (`/api/jobs`) und „Reset to Default“, Schalter + Feld „Custom Proxy URL“. Speichert sofort und setzt `SongpickerConfig` |
+| `NavigationTarget.swift`, `SettingsView.swift`, `AppDelegate.swift` | Neuer Eintrag `youTubeMusic`, Link in den Settings, `SongpickerConfig.apply` beim Start |
+| `Amperfy/Screens/Player/PopupPlayer+Fork.swift` (neu) | `ForkPlayerTransition`: Zoom-Übergang (`preferredTransition = .zoom`) vom Mini-Player-Cover zum Player-Cover, Vollbild statt Sheet, Griff oben zum Schließen. Wisch nach oben auf dem Cover = Queue, in der Queue über den oberen Rand ziehen = zurück. Lyrics-Karte laden, ein- und ausblenden, Zeit nachführen |
+| `Amperfy/Screens/Player/LyricsCardView.swift` (neu) | Karte unter Titel und Künstler: aktuelle Zeile fett, nächste gedimmt, Fläche in abgedunkelter Cover-Farbe. Tap öffnet die volle Lyrics-Ansicht |
+| `MiniPlayerView.swift`, `PopupPlayerVC.swift`, `PopupPlayer+Visuals.swift`, `LargeCurrentlyPlayingPlayerView.swift` | Nur Hooks (je 1 bis 4 Zeilen): Zoom vorbereiten, `forkConfigurePlayer()`, Lyrics neu laden / Zeit / sichtbar, Karte einfärben |
+
+**Verhalten:**
+
+- **Library (iPhone):** Ohne Chip: „Favorite Songs“ + zuletzt genutzte Alben, Playlists und Künstler, darunter „Browse“
+  (Songs, Genres, Podcasts usw., je nach Library-Einstellungen). Chip erneut antippen = zurück zur Übersicht.
+  Im Offline-Modus nur gecachte Einträge.
+- **Downloads:** alle Jobs, die der Songpicker kennt (auch von anderen Geräten), laufende oben. Tap auf eine
+  fehlgeschlagene Zeile oder „Retry“ schickt `POST /api/get` erneut (mit dem gemerkten Treffer-JSON, sonst nur
+  `id`, `title`, `source`, `kind`). Darunter „Downloaded on This Device“ (die bisherige `DownloadsVC`).
+  Ist YouTube Music aus, steht dort ein Hinweis.
+- **Player:** öffnet immer auf dem Cover (die Queue merkt sich der Player nicht mehr über `playerDisplayStyle`).
+  Herunterwischen schließt den Player, aber nicht in der Queue und nicht in der vollen Lyrics-Ansicht.
+  Die Lyrics-Karte erscheint nur, wenn der Song Lyrics hat (Subsonic, Musikmodus).
+
+**Bekannte Grenzen:**
+
+- Die Karte nimmt dem Cover Höhe weg (Stack-View aus der XIB). Auf kleinen iPhones wird das Cover dadurch kleiner.
+- Das Feld `started` von `/api/jobs` ist nur geraten (Unix-Zeit oder ISO 8601). Fehlt es, sortiert die Liste
+  fertige Jobs ohne Zeitangabe ans Ende.
+- Die Zwischen-Commits `d3c1ec2b` bis `be5d7705` haben die neuen Dateien unvollständig im Projekt eingetragen,
+  erst `9165849a` baut. Der Stand `9165849a` baut und startet auf dem iPhone.
 
 ### Hilfsskript
 
@@ -253,13 +295,13 @@ Datei einzeln in `project.pbxproj` führt.
    - Status-Badge pro Treffer (Wolke, Spinner, Haken), aktualisiert per Polling von `/api/jobs`.
    - Ist ein Job `fertig`, wird der Song über Navidrome synchronisiert: per `search3` nach dem Titel suchen und über
      das Ende von `path` abgleichen.
-3. **Einstellungen:** Songpicker-URL (Default `http://10.66.66.6:8781`), YouTube-Bereich an/aus.
-4. Später: Download-Übersicht, „Ähnliche Songs von YouTube“.
+3. ~~**Einstellungen:** Songpicker-URL (Default `http://10.66.66.6:8781`), YouTube-Bereich an/aus.~~ ✅ (Design Phase 5, plus eigene Proxy-URL)
+4. ~~Download-Übersicht~~ ✅ (Design Phase 5, Library-Chip „Downloads“). Später: „Ähnliche Songs von YouTube“.
    - **Personalisierte Treffer:** Der Songpicker sortiert die YouTube-Ergebnisse nach den Hörgewohnheiten
      (Wiedergabezahlen, Favoriten, oft gehörte Künstler über die Subsonic-API von Navidrome), Karaoke- und Cover-Versionen
      nach unten. In der App nur ein kleiner Bonus im Top-Treffer-Ranking (`forkScore` in `SearchVC+Fork.swift`) aus
      `playCount`, `isFavorite` und `lastPlayedDate`, die schon lokal vorliegen.
-5. Design-Überarbeitung Richtung moderner Streaming-Client, in 5 Phasen laut `DESIGN-AUDIT.md`. Phase 1 ✅, Phase 2 ✅, Phase 3 ✅, Phase 4 ✅
+5. Design-Überarbeitung Richtung moderner Streaming-Client, in 5 Phasen laut `DESIGN-AUDIT.md`. Phase 1 ✅, Phase 2 ✅, Phase 3 ✅, Phase 4 ✅, Phase 5 ✅
 
 ## Arbeitsweise
 
