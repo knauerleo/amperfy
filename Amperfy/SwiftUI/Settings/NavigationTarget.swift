@@ -71,7 +71,7 @@ enum NavigationTarget: String, CaseIterable, @MainActor Identifiable {
     case .support: "Support"
     case .license: "License"
     case .equalizer: "Equalizer"
-    case .player: "Player, Stream & Scrobble"
+    case .player: "Player & Stream"
     case .xcallback: "X-Callback-URL Documentation"
     case .youTubeMusic: "YouTube Music"
     #if DEBUG
