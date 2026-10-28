@@ -371,6 +371,7 @@
 		50C9D66F284FAA4D007F18D0 /* LibrarySyncVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50223EF2264543EA007445BC /* LibrarySyncVersion.swift */; };
 		50C9D670284FAA4D007F18D0 /* LibraryStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BA930521D5715D00E5901D /* LibraryStorage.swift */; };
 		F9B8E090F2D0A66DE3BE1942 /* LibraryStorage+ForkHome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CBB663C5523D06770B559AE /* LibraryStorage+ForkHome.swift */; };
+		8C716989A258B8F1A48E683A /* ForkLibraryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F013A9DF48A55FEA53DA34C /* ForkLibraryVC.swift */; };
 		08120C7A1C58B09BA06DF1FA /* LibraryStorage+YouTubeMusic.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABDC99627E3CE2E1DF23163 /* LibraryStorage+YouTubeMusic.swift */; };
 		BF550BC084E4453B0CD9E164 /* LibraryStorage+MultiWordSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = C484BEC9AA43675ACBFA34D5 /* LibraryStorage+MultiWordSearch.swift */; };
 		50C9D671284FAA4D007F18D0 /* Identifyable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C16C2121E7A38A00F086F0 /* Identifyable.swift */; };
@@ -1020,6 +1021,7 @@
 		50BA930321D10F0000E5901D /* SyncVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncVC.swift; sourceTree = "<group>"; };
 		50BA930521D5715D00E5901D /* LibraryStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryStorage.swift; sourceTree = "<group>"; };
 		4CBB663C5523D06770B559AE /* LibraryStorage+ForkHome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryStorage+ForkHome.swift"; sourceTree = "<group>"; };
+		6F013A9DF48A55FEA53DA34C /* ForkLibraryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ForkLibraryVC.swift"; sourceTree = "<group>"; };
 		CABDC99627E3CE2E1DF23163 /* LibraryStorage+YouTubeMusic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryStorage+YouTubeMusic.swift"; sourceTree = "<group>"; };
 		C484BEC9AA43675ACBFA34D5 /* LibraryStorage+MultiWordSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryStorage+MultiWordSearch.swift"; sourceTree = "<group>"; };
 		50BA930721D75C5600E5901D /* AuthentificationHandshake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthentificationHandshake.swift; sourceTree = "<group>"; };
@@ -1811,6 +1813,7 @@
 				50C3B9AB2EED848B00F5CAB7 /* LegacySettings.swift */,
 				50BA930521D5715D00E5901D /* LibraryStorage.swift */,
 				4CBB663C5523D06770B559AE /* LibraryStorage+ForkHome.swift */,
+				6F013A9DF48A55FEA53DA34C /* ForkLibraryVC.swift */,
 				CABDC99627E3CE2E1DF23163 /* LibraryStorage+YouTubeMusic.swift */,
 				C484BEC9AA43675ACBFA34D5 /* LibraryStorage+MultiWordSearch.swift */,
 				50223EF2264543EA007445BC /* LibrarySyncVersion.swift */,
@@ -2825,6 +2828,7 @@
 				50D54B722E30FFDB0078631E /* FFT.swift in Sources */,
 				50C9D670284FAA4D007F18D0 /* LibraryStorage.swift in Sources */,
 				F9B8E090F2D0A66DE3BE1942 /* LibraryStorage+ForkHome.swift in Sources */,
+				8C716989A258B8F1A48E683A /* ForkLibraryVC.swift in Sources */,
 				08120C7A1C58B09BA06DF1FA /* LibraryStorage+YouTubeMusic.swift in Sources */,
 				BF550BC084E4453B0CD9E164 /* LibraryStorage+MultiWordSearch.swift in Sources */,
 				50C9D672284FAA4D007F18D0 /* BasicFetchedResultsController.swift in Sources */,

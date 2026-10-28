@@ -102,7 +102,13 @@ enum AppStoryboard: String {
   }
 
   func segueToHome(account: Account) -> HomeVC { HomeVC(account: account) }
-  func segueToLibrary(account: Account) -> UIViewController { LibraryVC(
+  func segueToLibrary(account: Account) -> UIViewController {
+    // Fork: Library grid on the iPhone (design phase 5), the category list stays one tap away
+    if UIDevice.current.userInterfaceIdiom == .phone { return ForkLibraryVC(account: account) }
+    return segueToLibraryList(account: account)
+  }
+
+  func segueToLibraryList(account: Account) -> UIViewController { LibraryVC(
     collectionViewLayout: .verticalLayout,
     account: account
   ) }
