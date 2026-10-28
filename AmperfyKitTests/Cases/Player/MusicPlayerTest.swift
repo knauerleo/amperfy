@@ -167,9 +167,9 @@ final class MOCK_LibrarySyncer: LibrarySyncer {
   func syncUpload(playlistToUpdateOrder playlist: Playlist) async throws {}
   func syncUpload(playlistIdToDelete id: String) async throws {}
   func syncDownPodcastsWithoutEpisodes() async throws {}
-  func searchArtists(searchText: String) async throws {}
-  func searchAlbums(searchText: String) async throws {}
-  func searchSongs(searchText: String) async throws {}
+  func searchArtists(searchText: String) async throws -> [NSManagedObjectID] { [] }
+  func searchAlbums(searchText: String) async throws -> [NSManagedObjectID] { [] }
+  func searchSongs(searchText: String) async throws -> [NSManagedObjectID] { [] }
   func syncMusicFolders() async throws {}
   func syncIndexes(musicFolder: MusicFolder) async throws {}
   func sync(directory: Directory) async throws {}

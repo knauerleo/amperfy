@@ -173,12 +173,12 @@ public protocol LibrarySyncer: Sendable {
   func syncUpload(playlistIdToDelete id: String) async throws
   @MainActor
   func syncDownPodcastsWithoutEpisodes() async throws
-  @MainActor
-  func searchArtists(searchText: String) async throws
-  @MainActor
-  func searchAlbums(searchText: String) async throws
-  @MainActor
-  func searchSongs(searchText: String) async throws
+  @MainActor @discardableResult
+  func searchArtists(searchText: String) async throws -> [NSManagedObjectID]
+  @MainActor @discardableResult
+  func searchAlbums(searchText: String) async throws -> [NSManagedObjectID]
+  @MainActor @discardableResult
+  func searchSongs(searchText: String) async throws -> [NSManagedObjectID]
   @MainActor
   func syncMusicFolders() async throws
   @MainActor

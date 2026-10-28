@@ -69,7 +69,9 @@ class SearchDiffableDataSource: BasicUITableViewDiffableDataSource {
 class SearchVC: BasicTableViewController {
   override var sceneTitle: String { "Search" }
 
-  nonisolated private static let categoryItemLimit = 10
+  nonisolated fileprivate static let categoryItemLimit = 10
+  nonisolated fileprivate static let songItemLimit = 25
+  nonisolated private static let searchDebounce: Duration = .milliseconds(300)
 
   private var diffableDataSource: SearchDiffableDataSource?
   fileprivate var searchHistory: [SearchHistoryItem] = []
@@ -85,6 +87,7 @@ class SearchVC: BasicTableViewController {
   private var accountObjectId: NSManagedObjectID?
   private let account: Account
   private var accountNotificationHandler: AccountNotificationHandler?
+  private var searchTask: Task<Void, Never>?
 
   init(account: Account) {
     self.account = account
@@ -497,172 +500,27 @@ class SearchVC: BasicTableViewController {
     var albumsIDs = [NSManagedObjectID]()
     var playlistsIDs = [NSManagedObjectID]()
     var songsIDs = [NSManagedObjectID]()
+
+    /// Server results first (in server order), then local results the server did not return.
+    func merged(withLocal local: SearchResultObjectContainer) -> SearchResultObjectContainer {
+      func merge(_ server: [NSManagedObjectID], _ local: [NSManagedObjectID], limit: Int)
+        -> [NSManagedObjectID] {
+        var seen = Set<NSManagedObjectID>()
+        return (server + local).filter { seen.insert($0).inserted }.prefix(upToAsArray: limit)
+      }
+      var result = SearchResultObjectContainer()
+      result.artistsIDs = merge(artistsIDs, local.artistsIDs, limit: SearchVC.categoryItemLimit)
+      result.albumsIDs = merge(albumsIDs, local.albumsIDs, limit: SearchVC.categoryItemLimit)
+      result.playlistsIDs = local.playlistsIDs
+      result.songsIDs = merge(songsIDs, local.songsIDs, limit: SearchVC.songItemLimit)
+      return result
+    }
   }
 
   override func updateSearchResults(for searchController: UISearchController) {
+    searchTask?.cancel()
     guard let searchText = searchController.searchBar.text, let accountObjectId else { return }
-    if !searchText.isEmpty, !searchController.searchBar.isCachedScopeSelected {
-      Task { @MainActor in do {
-        try await self.appDelegate.getMeta(self.account.info).librarySyncer
-          .searchArtists(searchText: searchText)
-      } catch {
-        self.appDelegate.eventLogger.report(topic: "Artists Search", error: error)
-      }}
-
-      Task { @MainActor in do {
-        try await self.appDelegate.getMeta(self.account.info).librarySyncer
-          .searchAlbums(searchText: searchText)
-      } catch {
-        self.appDelegate.eventLogger.report(topic: "Albums Search", error: error)
-      }}
-
-      Task { @MainActor in do {
-        try await self.appDelegate.getMeta(self.account.info).librarySyncer
-          .searchSongs(searchText: searchText)
-      } catch {
-        self.appDelegate.eventLogger.report(topic: "Songs Search", error: error)
-      }}
-
-      Task { @MainActor in do {
-        let searchResult = try await appDelegate.storage.async.performAndGet { asyncCompanion in
-          let accountAsync = asyncCompanion.library.getAccount(managedObjectId: accountObjectId)
-          let artists = asyncCompanion.library.searchArtists(
-            for: accountAsync,
-            searchText: searchText,
-            onlyCached: false,
-            displayFilter: .all
-          )
-          let albums = asyncCompanion.library.searchAlbums(
-            for: accountAsync,
-            searchText: searchText,
-            onlyCached: false,
-            displayFilter: .all
-          )
-          let playlists = asyncCompanion.library.searchPlaylists(
-            for: accountAsync,
-            searchText: searchText,
-            playlistSearchCategory: .all
-          )
-          let songs = asyncCompanion.library.searchSongs(
-            for: accountAsync,
-            searchText: searchText,
-            onlyCached: false,
-            displayFilter: .all
-          )
-
-          var result = SearchResultObjectContainer()
-          result.artistsIDs = FuzzySearcher.findBestMatch(in: artists, search: searchText)
-            .prefix(upToAsArray: Self.categoryItemLimit)
-            .compactMap { $0 as? Artist }
-            .compactMap { $0.managedObject.objectID }
-          result.albumsIDs = FuzzySearcher.findBestMatch(in: albums, search: searchText)
-            .prefix(upToAsArray: Self.categoryItemLimit)
-            .compactMap { $0 as? Album }
-            .compactMap { $0.managedObject.objectID }
-          result.playlistsIDs = FuzzySearcher.findBestMatch(in: playlists, search: searchText)
-            .prefix(upToAsArray: Self.categoryItemLimit)
-            .compactMap { $0 as? Playlist }
-            .compactMap { $0.managedObject.objectID }
-          result.songsIDs = FuzzySearcher.findBestMatch(in: songs, search: searchText)
-            .prefix(upToAsArray: Self.categoryItemLimit)
-            .compactMap { $0 as? Song }
-            .compactMap { $0.managedObject.objectID }
-          return result
-        }
-
-        guard searchText == self.searchController.searchBar.text else { return }
-        self.isSearchActive = true
-        self.searchHistory = []
-        self.artists = searchResult.artistsIDs
-          .compactMap { self.appDelegate.storage.main.context.object(with: $0) as? ArtistMO }
-          .compactMap { Artist(managedObject: $0) }
-        self.albums = searchResult.albumsIDs
-          .compactMap { self.appDelegate.storage.main.context.object(with: $0) as? AlbumMO }
-          .compactMap { Album(managedObject: $0) }
-        self.playlists = searchResult.playlistsIDs
-          .compactMap { self.appDelegate.storage.main.context.object(with: $0) as? PlaylistMO }
-          .compactMap { Playlist(library: self.appDelegate.storage.main.library, managedObject: $0)
-          }
-        self.songs = searchResult.songsIDs
-          .compactMap { self.appDelegate.storage.main.context.object(with: $0) as? SongMO }
-          .compactMap { Song(managedObject: $0) }
-        self.tableView.separatorStyle = .singleLine
-        self.updateDataSource(animated: false)
-        self.updateContentUnavailable()
-      } catch {
-        // do nothing
-      }}
-    } else if !searchText.isEmpty, searchController.searchBar.isCachedScopeSelected {
-      Task { @MainActor in do {
-        let searchResult = try await appDelegate.storage.async.performAndGet { asyncCompanion in
-          let accountAsync = asyncCompanion.library.getAccount(managedObjectId: accountObjectId)
-          let artists = asyncCompanion.library.searchArtists(
-            for: accountAsync,
-            searchText: searchText,
-            onlyCached: true,
-            displayFilter: .all
-          )
-          let albums = asyncCompanion.library.searchAlbums(
-            for: accountAsync,
-            searchText: searchText,
-            onlyCached: true,
-            displayFilter: .all
-          )
-          let playlists = asyncCompanion.library.searchPlaylists(
-            for: accountAsync,
-            searchText: searchText,
-            playlistSearchCategory: .cached
-          )
-          let songs = asyncCompanion.library.searchSongs(
-            for: accountAsync,
-            searchText: searchText,
-            onlyCached: true,
-            displayFilter: .all
-          )
-
-          var result = SearchResultObjectContainer()
-          result.artistsIDs = FuzzySearcher.findBestMatch(in: artists, search: searchText)
-            .prefix(upToAsArray: Self.categoryItemLimit)
-            .compactMap { $0 as? Artist }
-            .compactMap { $0.managedObject.objectID }
-          result.albumsIDs = FuzzySearcher.findBestMatch(in: albums, search: searchText)
-            .prefix(upToAsArray: Self.categoryItemLimit)
-            .compactMap { $0 as? Album }
-            .compactMap { $0.managedObject.objectID }
-          result.playlistsIDs = FuzzySearcher.findBestMatch(in: playlists, search: searchText)
-            .prefix(upToAsArray: Self.categoryItemLimit)
-            .compactMap { $0 as? Playlist }
-            .compactMap { $0.managedObject.objectID }
-          result.songsIDs = FuzzySearcher.findBestMatch(in: songs, search: searchText)
-            .prefix(upToAsArray: Self.categoryItemLimit)
-            .compactMap { $0 as? Song }
-            .compactMap { $0.managedObject.objectID }
-          return result
-        }
-
-        guard searchText == self.searchController.searchBar.text else { return }
-        self.isSearchActive = true
-        self.searchHistory = []
-        self.artists = searchResult.artistsIDs
-          .compactMap { self.appDelegate.storage.main.context.object(with: $0) as? ArtistMO }
-          .compactMap { Artist(managedObject: $0) }
-        self.albums = searchResult.albumsIDs
-          .compactMap { self.appDelegate.storage.main.context.object(with: $0) as? AlbumMO }
-          .compactMap { Album(managedObject: $0) }
-        self.playlists = searchResult.playlistsIDs
-          .compactMap { self.appDelegate.storage.main.context.object(with: $0) as? PlaylistMO }
-          .compactMap { Playlist(library: self.appDelegate.storage.main.library, managedObject: $0)
-          }
-        self.songs = searchResult.songsIDs
-          .compactMap { self.appDelegate.storage.main.context.object(with: $0) as? SongMO }
-          .compactMap { Song(managedObject: $0) }
-        self.tableView.separatorStyle = .singleLine
-        self.updateDataSource(animated: false)
-        self.updateContentUnavailable()
-      } catch {
-        // do nothing
-      }}
-    } else {
+    guard !searchText.isEmpty else {
       isSearchActive = false
       searchHistory = appDelegate.storage.main.library.getSearchHistory(for: account)
       artists = []
@@ -672,7 +530,114 @@ class SearchVC: BasicTableViewController {
       tableView.separatorStyle = .singleLine
       updateDataSource(animated: false)
       updateContentUnavailable()
+      return
     }
+    let onlyCached = searchController.searchBar.isCachedScopeSelected
+    searchTask = Task { @MainActor in
+      do { try await Task.sleep(for: Self.searchDebounce) } catch { return }
+
+      // Local results appear right away, server results replace them once all requests finished.
+      guard let localResult = try? await self.searchLocally(
+        searchText: searchText,
+        onlyCached: onlyCached,
+        accountObjectId: accountObjectId
+      ), !Task.isCancelled else { return }
+      self.display(searchResult: localResult)
+      guard !onlyCached else { return }
+
+      let librarySyncer = self.appDelegate.getMeta(self.account.info).librarySyncer
+      async let artistsIDs = self.searchOnServer(topic: "Artists Search") {
+        try await librarySyncer.searchArtists(searchText: searchText)
+      }
+      async let albumsIDs = self.searchOnServer(topic: "Albums Search") {
+        try await librarySyncer.searchAlbums(searchText: searchText)
+      }
+      async let songsIDs = self.searchOnServer(topic: "Songs Search") {
+        try await librarySyncer.searchSongs(searchText: searchText)
+      }
+      var serverResult = SearchResultObjectContainer()
+      serverResult.artistsIDs = await artistsIDs
+      serverResult.albumsIDs = await albumsIDs
+      serverResult.songsIDs = await songsIDs
+      guard !Task.isCancelled else { return }
+      self.display(searchResult: serverResult.merged(withLocal: localResult))
+    }
+  }
+
+  private func searchOnServer(
+    topic: String,
+    request: @MainActor () async throws -> [NSManagedObjectID]
+  ) async
+    -> [NSManagedObjectID] {
+    do {
+      return try await request()
+    } catch {
+      if !Task.isCancelled {
+        appDelegate.eventLogger.report(topic: topic, error: error)
+      }
+      return []
+    }
+  }
+
+  private func searchLocally(
+    searchText: String,
+    onlyCached: Bool,
+    accountObjectId: NSManagedObjectID
+  ) async throws
+    -> SearchResultObjectContainer {
+    try await appDelegate.storage.async.performAndGet { asyncCompanion in
+      let accountAsync = asyncCompanion.library.getAccount(managedObjectId: accountObjectId)
+      let playlists = asyncCompanion.library.searchPlaylists(
+        for: accountAsync,
+        searchText: searchText,
+        playlistSearchCategory: onlyCached ? .cached : .all
+      )
+
+      var result = SearchResultObjectContainer()
+      result.artistsIDs = asyncCompanion.library.multiWordSearchArtists(
+        for: accountAsync,
+        searchText: searchText,
+        onlyCached: onlyCached,
+        limit: Self.categoryItemLimit
+      ).compactMap { $0.managedObject.objectID }
+      result.albumsIDs = asyncCompanion.library.multiWordSearchAlbums(
+        for: accountAsync,
+        searchText: searchText,
+        onlyCached: onlyCached,
+        limit: Self.categoryItemLimit
+      ).compactMap { $0.managedObject.objectID }
+      result.playlistsIDs = FuzzySearcher.findBestMatch(in: playlists, search: searchText)
+        .prefix(upToAsArray: Self.categoryItemLimit)
+        .compactMap { $0 as? Playlist }
+        .compactMap { $0.managedObject.objectID }
+      result.songsIDs = asyncCompanion.library.multiWordSearchSongs(
+        for: accountAsync,
+        searchText: searchText,
+        onlyCached: onlyCached,
+        limit: Self.songItemLimit
+      ).compactMap { $0.managedObject.objectID }
+      return result
+    }
+  }
+
+  private func display(searchResult: SearchResultObjectContainer) {
+    isSearchActive = true
+    searchHistory = []
+    artists = searchResult.artistsIDs
+      .compactMap { appDelegate.storage.main.context.object(with: $0) as? ArtistMO }
+      .compactMap { Artist(managedObject: $0) }
+    albums = searchResult.albumsIDs
+      .compactMap { appDelegate.storage.main.context.object(with: $0) as? AlbumMO }
+      .compactMap { Album(managedObject: $0) }
+    playlists = searchResult.playlistsIDs
+      .compactMap { appDelegate.storage.main.context.object(with: $0) as? PlaylistMO }
+      .compactMap { Playlist(library: appDelegate.storage.main.library, managedObject: $0) }
+    songs = searchResult.songsIDs
+      .compactMap { appDelegate.storage.main.context.object(with: $0) as? SongMO }
+      .compactMap { Song(managedObject: $0) }
+    tableView.separatorStyle = .singleLine
+    updateDataSource(animated: false)
+    updateContentUnavailable()
   }
 
   func updateContentUnavailable() {

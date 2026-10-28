@@ -355,6 +355,7 @@
 		50C9D66E284FAA4D007F18D0 /* DownloadRequestManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50073BDE22301D9A000130D8 /* DownloadRequestManager.swift */; };
 		50C9D66F284FAA4D007F18D0 /* LibrarySyncVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50223EF2264543EA007445BC /* LibrarySyncVersion.swift */; };
 		50C9D670284FAA4D007F18D0 /* LibraryStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BA930521D5715D00E5901D /* LibraryStorage.swift */; };
+		BF550BC084E4453B0CD9E164 /* LibraryStorage+MultiWordSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = C484BEC9AA43675ACBFA34D5 /* LibraryStorage+MultiWordSearch.swift */; };
 		50C9D671284FAA4D007F18D0 /* Identifyable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C16C2121E7A38A00F086F0 /* Identifyable.swift */; };
 		50C9D672284FAA4D007F18D0 /* BasicFetchedResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50FBE7DD262DD86500114278 /* BasicFetchedResultsController.swift */; };
 		50C9D673284FAA4D007F18D0 /* LibraryUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C16C3321EB454100F086F0 /* LibraryUpdater.swift */; };
@@ -972,6 +973,7 @@
 		50BA930121D1019B00E5901D /* AmpacheLibrarySyncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmpacheLibrarySyncer.swift; sourceTree = "<group>"; };
 		50BA930321D10F0000E5901D /* SyncVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncVC.swift; sourceTree = "<group>"; };
 		50BA930521D5715D00E5901D /* LibraryStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryStorage.swift; sourceTree = "<group>"; };
+		C484BEC9AA43675ACBFA34D5 /* LibraryStorage+MultiWordSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryStorage+MultiWordSearch.swift"; sourceTree = "<group>"; };
 		50BA930721D75C5600E5901D /* AuthentificationHandshake.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthentificationHandshake.swift; sourceTree = "<group>"; };
 		50BE5D442850EFE100156FC6 /* PlayMediaIntentHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayMediaIntentHandler.swift; sourceTree = "<group>"; };
 		50BE5D9D2851D5DE00156FC6 /* IntentManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntentManager.swift; sourceTree = "<group>"; };
@@ -1736,6 +1738,7 @@
 				50C3B9AD2EED882D00F5CAB7 /* SettingEnumerations.swift */,
 				50C3B9AB2EED848B00F5CAB7 /* LegacySettings.swift */,
 				50BA930521D5715D00E5901D /* LibraryStorage.swift */,
+				C484BEC9AA43675ACBFA34D5 /* LibraryStorage+MultiWordSearch.swift */,
 				50223EF2264543EA007445BC /* LibrarySyncVersion.swift */,
 				50073BDE22301D9A000130D8 /* DownloadRequestManager.swift */,
 				50C16C2121E7A38A00F086F0 /* Identifyable.swift */,
@@ -2712,6 +2715,7 @@
 				50D54B712E30FFDB0078631E /* WindowType.swift in Sources */,
 				50D54B722E30FFDB0078631E /* FFT.swift in Sources */,
 				50C9D670284FAA4D007F18D0 /* LibraryStorage.swift in Sources */,
+				BF550BC084E4453B0CD9E164 /* LibraryStorage+MultiWordSearch.swift in Sources */,
 				50C9D672284FAA4D007F18D0 /* BasicFetchedResultsController.swift in Sources */,
 				50C9D682284FAA6C007F18D0 /* PodcastEpisodeMO+CoreDataProperties.swift in Sources */,
 				50C9D6F028506EBC007F18D0 /* AmperfyKit.swift in Sources */,

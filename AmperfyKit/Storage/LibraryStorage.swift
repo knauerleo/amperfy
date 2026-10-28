@@ -74,7 +74,7 @@ public class LibraryStorage: PlayableFileCachable {
     // Accounts are not going to get deleted
   ]
   private let log = OSLog(subsystem: "Amperfy", category: "LibraryStorage")
-  private var context: NSManagedObjectContext
+  private(set) var context: NSManagedObjectContext
   private let fileManager = CacheFileManager.shared
 
   public init(context: NSManagedObjectContext) {

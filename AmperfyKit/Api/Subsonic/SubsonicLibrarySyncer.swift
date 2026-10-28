@@ -1223,12 +1223,12 @@ class SubsonicLibrarySyncer: CommonLibrarySyncer, LibrarySyncer {
     try parseForError(response: response)
   }
 
-  @MainActor
-  func searchArtists(searchText: String) async throws {
-    guard isSyncAllowed, !searchText.isEmpty else { return }
+  @MainActor @discardableResult
+  func searchArtists(searchText: String) async throws -> [NSManagedObjectID] {
+    guard isSyncAllowed, !searchText.isEmpty else { return [] }
     os_log("Search artists via API: \"%s\"", log: log, type: .info, searchText)
     let response = try await subsonicServerApi.requestSearchArtists(searchText: searchText)
-    try await storage.async.perform { asyncCompanion in
+    return try await storage.async.performAndGet { asyncCompanion in
       let accountAsync = asyncCompanion.library.getAccount(managedObjectId: self.accountObjectId)
       let idParserDelegate = SsIDsParserDelegate(performanceMonitor: self.performanceMonitor)
       try self.parse(
@@ -1246,15 +1246,18 @@ class SubsonicLibrarySyncer: CommonLibrarySyncer, LibrarySyncer {
         library: asyncCompanion.library
       )
       try self.parse(response: response, delegate: parserDelegate)
+      let found = parserDelegate.parsedArtists.compactMap { $0.managedObject as NSManagedObject }
+      try asyncCompanion.context.obtainPermanentIDs(for: found)
+      return found.map { $0.objectID }
     }
   }
 
-  @MainActor
-  func searchAlbums(searchText: String) async throws {
-    guard isSyncAllowed, !searchText.isEmpty else { return }
+  @MainActor @discardableResult
+  func searchAlbums(searchText: String) async throws -> [NSManagedObjectID] {
+    guard isSyncAllowed, !searchText.isEmpty else { return [] }
     os_log("Search albums via API: \"%s\"", log: log, type: .info, searchText)
     let response = try await subsonicServerApi.requestSearchAlbums(searchText: searchText)
-    try await storage.async.perform { asyncCompanion in
+    return try await storage.async.performAndGet { asyncCompanion in
       let accountAsync = asyncCompanion.library.getAccount(managedObjectId: self.accountObjectId)
       let idParserDelegate = SsIDsParserDelegate(performanceMonitor: self.performanceMonitor)
       try self.parse(
@@ -1272,15 +1275,18 @@ class SubsonicLibrarySyncer: CommonLibrarySyncer, LibrarySyncer {
         library: asyncCompanion.library
       )
       try self.parse(response: response, delegate: parserDelegate)
+      let found = parserDelegate.parsedAlbums.compactMap { $0.managedObject as NSManagedObject }
+      try asyncCompanion.context.obtainPermanentIDs(for: found)
+      return found.map { $0.objectID }
     }
   }
 
-  @MainActor
-  func searchSongs(searchText: String) async throws {
-    guard isSyncAllowed, !searchText.isEmpty else { return }
+  @MainActor @discardableResult
+  func searchSongs(searchText: String) async throws -> [NSManagedObjectID] {
+    guard isSyncAllowed, !searchText.isEmpty else { return [] }
     os_log("Search songs via API: \"%s\"", log: log, type: .info, searchText)
     let response = try await subsonicServerApi.requestSearchSongs(searchText: searchText)
-    try await storage.async.perform { asyncCompanion in
+    return try await storage.async.performAndGet { asyncCompanion in
       let accountAsync = asyncCompanion.library.getAccount(managedObjectId: self.accountObjectId)
       let idParserDelegate = SsIDsParserDelegate(performanceMonitor: self.performanceMonitor)
       try self.parse(
@@ -1298,6 +1304,9 @@ class SubsonicLibrarySyncer: CommonLibrarySyncer, LibrarySyncer {
         library: asyncCompanion.library
       )
       try self.parse(response: response, delegate: parserDelegate)
+      let found = parserDelegate.parsedSongs.compactMap { $0.managedObject as NSManagedObject }
+      try asyncCompanion.context.obtainPermanentIDs(for: found)
+      return found.map { $0.objectID }
     }
   }
 
