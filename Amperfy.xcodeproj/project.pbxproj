@@ -132,6 +132,7 @@
 		507DFE6A2B1E62C9002BBB1D /* ID3TagEditor in Frameworks */ = {isa = PBXBuildFile; productRef = 507DFE692B1E62C9002BBB1D /* ID3TagEditor */; };
 		507DFE902B1E7262002BBB1D /* CallbackURLKit in Frameworks */ = {isa = PBXBuildFile; productRef = 507DFE8F2B1E7262002BBB1D /* CallbackURLKit */; };
 		508385E821C5965B00C4BB32 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508385E721C5965B00C4BB32 /* AppDelegate.swift */; };
+		C5F16F9D533EB1D67FE936E8 /* ForkLaunchScreenCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCCBF5C62DA75F6B9059A33 /* ForkLaunchScreenCache.swift */; };
 		508385EA21C5965B00C4BB32 /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508385E921C5965B00C4BB32 /* LoginVC.swift */; };
 		508385ED21C5965B00C4BB32 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 508385EB21C5965B00C4BB32 /* Main.storyboard */; };
 		5084F70F2ED9E2F400D8D3DA /* AccountMO+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5084F70D2ED9E2F400D8D3DA /* AccountMO+CoreDataClass.swift */; };
@@ -867,6 +868,7 @@
 		50814CA027D9FF660072738F /* ScrobbleEntryMO+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ScrobbleEntryMO+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		508385E421C5965B00C4BB32 /* Amperfy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Amperfy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		508385E721C5965B00C4BB32 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		DDCCBF5C62DA75F6B9059A33 /* ForkLaunchScreenCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ForkLaunchScreenCache.swift"; sourceTree = "<group>"; };
 		508385E921C5965B00C4BB32 /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
 		508385EC21C5965B00C4BB32 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		508385EE21C5965E00C4BB32 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -1587,6 +1589,7 @@
 			isa = PBXGroup;
 			children = (
 				508385E721C5965B00C4BB32 /* AppDelegate.swift */,
+				DDCCBF5C62DA75F6B9059A33 /* ForkLaunchScreenCache.swift */,
 				5059A31B28A9ED680068E4D2 /* SceneDelegate.swift */,
 				63DCDB792C674B5D00522F68 /* SettingsSceneDelegate.swift */,
 				637A28B42C79409B0082FACC /* MiniPlayerSceneDelegate.swift */,
@@ -2819,6 +2822,7 @@
 				63DCDB7A2C674B5D00522F68 /* SettingsSceneDelegate.swift in Sources */,
 				505CA20C2B88E9D300AA81CD /* FetchUpdateHandler.swift in Sources */,
 				508385E821C5965B00C4BB32 /* AppDelegate.swift in Sources */,
+				C5F16F9D533EB1D67FE936E8 /* ForkLaunchScreenCache.swift in Sources */,
 				50AB3B3C2F01D5AC00556CE4 /* OpenAppWithConfigurationIntent.swift in Sources */,
 				50C171482D10644600C0C53A /* PlaylistAddAlbumDetailVC.swift in Sources */,
 				50DE29EB2B8FCEB700ABA78E /* LibraryNavigatorConfigurator.swift in Sources */,

@@ -328,8 +328,9 @@ Alles, woran Daten, Logins und Downloads hängen, bleibt „Amperfy“.
 | `Amperfy/SwiftUI/Settings/ForkAboutSection.swift` (neu) | Settings-Hauptseite (auf dem Mac Tab „General“), Sektion „About Drift“: „Based on Amperfy by Maximilian Bauer, licensed under GPLv3“ mit Link auf github.com/BLeeEZ/amperfy. Hook: 1 Zeile in `SettingsView` |
 | `AmperfyKit/Assets/ForkAppIcon.icon` (neu) | Icon-Composer-Datei: drei Wellen (Ebenen `Wave1`–`Wave3`, Deckkraft 100/65/35 %) in Theme-Blau `#0A84FF` auf `#121212`, Default und Dark gleich, Tinted in Weiß. Ebenen-Quellen als SVG in `Design/ForkAppIcon/` |
 | `project.pbxproj` | `ForkAppIcon.icon` in denselben Resources-Phasen wie `AmperfyAppIcon.icon`, `ASSETCATALOG_COMPILER_APPICON_NAME = ForkAppIcon` (Debug und Release) |
-| `Assets.xcassets/LaunchBackground.colorset`, `LaunchGlyph.imageset` (neu) | Splash: Hintergrund dunkel `#121212`, hell `systemBackground`, Wellen-Glyph 96 pt ohne Hintergrund (1x/2x/3x aus `Design/ForkAppIcon/launch-glyph.svg`) |
+| `Assets.xcassets/LaunchBackground.colorset`, `LaunchGlyph.imageset` (neu) | Splash: Hintergrund in beiden Modi `#121212` (passend zur dunklen App, auch bei hellem System), Wellen-Glyph 96 pt ohne Hintergrund (1x/2x/3x aus `Design/ForkAppIcon/launch-glyph.svg`) |
 | `SceneDelegate.swift` | 1 Zeile: Fenster-Hintergrund `DS.Color.background`, damit zwischen Splash und Home nichts aufblitzt |
+| `Amperfy/ForkLaunchScreenCache.swift` (neu) | Löscht einmalig `Library/SplashBoard` (Key `forkLaunchScreenCacheVersion`). iOS behält nach dem Wechsel vom Storyboard auf `UILaunchScreen` sonst den alten bzw. einen leeren Splash-Snapshot. Nicht auf dem Mac. Hook: 1 Zeile in `AppDelegate` |
 
 **Bleibt bewusst „Amperfy“:**
 
@@ -357,9 +358,9 @@ Alles, woran Daten, Logins und Downloads hängen, bleibt „Amperfy“.
 
 **Bekannte Grenzen:**
 
-- Der Splash folgt dem Systemmodus, nicht der Darstellung in der App. Ist das System hell, die App aber dunkel
-  (Standard seit Phase 6), wechselt der Splash von Weiß auf `#121212`. Abhilfe wäre ein Splash, der in beiden Modi dunkel ist.
-- iOS speichert den Splash zwischen. Nach dem Update erscheint der neue manchmal erst nach einem Neustart des iPhones.
+- Der Splash ist immer dunkel. Wer die App auf „Light“ stellt, sieht beim Start kurz `#121212`, dann Hell.
+- Den Splash gibt es nur bei einem Kaltstart. Holt man die App aus dem Hintergrund zurück, zeigt iOS den letzten Bildschirm.
+- Den Splash-Cache löscht die App erst bei ihrem ersten Start nach dem Update. Erst der Kaltstart danach zeigt den neuen Splash.
 - Das Icon zeigt immer Blau, unabhängig von der Theme-Farbe in der App.
 
 ### Hilfsskript
