@@ -174,7 +174,7 @@ class EntityPreviewActionBuilder {
       menuActions.append(createCopyIdToClipboardAction())
     }
 
-    return menuActions
+    return ForkMenuText.relabel(menuActions)
   }
 
   public func performPreviewTransition() {
@@ -487,7 +487,7 @@ class EntityPreviewActionBuilder {
       if similarSongs.isEmpty {
         appDelegate.eventLogger.info(
           topic: "Instant Mix",
-          message: "No similar songs found",
+          message: "No similar songs found for a song radio",
           displayPopup: true
         )
         return
@@ -497,12 +497,12 @@ class EntityPreviewActionBuilder {
       var allSongs = [song] + similarSongs
 
       // Create play context and start playing
-      let context = PlayContext(name: "Instant Mix: \(song.title)", playables: allSongs)
+      let context = PlayContext(name: "Song Radio: \(song.title)", playables: allSongs)
       appDelegate.player.play(context: context)
 
       appDelegate.eventLogger.info(
         topic: "Instant Mix",
-        message: "Playing instant mix with \(allSongs.count) songs",
+        message: "Playing song radio with \(allSongs.count) songs",
         displayPopup: true
       )
 
@@ -511,34 +511,37 @@ class EntityPreviewActionBuilder {
     }
   }
 
+  // Fork: Play Next and Add to Queue in one tap, the context queue in a submenu
   private func createMusicQueueAction() -> UIMenuElement {
-    UIMenu(title: "Music Queue", image: .listBullet, children: [
-      UIAction(title: "Insert Context Queue", image: .contextQueueInsert) { action in
-        guard !self.entityPlayables.isEmpty else { return }
-        self.appDelegate.player.insertContextQueue(playables: self.entityPlayables)
-      },
-      UIAction(title: "Append Context Queue", image: .contextQueueAppend) { action in
-        guard !self.entityPlayables.isEmpty else { return }
-        self.appDelegate.player.appendContextQueue(playables: self.entityPlayables)
-      },
-      UIAction(title: "Insert User Queue", image: .userQueueInsert) { action in
+    UIMenu(options: .displayInline, children: [
+      UIAction(title: "Play Next", image: .userQueueInsert) { action in
         guard !self.entityPlayables.isEmpty else { return }
         self.appDelegate.player.insertUserQueue(playables: self.entityPlayables)
       },
-      UIAction(title: "Append User Queue", image: .userQueueAppend) { action in
+      UIAction(title: "Add to Queue", image: .userQueueAppend) { action in
         guard !self.entityPlayables.isEmpty else { return }
         self.appDelegate.player.appendUserQueue(playables: self.entityPlayables)
       },
+      UIMenu(title: "More Queue Options", image: .listBullet, children: [
+        UIAction(title: "Play Next in Current List", image: .contextQueueInsert) { action in
+          guard !self.entityPlayables.isEmpty else { return }
+          self.appDelegate.player.insertContextQueue(playables: self.entityPlayables)
+        },
+        UIAction(title: "Add to End of Current List", image: .contextQueueAppend) { action in
+          guard !self.entityPlayables.isEmpty else { return }
+          self.appDelegate.player.appendContextQueue(playables: self.entityPlayables)
+        },
+      ]),
     ])
   }
 
   private func createPodcastQueueAction() -> UIMenuElement {
     UIMenu(image: .listBullet, options: .displayInline, children: [
-      UIAction(title: "Insert Podcast Queue", image: .podcastQueueInsert) { action in
+      UIAction(title: "Play Next", image: .podcastQueueInsert) { action in
         guard !self.entityPlayables.isEmpty else { return }
         self.appDelegate.player.insertPodcastQueue(playables: self.entityPlayables)
       },
-      UIAction(title: "Append Podcast Queue", image: .podcastQueueAppend) { action in
+      UIAction(title: "Add to Queue", image: .podcastQueueAppend) { action in
         guard !self.entityPlayables.isEmpty else { return }
         self.appDelegate.player.appendPodcastQueue(playables: self.entityPlayables)
       },

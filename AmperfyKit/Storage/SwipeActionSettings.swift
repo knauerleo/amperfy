@@ -41,27 +41,27 @@ public enum SwipeActionType: Int, CaseIterable, Sendable, Codable {
   public var displayName: String {
     switch self {
     case .insertUserQueue:
-      return "Insert User Queue"
+      return "Play Next"
     case .appendUserQueue:
-      return "Append User Queue"
+      return "Add to Queue"
     case .insertContextQueue:
-      return "Insert Context Queue"
+      return "Next in List"
     case .appendContextQueue:
-      return "Append Context Queue"
+      return "End of List"
     case .download:
       return "Download"
     case .removeFromCache:
-      return "Remove from Cache"
+      return "Remove Download"
     case .addToPlaylist:
       return "Add to Playlist"
     case .play:
       return "Play"
     case .playShuffled:
-      return "Play shuffled"
+      return "Shuffle"
     case .insertPodcastQueue:
-      return "Insert Podcast Queue"
+      return "Play Next"
     case .appendPodcastQueue:
-      return "Append Podcast Queue"
+      return "Add to Queue"
     case .favorite:
       return "Favorite"
     }
@@ -70,29 +70,29 @@ public enum SwipeActionType: Int, CaseIterable, Sendable, Codable {
   public var settingsName: String {
     switch self {
     case .insertUserQueue:
-      return "Insert in User Queue"
+      return "Play Next"
     case .appendUserQueue:
-      return "Append to User Queue"
+      return "Add to Queue"
     case .insertContextQueue:
-      return "Insert in Context Queue"
+      return "Play Next in Current List"
     case .appendContextQueue:
-      return "Append to Context Queue"
+      return "Add to End of Current List"
     case .download:
       return "Download"
     case .removeFromCache:
-      return "Remove from Cache"
+      return "Remove Download"
     case .addToPlaylist:
       return "Add to Playlist"
     case .play:
       return "Play"
     case .playShuffled:
-      return "Play shuffled"
+      return "Shuffle"
     case .insertPodcastQueue:
-      return "Insert in Podcast Queue"
+      return "Play Next (Podcasts)"
     case .appendPodcastQueue:
-      return "Append to Podcast Queue"
+      return "Add to Queue (Podcasts)"
     case .favorite:
-      return "Mark as Favorite"
+      return "Add to Favorites"
     }
   }
 
@@ -181,6 +181,11 @@ public struct SwipeActionSettings: Sendable, Codable {
   }
 
   public static var defaultSettings: SwipeActionSettings {
+    // Fork: Play Next / Add to Queue leading, Favorite / Download trailing
+    forkDefaultSettings
+  }
+
+  static var upstreamDefaultSettings: SwipeActionSettings {
     SwipeActionSettings(
       leading: [
         .appendContextQueue,

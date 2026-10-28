@@ -412,7 +412,7 @@ class PlayerControlView: UIView {
       rootView.present(detailVC, animated: true)
     })
     menuActions.append(playerInfo)
-    return menuActions
+    return ForkMenuText.relabel(menuActions)
   }
 
   func refreshPlayerModeChangeButton() {

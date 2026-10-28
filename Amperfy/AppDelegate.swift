@@ -264,6 +264,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     storage.applyMultiAccountSettingsUpdateIfNeeded()
+    // Fork: everyday swipe defaults (measure 9), once
+    var userSettings = storage.settings.user
+    if userSettings.migrateForkSwipeDefaults() { storage.settings.user = userSettings }
     libraryUpdater.performAccountCleanUpIfNeccessaryInBackground()
 
     configureDefaultNavigationBarStyle()

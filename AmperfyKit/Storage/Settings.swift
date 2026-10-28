@@ -260,6 +260,9 @@ public struct UserSettings: Sendable, Codable {
     set { _swipeActionSettings = newValue }
   }
 
+  // Fork: version of the one-time swipe migration, see SwipeActionSettings+Fork.swift
+  var _forkSwipeDefaultsVersion: Int?
+
   private var _songsSortSetting: SongElementSortType = .defaultValue
   public var songsSortSetting: SongElementSortType {
     get { _songsSortSetting }
