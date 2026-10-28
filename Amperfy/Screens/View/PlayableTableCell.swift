@@ -308,6 +308,9 @@ class PlayableTableCell: BasicTableCell {
     guard let playable = playable else { return }
     titleLabel.text = playable.title
     artistLabel.text = playable.creatorName
+    // Fork: on an album page the artist line only matters for guest/compilation tracks
+    artistLabel.isHidden = isDislayAlbumTrackNumberStyle &&
+      playable.asSong?.album?.artist?.name == playable.creatorName
 
     configureStyle(
       playable: playable,
