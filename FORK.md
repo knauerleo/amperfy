@@ -122,7 +122,7 @@ Plan und Begründungen stehen in `DESIGN-AUDIT.md`.
 | `PlayableTableCell.swift` | Auf der Albumseite entfällt die Künstlerzeile, wenn der Track vom Albumkünstler ist |
 
 Offen aus Phase 1: Die blaue Playlist-Platzhalterkachel ist ein vorgerendertes Asset (`getGeneratedArtwork`).
-Gedämpft wird sie in Phase 3 zusammen mit den neuen Home-Zellen.
+Erledigt in Phase 3 (`UIImage+MutedArtwork.swift`).
 
 ### 3. Design Phase 2: Detailseiten (Commits `c7047d01` bis `d45c6c51`)
 
@@ -138,6 +138,45 @@ Gedämpft wird sie in Phase 3 zusammen mit den neuen Home-Zellen.
 
 `GenericDetailTableHeader` bleibt für Podcasts und den Playlist-Editor (`PlaylistEditVC`, Namensbearbeitung) im Einsatz.
 Die UI-Texte der neuen Views sind wie der Rest der App englisch („Popular“, „Discography“).
+
+### 4. Design Phase 3: Home (Commits `03e0ed7c` bis `651774d7`)
+
+Maßnahmen 7, 11, 15 aus `DESIGN-AUDIT.md` und der offene Punkt aus Phase 1 (Playlist-Platzhalter).
+
+**Aufbau von Home:** oben ein 2×3-Raster „Recently Played“ (erste Kachel fest „Favorite Songs“, dann die fünf
+zuletzt gehörten Alben, Playlists und Künstler), darunter die große Shelf „Recently Added“, dann die bisherigen
+Shelves, Random-Sektionen am Ende. „Random Artists“ hat runde Zellen.
+
+| Datei | Änderung |
+|---|---|
+| `AmperfyKit/Storage/HomeSection.swift` | Neue Fälle `recentlyPlayed`, `recentlyAdded` **am Ende** (Codable/Int). Neue Default-Reihenfolge ohne Random am Anfang |
+| `AmperfyKit/Storage/HomeSection+ForkMigration.swift` (neu) | Einmalige Migration pro Account: neue Sektionen sichtbar oben einfügen, Random-Sektionen ans Ende. Welche alten Sektionen sichtbar sind, bleibt gleich |
+| `AmperfyKit/Storage/Settings.swift` | 1 Feld `_forkHomeSectionsVersion` (optional, alte Settings decodieren weiter) |
+| `AmperfyKit/Storage/LibraryStorage+ForkHome.swift` (neu) | `getRecentlyPlayedContainers`: Alben, Künstler, Playlists nach `lastPlayedDate`, einzeln gespielte Songs zählen für ihr Album. `getRecentlyAddedAlbums`: Alben der neuesten Songs nach `addedDate`, aufgefüllt mit `newestIndex` |
+| `AmperfyKit/Assets/UIImage+MutedArtwork.swift` (neu) | Playlist-Platzhalter als dynamisches Bild: hell = hellgraue Fläche + Icon in gedämpfter Theme-Farbe, dunkel = Fläche `white 0.16` + Icon `white 0.55`. Hook: 1 Zeile in `getGeneratedArtwork` |
+| `Amperfy/Screens/View/Collection/ShelfLayout.swift` (neu) | `ShelfStyle` (`tileGrid`, `standard`, `large`, `circle`) und Layout-Sektionen dazu. Unabhängig von Home |
+| `.../TileCollectionCell.swift`, `LargeAlbumCell.swift`, `ArtistCircleCell.swift` (neu) | Zellen mit `display(container:)` für Bibliotheks-Objekte, `display(title:…, image:)` für Treffer außerhalb der Bibliothek (YouTube) und `displaySkeleton()` |
+| `.../ShelfArtworkView.swift`, `SkeletonView.swift`, `GradientArtworkView.swift` (neu) | Gemeinsamer Cover-Bereich (Entity, Bild, Verlauf, Skeleton), Shimmer (aus bei „Bewegung reduzieren“), Verlaufs-Cover mit Symbol (Favorite Songs) |
+| `Amperfy/Screens/ViewController/HomeVC+Fork.swift` (neu) | `HomeCellItem` (Entity, Favorite-Songs-Kachel, Skeleton), Zelle und Layout je Sektion, Snapshot mit Skeletons, leere Sektionen ausgeblendet, Leerzustand („Sync Library“, „Edit Home“, Offline-Hinweis), Tap im Raster spielt Album/Playlist sofort |
+| `Amperfy/Screens/ViewController/HomeManager+Fork.swift` (neu) | Daten der neuen Sektionen, `HomeForkObserver` (FRC auf Songs nach `lastPlayedDate`/`addedDate`, entprellt), Ladezustand, `syncLibraryForHome()` |
+| `HomeVC.swift` | Hooks: Item-Typ, `configureForkLayout()`, Zell-Provider, Snapshot, Header per `sectionIdentifier`, Auswahl. Ein paar `private` auf intern |
+| `HomeManager.swift` | Hooks: Migration im `init`, `loadingSections` um die Remote-Syncs, Aufruf der Fork-Controller. Vier Eigenschaften von `private` auf intern |
+| `DesignTokens.swift` | `tileTitle`, `shelfTitle`, `shelfSubtitle`, `tileSurface`, `skeleton`, `favoritesGradient` |
+| `CarPlayHomeTabExtension.swift` | neue Fälle im `switch` |
+
+**Verhalten:**
+
+- Tap im Raster: Album und Playlist spielen sofort (fehlen die Songs, werden sie vorher geladen), Künstler öffnen
+  ihre Seite, „Favorite Songs“ öffnet die Liste. Langes Drücken zeigt wie bisher Vorschau und Menü.
+- Skeletons erscheinen, solange eine Sektion noch keine Daten hat oder ihr Remote-Sync läuft. Danach verschwinden
+  leere Sektionen ganz.
+- „Recently Added“ füllt sich aus `Song.addedDate`. Fertige YouTube-Downloads erscheinen dort, sobald Navidrome sie
+  gescannt und Amperfy den Song synchronisiert hat (Roadmap 2: Sync per `search3` nach `fertig`).
+- Für „Similar from YouTube“ (später) reichen `ShelfLayout.section(.large)` bzw. `.circle` plus die
+  `display(title:…, image:)`-Varianten der Zellen.
+
+**Nicht geändert:** `AlbumCollectionCell` und alle XIBs. Die Standard-Shelves nutzen weiter die alte Zelle.
+Die Zwischen-Commits wurden nicht einzeln gebaut, der letzte Stand (`651774d7`) baut und läuft auf dem iPhone.
 
 ### Hilfsskript
 
@@ -158,7 +197,7 @@ Datei einzeln in `project.pbxproj` führt.
      das Ende von `path` abgleichen.
 3. **Einstellungen:** Songpicker-URL (Default `http://10.66.66.6:8781`), YouTube-Bereich an/aus.
 4. Später: Download-Übersicht, „Ähnliche Songs von YouTube“.
-5. Design-Überarbeitung Richtung moderner Streaming-Client, in 5 Phasen laut `DESIGN-AUDIT.md`. Phase 1 ✅, Phase 2 ✅
+5. Design-Überarbeitung Richtung moderner Streaming-Client, in 5 Phasen laut `DESIGN-AUDIT.md`. Phase 1 ✅, Phase 2 ✅, Phase 3 ✅
 
 ## Arbeitsweise
 
