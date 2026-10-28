@@ -242,6 +242,10 @@ Datei einzeln in `project.pbxproj` führt.
      das Ende von `path` abgleichen.
 3. **Einstellungen:** Songpicker-URL (Default `http://10.66.66.6:8781`), YouTube-Bereich an/aus.
 4. Später: Download-Übersicht, „Ähnliche Songs von YouTube“.
+   - **Personalisierte Treffer:** Der Songpicker sortiert die YouTube-Ergebnisse nach den Hörgewohnheiten
+     (Wiedergabezahlen, Favoriten, oft gehörte Künstler über die Subsonic-API von Navidrome), Karaoke- und Cover-Versionen
+     nach unten. In der App nur ein kleiner Bonus im Top-Treffer-Ranking (`forkScore` in `SearchVC+Fork.swift`) aus
+     `playCount`, `isFavorite` und `lastPlayedDate`, die schon lokal vorliegen.
 5. Design-Überarbeitung Richtung moderner Streaming-Client, in 5 Phasen laut `DESIGN-AUDIT.md`. Phase 1 ✅, Phase 2 ✅, Phase 3 ✅, Phase 4 ✅
 
 ## Arbeitsweise
