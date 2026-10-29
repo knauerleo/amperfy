@@ -63,7 +63,7 @@ public final class YouTubeMusicLibrarySync {
     for delay in Self.attemptDelays {
       do {
         try await Task.sleep(for: .seconds(delay))
-        if let song = try await findAndSync(hit: hit, pathSuffix: pathSuffix) {
+        if let song = try await findAndSync(hit: hit, songId: job.songId, pathSuffix: pathSuffix) {
           os_log("Synced YouTube download: %s", log: log, type: .info, song.displayString)
           NotificationCenter.default.post(name: .youTubeMusicSongSynced, object: song)
           return song
@@ -78,11 +78,20 @@ public final class YouTubeMusicLibrarySync {
     return nil
   }
 
-  private func findAndSync(hit: SongpickerHit, pathSuffix: String?) async throws -> Song? {
+  private func findAndSync(
+    hit: SongpickerHit,
+    songId: String?,
+    pathSuffix: String?
+  ) async throws -> Song? {
     guard let serverApi = backendApi.forkSubsonicServerApi else { return nil }
     let response = try await serverApi.requestSearchSongs(searchText: hit.title)
+    // the proxy mixes its own `ytm-` results into search3
     let candidates = SongPathParser.parse(data: response.data)
+      .filter { !YouTubeMusic.isPlaceholderId($0.id) }
     let match = candidates.first { candidate in
+      // the proxy reports the Navidrome ID once it matched the file
+      songId != nil && candidate.id == songId
+    } ?? candidates.first { candidate in
       guard let pathSuffix, let candidatePath = candidate.path else { return false }
       return Self.pathSuffix(candidatePath) == pathSuffix
     } ?? candidates.first { candidate in

@@ -2,8 +2,9 @@
 //  SongpickerClient.swift
 //  AmperfyKit
 //
-//  Fork: client for the Songpicker service on the Raspberry Pi (YouTube Music search and download).
-//  API: GET /api/search, POST /api/get, GET /api/jobs (see FORK.md).
+//  Fork: YouTube Music through the Subsonic proxy in front of Navidrome (see FORK.md).
+//  The proxy mixes YouTube results (`ytm-<videoId>`) into search3, streams and downloads them,
+//  and lists the downloads of the user in `getYtJobs.view`. The Songpicker itself stays internal.
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -23,41 +24,37 @@ import Foundation
 
 // MARK: - SongpickerConfig
 
-/// All Songpicker and proxy addresses in one place. Set at start from the settings (see `apply`).
+/// Proxy addresses and the YouTube Music switch. Set at start from the settings (see `apply`).
 public enum SongpickerConfig {
-  public static let defaultBaseURL = URL(string: "http://10.66.66.6:8781")!
+  /// Port of Navidrome itself. An account on this port talks to Navidrome directly (LAN),
+  /// YouTube songs then go to the proxy port of the same host.
+  public static let navidromePort = 4533
   /// Port of the Subsonic proxy (nginx) that understands the `ytm-<videoId>` IDs.
   public static let proxyPort = 4534
 
-  private static let _baseURL = Atomic<URL>(wrappedValue: defaultBaseURL)
   private static let _isEnabled = Atomic<Bool>(wrappedValue: true)
   private static let _customProxyURL = Atomic<URL?>(wrappedValue: nil)
 
-  public static var baseURL: URL {
-    get { _baseURL.wrappedValue }
-    set { _baseURL.wrappedValue = newValue }
-  }
-
-  /// Shows the YouTube Music section in the search.
+  /// Shows the YouTube Music results in the search.
   public static var isEnabled: Bool {
     get { _isEnabled.wrappedValue }
     set { _isEnabled.wrappedValue = newValue }
   }
 
-  /// Own address of the proxy, e.g. behind an HTTPS reverse proxy. `nil`: host of the account + `proxyPort`.
+  /// Own address of the proxy. `nil`: the account itself, or its host + `proxyPort`
+  /// if the account points to Navidrome directly.
   public static var customProxyURL: URL? {
     get { _customProxyURL.wrappedValue }
     set { _customProxyURL.wrappedValue = newValue }
   }
 
-  /// Takes over the values stored in the settings (phase 5).
+  /// Takes over the values stored in the settings.
   public static func apply(_ settings: UserSettings) {
-    baseURL = settings.songpickerURL
     isEnabled = settings.isYouTubeMusicEnabled
     customProxyURL = settings.songpickerProxyURL
   }
 
-  /// A typed address with scheme, e.g. "10.66.66.6:8781" → "http://10.66.66.6:8781".
+  /// A typed address with scheme, e.g. "music.example.com" → "http://music.example.com".
   public static func normalizedURL(from text: String) -> URL? {
     var trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
     guard !trimmed.isEmpty else { return nil }
@@ -69,14 +66,16 @@ public enum SongpickerConfig {
     return url
   }
 
-  /// Same host as the Subsonic server of the account, but the proxy port.
-  /// With a custom proxy URL: its scheme, host, port and path, followed by the `rest/…` part.
+  /// Unchanged if the account already talks to the proxy (e.g. `https://musik.leokna.de`).
+  /// Navidrome port → proxy port of the same host. With a custom proxy URL: its scheme, host,
+  /// port and path, followed by the `rest/…` part.
   public static func proxyURL(rewriting url: URL) -> URL {
     guard var components = URLComponents(url: url, resolvingAgainstBaseURL: false)
     else { return url }
     guard let custom = customProxyURL,
           let customComponents = URLComponents(url: custom, resolvingAgainstBaseURL: false)
     else {
+      guard components.port == navidromePort else { return url }
       components.port = proxyPort
       return components.url ?? url
     }
@@ -94,7 +93,7 @@ public enum SongpickerConfig {
 
 // MARK: - SongpickerHit
 
-/// One YouTube Music result of `GET /api/search`.
+/// One YouTube Music result, read from a `ytm-<videoId>` song of the proxy.
 public struct SongpickerHit: Sendable, Hashable {
   public let videoId: String
   public let title: String
@@ -103,12 +102,30 @@ public struct SongpickerHit: Sendable, Hashable {
   public let duration: Int
   public let thumbURL: URL?
   public let kind: String?
-  /// Relative path of the copy in the library, if the Songpicker already knows one.
+  /// Relative path of the copy in the library, if known.
   public let libraryPath: String?
-  /// The complete result as returned by the server, `POST /api/get` expects it unchanged.
+  /// The result as JSON, kept in `YouTubeMusicHitStore`.
   public let json: Data
 
   public var isInLibrary: Bool { libraryPath != nil }
+
+  /// Public thumbnail of the video, e.g. for the download overview.
+  public static func thumbnailURL(videoId: String) -> URL? {
+    URL(string: "https://i.ytimg.com/vi/\(videoId)/mqdefault.jpg")
+  }
+
+  public init?(videoId: String, title: String, artist: String, album: String?, duration: Int) {
+    var dict: [String: Any] = [
+      "source": "youtube",
+      "id": videoId,
+      "title": title,
+      "artist": artist,
+      "duration": duration,
+      "kind": "song",
+    ]
+    dict["album"] = album
+    self.init(dict: dict)
+  }
 
   init?(dict: [String: Any]) {
     guard let videoId = dict["id"] as? String, !videoId.isEmpty,
@@ -165,18 +182,27 @@ public enum SongpickerJobState: Sendable {
   public var isFinished: Bool { self == .done || self == .failed }
 }
 
+/// One entry of `getYtJobs.view`.
 public struct SongpickerJob: Sendable, Equatable {
   public let state: SongpickerJobState
-  public let label: String?
+  public let title: String?
+  public let artist: String?
+  public let album: String?
+  /// Navidrome path (`/music/<rel>`), once the file is saved.
   public let path: String?
+  /// Navidrome ID, once the proxy matched the file (about 35 s after `fertig`).
+  public let songId: String?
   public let error: String?
-  /// Start of the job, sent as Unix time or ISO 8601 text.
+  /// Start of the job (Unix time), set again on a retry.
   public let started: Date?
 
   init(dict: [String: Any]) {
     self.state = SongpickerJobState(rawValue: (dict["state"] as? String) ?? "")
-    self.label = dict["label"] as? String
+    self.title = (dict["title"] as? String) ?? (dict["label"] as? String)
+    self.artist = dict["artist"] as? String
+    self.album = dict["album"] as? String
     self.path = dict["path"] as? String
+    self.songId = dict["songId"] as? String
     self.error = dict["error"] as? String
     switch dict["started"] {
     case let number as NSNumber:
@@ -190,83 +216,42 @@ public struct SongpickerJob: Sendable, Equatable {
       self.started = nil
     }
   }
+
+  /// Jobs of a `getYtJobs.view?f=json` answer, keyed by video ID.
+  static func parseYtJobs(data: Data) throws -> [String: SongpickerJob] {
+    guard let root = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+          let response = root["subsonic-response"] as? [String: Any]
+    else { throw SongpickerError.invalidResponse }
+    if response["status"] as? String != "ok" {
+      let error = response["error"] as? [String: Any]
+      throw SongpickerError.server((error?["message"] as? String) ?? "The proxy reported an error")
+    }
+    // no `ytJobs` at all: the account does not talk to the proxy
+    guard let ytJobs = response["ytJobs"] as? [String: Any] else {
+      throw SongpickerError.noProxy
+    }
+    let list = (ytJobs["job"] as? [[String: Any]]) ?? []
+    var jobs = [String: SongpickerJob]()
+    for dict in list {
+      guard let videoId = dict["id"] as? String, !videoId.isEmpty else { continue }
+      jobs[videoId] = SongpickerJob(dict: dict)
+    }
+    return jobs
+  }
 }
 
 // MARK: - SongpickerError
 
 public enum SongpickerError: LocalizedError {
-  case badStatus(Int)
   case invalidResponse
+  case noProxy
   case server(String)
 
   public var errorDescription: String? {
     switch self {
-    case let .badStatus(code): return "Songpicker answered with status \(code)"
-    case .invalidResponse: return "Songpicker sent an invalid response"
+    case .invalidResponse: return "The proxy sent an invalid response"
+    case .noProxy: return "The server of this account does not offer YouTube Music"
     case let .server(message): return message
     }
-  }
-}
-
-// MARK: - SongpickerClient
-
-public final class SongpickerClient: Sendable {
-  public static let shared = SongpickerClient()
-
-  private let session: URLSession
-
-  init() {
-    let configuration = URLSessionConfiguration.default
-    configuration.timeoutIntervalForRequest = 20
-    configuration.requestCachePolicy = .reloadIgnoringLocalCacheData
-    self.session = URLSession(configuration: configuration)
-  }
-
-  /// YouTube Music results, in Songpicker order.
-  public func search(query: String) async throws -> [SongpickerHit] {
-    var components = URLComponents(
-      url: SongpickerConfig.baseURL.appendingPathComponent("api/search"),
-      resolvingAgainstBaseURL: false
-    )
-    components?.queryItems = [URLQueryItem(name: "q", value: query)]
-    guard let url = components?.url else { throw SongpickerError.invalidResponse }
-    let object = try await requestJSON(URLRequest(url: url))
-    guard let dict = object as? [String: Any] else { throw SongpickerError.invalidResponse }
-    if let message = dict["error"] as? String, !message.isEmpty {
-      throw SongpickerError.server(message)
-    }
-    return ((dict["youtube"] as? [[String: Any]]) ?? []).compactMap { SongpickerHit(dict: $0) }
-  }
-
-  /// Starts the download into the library (`musik/YouTube/<artist>/<album>/NN - title.opus`).
-  public func requestDownload(hit: SongpickerHit) async throws {
-    var request = URLRequest(url: SongpickerConfig.baseURL.appendingPathComponent("api/get"))
-    request.httpMethod = "POST"
-    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-    request.httpBody = hit.json
-    _ = try await requestData(request)
-  }
-
-  /// All jobs the Songpicker knows, keyed by video ID.
-  public func jobs() async throws -> [String: SongpickerJob] {
-    var request = URLRequest(url: SongpickerConfig.baseURL.appendingPathComponent("api/jobs"))
-    request.timeoutInterval = 8
-    guard let dict = try await requestJSON(request) as? [String: Any]
-    else { throw SongpickerError.invalidResponse }
-    return dict.compactMapValues { ($0 as? [String: Any]).map { SongpickerJob(dict: $0) } }
-  }
-
-  private func requestJSON(_ request: URLRequest) async throws -> Any {
-    let data = try await requestData(request)
-    return try JSONSerialization.jsonObject(with: data)
-  }
-
-  private func requestData(_ request: URLRequest) async throws -> Data {
-    let (data, response) = try await session.data(for: request)
-    guard let http = response as? HTTPURLResponse else { throw SongpickerError.invalidResponse }
-    guard (200 ..< 300).contains(http.statusCode) else {
-      throw SongpickerError.badStatus(http.statusCode)
-    }
-    return data
   }
 }

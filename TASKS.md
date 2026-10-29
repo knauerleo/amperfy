@@ -5,19 +5,6 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 
 ## Active
 
-- [ ] **F-1 YouTube Music nur noch über Subsonic am Login-Host** - kein Songpicker-Setup mehr
-  - Proxy-Kette (Stand 2026-10-29, Pi-Session): Caddy `musik.leokna.de` → WireGuard → nginx :4534 → Songpicker `/nd` bzw. Navidrome, Auth per u/t/s gegen Navidrome. `/api/` bleibt bewusst intern
-  - Was der Proxy liefert: `search2`/`search3` = Navidrome-Treffer + bis zu 8 YouTube-Songs (nur erste Seite, ab 3 Zeichen), ID `ytm-<videoId>`, Titel mit Marker „ ☁︎“, geschätzte `size`, gemeinsame `albumId` `ytm-ytsuche0000`. `stream`/`download` mit `ytm-…` = MP3 320k und Download in die Bibliothek. `getCoverArt` = Thumbnail, `getSong` = Fake-Song, `star` = Download + Herz nach Zuordnung (~35 s). Geladene Songs schreibt der Proxy auf die echte ID um
-  - App: YouTube-Treffer aus den search3-Ergebnissen nehmen (ID-Präfix `ytm-`), `SongpickerClient.search`/`requestDownload` und die eigene Abfrage an `10.66.66.6:8781` entfernen. Stream-/Download-URL nicht mehr auf Port 4534 umschreiben (`BackendProxy.swift:397`). „In Sammlung laden“ = `download.view` bzw. `star`
-  - Settings › YouTube Music: Songpicker-URL und Custom Proxy URL entfallen, Schalter an/aus bleibt (blendet `ytm-`-Treffer aus)
-  - Fertig, wenn: frischer Login auf `musik.leokna.de` reicht für YouTube-Suche, Abspielen und Laden, im LAN wie unterwegs
-  - Dateien: `SongpickerClient.swift`, `SearchVC+Fork.swift`, `BackendProxy.swift`, `UserSettings+Songpicker.swift`, `YouTubeMusicSettingsView.swift`, `LibraryStorage+YouTubeMusic.swift`
-- [ ] **F-1a Fake-Songs des Proxys aus der Bibliothek halten** - dringend, sobald der Account auf `musik.leokna.de` läuft
-  - Die search3-Synchronisierung legt die `ytm-`-Songs samt Fake-Album `ytm-ytsuche0000` in CoreData an. Sie haben eine `size`, fallen also nicht wie die bisherigen Platzhalter aus den Listen
-  - Prüfen und ausfiltern: Albums, Recently Added, Songs, Genres, Random-Shelves, Spotlight/Widgets später. Marker „ ☁︎“ im Titel für die Anzeige entfernen, stattdessen `SourceBadgeView`
-  - Fertig, wenn: nach einer YouTube-Suche taucht nichts mit `ytm-` außerhalb der Suche und der Queue auf
-- [ ] **F-1b Download-Liste über `/rest/getYtJobs.view`** - wartet auf den Endpunkt der Pi-Session (leo-39)
-  - `YouTubeMusicJobMonitor` von `/api/jobs` auf den neuen Endpunkt umstellen, Retry über `download.view`
 - [ ] **F-2 Server-URL automatisch umschalten** - mit F-1 meist überflüssig (nur noch die Domain), nur falls LAN-Adresse weiter genutzt wird
   - Bei Netzwechsel (`NetworkMonitor`) die erste erreichbare URL aus `activeBackendServerUrl` + `alternativeServerURLs` per `ping` wählen
 - [ ] **UI-1 Podcast-Detailseite mit `ImmersiveDetailHeaderView`**
@@ -103,3 +90,7 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
   - Engine `AudioStreaming` (AVAudioEngine) lädt den nächsten Song schon vor. Größter Eingriff in AmperfyKit, zuletzt
 
 ## Done
+
+- [x] ~~**F-1 YouTube Music nur noch über Subsonic am Login-Host**~~ (2026-10-29) - FORK.md Abschnitt 9
+- [x] ~~**F-1a Fake-Songs des Proxys aus der Bibliothek halten**~~ (2026-10-29) - FORK.md Abschnitt 9
+- [x] ~~**F-1b Download-Liste über `/rest/getYtJobs.view`**~~ (2026-10-29) - FORK.md Abschnitt 9

@@ -38,6 +38,8 @@ class SsSongParserDelegate: SsPlayableParserDelegate {
     qualifiedName qName: String?,
     attributes attributeDict: [String: String]
   ) {
+    // Fork: `ytm-` songs of the YouTube Music proxy without album, artist, genre and size
+    let attributeDict = YouTubeMusic.sanitizedProxyAttributes(elementName: elementName, attributeDict)
     if elementName == "song" || elementName == "entry" || elementName == "child" || elementName ==
       "episode" {
       guard let songId = attributeDict["id"] else { return }

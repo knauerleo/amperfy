@@ -2,7 +2,7 @@
 //  YouTubeMusicJobMonitor.swift
 //  AmperfyKit
 //
-//  Fork: download status of YouTube Music results, by polling `GET /api/jobs` of the Songpicker
+//  Fork: download status of YouTube Music results, by polling `getYtJobs.view` of the Subsonic proxy
 //  while a tracked download runs (wartet → lädt → speichert → fertig/fehler).
 //
 //  This program is free software: you can redistribute it and/or modify
@@ -41,7 +41,7 @@ public enum YouTubeMusicStatus: Equatable, Sendable {
 
 // MARK: - YouTubeMusicJobEntry
 
-/// One Songpicker job for the download overview.
+/// One proxy job for the download overview.
 public struct YouTubeMusicJobEntry: Sendable, Hashable {
   public let videoId: String
   public let title: String
@@ -72,14 +72,15 @@ public final class YouTubeMusicJobMonitor {
   private static let pollInterval: Duration = .milliseconds(1500)
   /// While the overview is visible and nothing loads.
   private static let idlePollInterval: Duration = .seconds(5)
-  /// A requested download that does not show up in `/api/jobs` within this time counts as lost.
+  /// A requested download that does not show up in `getYtJobs` within this time counts as lost.
   private static let pendingTimeout: TimeInterval = 60
 
-  private let client: SongpickerClient
+  /// Backend of the active account, set by `configure(backendApi:)`.
+  private var backendApi: BackendProxy?
   private let log = OSLog(subsystem: "Amperfy", category: "YouTubeMusic")
   private var jobs = [String: SongpickerJob]()
   private var hits = [String: SongpickerHit]()
-  /// Tracked downloads not yet visible in `/api/jobs`: request time and the job seen before,
+  /// Tracked downloads not yet visible in `getYtJobs`: request time and the job seen before,
   /// so an old finished job of the same video does not count as the new one.
   private var pending = [String: (requested: Date, previous: SongpickerJob?)]()
   /// Tracked downloads whose job was seen unfinished, so `fertig` is new.
@@ -88,8 +89,21 @@ public final class YouTubeMusicJobMonitor {
   /// Visible screens that show the job list (download overview).
   private var observerCount = 0
 
-  init(client: SongpickerClient = .shared) {
-    self.client = client
+  init() {}
+
+  /// Jobs, downloads and retries go through the Subsonic proxy of this backend.
+  public func configure(backendApi: BackendProxy) {
+    guard self.backendApi !== backendApi else { return }
+    self.backendApi = backendApi
+    jobs = [:]
+    hasLoadedJobs = false
+    lastError = nil
+  }
+
+  /// Number of downloads the proxy lists for this account, throws if it does not offer them.
+  public func testConnection() async throws -> Int {
+    guard let backendApi else { throw SongpickerError.noProxy }
+    return try await backendApi.forkYouTubeJobs().count
   }
 
   public func status(for hit: SongpickerHit) -> YouTubeMusicStatus {
@@ -100,8 +114,8 @@ public final class YouTubeMusicJobMonitor {
     return hit.isInLibrary ? .inLibrary : .online
   }
 
-  /// All jobs the Songpicker reported, running ones first, then newest first.
-  /// Requested downloads that are not yet visible in `/api/jobs` are included as waiting.
+  /// All jobs the proxy reported, running ones first, then newest first.
+  /// Requested downloads that are not yet visible in `getYtJobs` are included as waiting.
   public var jobList: [YouTubeMusicJobEntry] {
     var videoIds = Set(jobs.keys)
     videoIds.formUnion(pending.keys)
@@ -118,9 +132,9 @@ public final class YouTubeMusicJobMonitor {
       }
       return YouTubeMusicJobEntry(
         videoId: videoId,
-        title: hit?.title ?? job?.label ?? videoId,
-        artist: hit?.artist,
-        thumbURL: hit?.thumbURL,
+        title: job?.title ?? hit?.title ?? videoId,
+        artist: job?.artist ?? hit?.artist,
+        thumbURL: hit?.thumbURL ?? SongpickerHit.thumbnailURL(videoId: videoId),
         status: status,
         error: job?.error,
         started: job?.started ?? pending[videoId]?.requested
@@ -132,9 +146,9 @@ public final class YouTubeMusicJobMonitor {
     }
   }
 
-  /// True after the first successful `/api/jobs` answer.
+  /// True after the first successful `getYtJobs` answer.
   public private(set) var hasLoadedJobs = false
-  /// Error of the last `/api/jobs` request, `nil` when it worked.
+  /// Error of the last `getYtJobs` request, `nil` when it worked.
   public private(set) var lastError: String?
 
   /// The download overview is visible: keeps the job list current until `stopObserving`.
@@ -149,17 +163,18 @@ public final class YouTubeMusicJobMonitor {
     observerCount = max(0, observerCount - 1)
   }
 
-  /// `POST /api/get` again for a failed job. Uses the result of the search, if it is known,
-  /// otherwise the video ID and label of the job.
+  /// Starts a failed job again (the proxy restarts it on the next stream request).
   public func retry(videoId: String) async throws {
+    let job = jobs[videoId]
     let hit = hits[videoId]
       ?? YouTubeMusicHitStore.shared.hit(forVideoId: videoId)
-      ?? SongpickerHit(dict: [
-        "source": "youtube",
-        "id": videoId,
-        "title": jobs[videoId]?.label ?? videoId,
-        "kind": "song",
-      ])
+      ?? SongpickerHit(
+        videoId: videoId,
+        title: job?.title ?? videoId,
+        artist: job?.artist ?? "Unknown Artist",
+        album: job?.album,
+        duration: 0
+      )
     guard let hit else { throw SongpickerError.invalidResponse }
     try await addToLibrary(hit)
   }
@@ -199,19 +214,21 @@ public final class YouTubeMusicJobMonitor {
     startPollingIfNeeded()
   }
 
-  /// `POST /api/get`: downloads the result into the library.
+  /// Downloads the result into the library through the proxy.
   public func addToLibrary(_ hit: SongpickerHit) async throws {
+    guard let backendApi else { throw SongpickerError.noProxy }
     hits[hit.videoId] = hit
     pending[hit.videoId] = (Date(), jobs[hit.videoId])
     postChange()
+    // the job shows up in getYtJobs right away, the first audio byte only after about 9 s
+    startPollingIfNeeded()
     do {
-      try await client.requestDownload(hit: hit)
+      try await backendApi.forkStartYouTubeDownload(videoId: hit.videoId)
     } catch {
       pending.removeValue(forKey: hit.videoId)
       postChange()
       throw error
     }
-    startPollingIfNeeded()
   }
 
   private var needsPolling: Bool {
@@ -237,7 +254,8 @@ public final class YouTubeMusicJobMonitor {
   private func poll() async {
     let newJobs: [String: SongpickerJob]
     do {
-      newJobs = try await client.jobs()
+      guard let backendApi else { throw SongpickerError.noProxy }
+      newJobs = try await backendApi.forkYouTubeJobs()
     } catch {
       os_log("Jobs request failed: %s", log: log, type: .info, error.localizedDescription)
       let hadError = lastError != nil

@@ -22,21 +22,14 @@
 import Foundation
 
 extension UserSettings {
-  /// Address of the Songpicker, default `SongpickerConfig.defaultBaseURL`.
-  public var songpickerURL: URL {
-    get { _forkSongpickerURL.flatMap { URL(string: $0) } ?? SongpickerConfig.defaultBaseURL }
-    set {
-      _forkSongpickerURL = newValue == SongpickerConfig.defaultBaseURL ? nil : newValue.absoluteString
-    }
-  }
-
   /// YouTube Music section in the search and the download overview.
   public var isYouTubeMusicEnabled: Bool {
     get { _forkYouTubeMusicEnabled ?? true }
     set { _forkYouTubeMusicEnabled = newValue }
   }
 
-  /// Own proxy address. `nil`: host of the account + `SongpickerConfig.proxyPort`.
+  /// Own proxy address. `nil`: the account itself (or its host + `SongpickerConfig.proxyPort`
+  /// if the account points to Navidrome directly). `_forkSongpickerURL` is no longer used.
   public var songpickerProxyURL: URL? {
     get { _forkSongpickerProxyURL.flatMap { URL(string: $0) } }
     set { _forkSongpickerProxyURL = newValue?.absoluteString }

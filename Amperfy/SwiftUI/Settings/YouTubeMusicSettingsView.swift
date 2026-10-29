@@ -3,7 +3,7 @@
 //  Amperfy
 //
 //  Fork: settings of the YouTube Music integration (design phase 5, roadmap 3).
-//  Songpicker URL, YouTube Music on/off and an optional own proxy URL. Stored in UserSettings
+//  YouTube Music on/off, a connection test against the proxy and an optional own proxy URL. Stored in UserSettings
 //  and taken over by SongpickerConfig right away.
 //
 //  This program is free software: you can redistribute it and/or modify
@@ -36,19 +36,13 @@ struct YouTubeMusicSettingsView: View {
   @State
   private var isEnabled = true
   @State
-  private var songpickerURLInput = ""
-  @State
   private var isCustomProxy = false
   @State
   private var proxyURLInput = ""
   @State
-  private var songpickerURLError: String?
-  @State
   private var proxyURLError: String?
   @State
   private var connection = ConnectionState.idle
-
-  private var defaultURLText: String { SongpickerConfig.defaultBaseURL.absoluteString }
 
   var body: some View {
     SettingsList {
@@ -61,27 +55,11 @@ struct YouTubeMusicSettingsView: View {
 
       SettingsSection(
         content: {
-          SettingsRow(title: "Songpicker URL", orientation: .vertical) {
-            TextField(defaultURLText, text: $songpickerURLInput)
-              .keyboardType(.URL)
-              .textInputAutocapitalization(.never)
-              .autocorrectionDisabled()
-              .textContentType(.URL)
-              .submitLabel(.done)
-              .onSubmit(saveSongpickerURL)
-              .foregroundColor(.secondary)
-          }
           SettingsButtonRow(title: "Test Connection", action: testConnection)
             .disabled(connection == .testing)
-          if songpickerURLInput != defaultURLText {
-            SettingsButtonRow(title: "Reset to Default") {
-              songpickerURLInput = defaultURLText
-              saveSongpickerURL()
-            }
-          }
         },
-        footer: songpickerFooter,
-        header: "Songpicker"
+        footer: connectionFooter,
+        header: "Server"
       )
 
       SettingsSection(
@@ -106,10 +84,7 @@ struct YouTubeMusicSettingsView: View {
     }
     .navigationTitle("YouTube Music")
     .onAppear(perform: load)
-    .onDisappear {
-      saveSongpickerURL()
-      saveProxyURL()
-    }
+    .onDisappear(perform: saveProxyURL)
     .onChange(of: isEnabled) { _, newValue in
       update { $0.isYouTubeMusicEnabled = newValue }
     }
@@ -123,17 +98,16 @@ struct YouTubeMusicSettingsView: View {
     }
   }
 
-  private var songpickerFooter: String {
-    if let songpickerURLError { return songpickerURLError }
+  private var connectionFooter: String {
     switch connection {
     case .idle:
-      return "Search and downloads go to this address. Default: \(defaultURLText)"
+      return "Search, playback and downloads go through the server of your account. It needs the YouTube Music proxy in front of Navidrome."
     case .testing:
       return "Connecting…"
     case let .ok(jobCount):
-      return "Connected. The Songpicker knows \(jobCount) download\(jobCount == 1 ? "" : "s")."
+      return "Connected. The proxy lists \(jobCount) download\(jobCount == 1 ? "" : "s") of this account."
     case let .failed(message):
-      return "Not reachable: \(message)"
+      return "Not available: \(message)"
     }
   }
 
@@ -141,13 +115,12 @@ struct YouTubeMusicSettingsView: View {
     if let proxyURLError { return proxyURLError }
     return isCustomProxy
       ? "Songs from YouTube Music play through this address, followed by /rest/stream.view."
-      : "Songs from YouTube Music play through port \(SongpickerConfig.proxyPort) on the host of your account."
+      : "Songs from YouTube Music play through the server of your account. If it points to Navidrome directly (port \(SongpickerConfig.navidromePort)), port \(SongpickerConfig.proxyPort) of the same host is used."
   }
 
   private func load() {
     let user = appDelegate.storage.settings.user
     isEnabled = user.isYouTubeMusicEnabled
-    songpickerURLInput = user.songpickerURL.absoluteString
     isCustomProxy = user.songpickerProxyURL != nil
     proxyURLInput = user.songpickerProxyURL?.absoluteString ?? ""
   }
@@ -157,21 +130,6 @@ struct YouTubeMusicSettingsView: View {
     change(&user)
     appDelegate.storage.settings.user = user
     SongpickerConfig.apply(user)
-  }
-
-  private func saveSongpickerURL() {
-    let text = songpickerURLInput.trimmingCharacters(in: .whitespacesAndNewlines)
-    let url = text.isEmpty ? SongpickerConfig.defaultBaseURL : SongpickerConfig.normalizedURL(from: text)
-    guard let url else {
-      songpickerURLError = "Please enter an address like \(defaultURLText)."
-      return
-    }
-    songpickerURLError = nil
-    songpickerURLInput = url.absoluteString
-    if url != appDelegate.storage.settings.user.songpickerURL {
-      connection = .idle
-      update { $0.songpickerURL = url }
-    }
   }
 
   private func saveProxyURL() {
@@ -193,13 +151,15 @@ struct YouTubeMusicSettingsView: View {
   }
 
   private func testConnection() {
-    saveSongpickerURL()
-    guard songpickerURLError == nil else { return }
+    saveProxyURL()
     connection = .testing
+    if let accountInfo = appDelegate.storage.settings.accounts.active {
+      YouTubeMusicJobMonitor.shared.configure(backendApi: appDelegate.getMeta(accountInfo).backendApi)
+    }
     Task { @MainActor in
       do {
-        let jobs = try await SongpickerClient.shared.jobs()
-        connection = .ok(jobCount: jobs.count)
+        let jobCount = try await YouTubeMusicJobMonitor.shared.testConnection()
+        connection = .ok(jobCount: jobCount)
       } catch {
         connection = .failed(error.localizedDescription)
       }

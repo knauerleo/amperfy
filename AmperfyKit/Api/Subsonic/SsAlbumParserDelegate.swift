@@ -47,6 +47,8 @@ class SsAlbumParserDelegate: SsXmlLibWithArtworkParser {
 
     if elementName == "album" {
       guard let albumId = attributeDict["id"] else { return }
+      // Fork: the search album of the YouTube Music proxy stays out of the library
+      guard !YouTubeMusic.isPlaceholderId(albumId) else { return }
 
       if let prefetchedAlbum = prefetch.prefetchedAlbumDict[albumId] {
         albumBuffer = prefetchedAlbum

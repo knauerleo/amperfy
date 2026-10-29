@@ -606,6 +606,7 @@ class SearchVC: BasicTableViewController {
       serverResult.songsIDs = await songsIDs
       guard !Task.isCancelled else { return }
       self.fork.isServerSearchRunning = false
+      self.forkDidReceiveServerSongs(serverResult.songsIDs)
       self.display(searchResult: serverResult.merged(withLocal: localResult))
     }
   }

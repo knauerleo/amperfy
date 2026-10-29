@@ -954,6 +954,15 @@ final class SubsonicServerApi: URLCleanser, Sendable {
     }
   }
 
+  /// Fork: downloads of this user on the YouTube Music proxy (`getYtJobs.view`, JSON).
+  public func requestYtJobs() async throws -> APIDataResponse {
+    try await request { version in
+      var urlComp = try self.createAuthApiUrlComponent(version: version, forAction: "getYtJobs")
+      urlComp.addQueryItem(name: "f", value: "json")
+      return try self.createUrl(from: urlComp)
+    }
+  }
+
   private func createUrl(from urlComp: URLComponents) throws -> URL {
     if let url = urlComp.url {
       return url

@@ -129,6 +129,7 @@ final class ForkLibraryVC: UICollectionViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    monitor.configure(backendApi: appDelegate.getMeta(account.info).backendApi)
     title = "Library"
     navigationController?.navigationBar.prefersLargeTitles = true
     collectionView.backgroundColor = ForkSurface.background
@@ -190,7 +191,7 @@ final class ForkLibraryVC: UICollectionViewController {
     setJobObservation(filter == .downloads && viewIfLoaded?.window != nil)
   }
 
-  /// Polls `/api/jobs` only while the overview is visible (running tracked jobs poll anyway).
+  /// Polls `getYtJobs` only while the overview is visible (running tracked jobs poll anyway).
   private func setJobObservation(_ isOn: Bool) {
     let shouldObserve = isOn && SongpickerConfig.isEnabled
     guard shouldObserve != isObservingJobs else { return }
@@ -515,7 +516,7 @@ final class ForkLibraryVC: UICollectionViewController {
         snapshot.appendSections([.jobs])
         snapshot.appendItems(entries.map { .job($0.videoId) }, toSection: .jobs)
       } else if let error = monitor.lastError {
-        message = "The Songpicker is not reachable (\(error))."
+        message = "Downloads are not available (\(error))."
       } else if !monitor.hasLoadedJobs {
         message = "Loading downloads…"
       } else {

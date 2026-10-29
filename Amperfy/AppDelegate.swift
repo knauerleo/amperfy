@@ -271,7 +271,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     if userSettings.migrateForkDarkFirst() { storage.settings.user = userSettings }
     ForkAccent.isNeutral = userSettings.isNeutralAccent
     ForkLaunchScreenCache.resetIfNeeded() // Fork
-    // Fork: Songpicker address, YouTube Music switch and proxy from the settings (phase 5)
+    // Fork: YouTube Music switch and proxy from the settings (phase 5)
     SongpickerConfig.apply(storage.settings.user)
     libraryUpdater.performAccountCleanUpIfNeccessaryInBackground()
 
@@ -289,6 +289,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       color: storage.settings.accounts.getSetting(activeAccountInfo).read.themePreference
         .asColor
     )
+    // Fork: YouTube Music downloads through the proxy of the active account
+    YouTubeMusicJobMonitor.shared.configure(backendApi: getMeta(activeAccountInfo).backendApi)
 
     guard AmperKit.shared.storage.settings.app.isLibrarySynced else {
       return true

@@ -33,6 +33,7 @@ Erreichbar per VPN unter `10.66.66.6`, im LAN unter `192.168.188.23`.
 - `GET /api/jobs` → `{<videoId>: {state, label, started, path?, error?}}`.
   Zustände: `wartet` → `lädt` → `speichert` → `fertig` (mit `path`) bzw. `fehler`.
 - `GET /api/stream/<videoId>` liefert Opus/WebM, das AVPlayer **nicht** abspielt. Nicht verwenden.
+- Seit Abschnitt 9 nutzt die App diese API nicht mehr, alles läuft über Subsonic am Login-Host.
 
 ### Sofort abspielen über den Proxy
 
@@ -362,6 +363,31 @@ Alles, woran Daten, Logins und Downloads hängen, bleibt „Amperfy“.
 - Den Splash gibt es nur bei einem Kaltstart. Holt man die App aus dem Hintergrund zurück, zeigt iOS den letzten Bildschirm.
 - Den Splash-Cache löscht die App erst bei ihrem ersten Start nach dem Update. Erst der Kaltstart danach zeigt den neuen Splash.
 - Das Icon zeigt immer Blau, unabhängig von der Theme-Farbe in der App.
+
+### 9. YouTube Music über den Subsonic-Proxy (TASKS F-1, F-1a, F-1b)
+
+Login über `https://musik.leokna.de` (Caddy → WireGuard → nginx :4534 → Songpicker `/nd` bzw. Navidrome).
+Die App spricht nur noch Subsonic mit dem Login-Host. Die Songpicker-API (`/api/…`, ohne Auth) bleibt intern und wird von der App nicht mehr aufgerufen.
+
+| Datei | Änderung |
+|---|---|
+| `AmperfyKit/Api/SongpickerClient.swift` | `SongpickerClient` (HTTP an `:8781`) und `baseURL` entfernt. `proxyURL(rewriting:)` schreibt nur noch Port 4533 → 4534 um (Account direkt auf Navidrome), sonst bleibt die URL. `SongpickerHit(videoId:title:artist:album:duration:)`, `thumbnailURL(videoId:)` (i.ytimg.com). `SongpickerJob` mit `title`, `artist`, `album`, `songId`, `path`, Parser für `getYtJobs.view?f=json` |
+| `SubsonicServerApi.swift` | `requestYtJobs()` (ein Block) |
+| `BackendProxy.swift` | `forkYouTubeJobs()`, `forkStartYouTubeDownload(videoId:)`: `stream.view?id=ytm-…&format=mp3`, liest nur bis zum ersten Audio-Byte (~9 s), der Proxy lädt allein weiter. Ein Job im Zustand `fehler` startet dabei neu |
+| `YouTubeMusicJobMonitor.swift` | Jobs aus `getYtJobs`, `configure(backendApi:)`, `testConnection()`. „Add to Library“ und Retry über `forkStartYouTubeDownload` |
+| `YouTubeMusicLibrarySync.swift` | Abgleich zuerst über `songId` des Jobs, dann Pfad, `ytm-`-Treffer der search3-Antwort ignoriert |
+| `LibraryStorage+YouTubeMusic.swift` | `YouTubeMusic.sanitizedProxyAttributes`: Bei `ytm-`-Songs fallen Album, Künstler, Genre, Datum, Pfad weg, `size` = 0, Marker „ ☁︎“ aus dem Titel, Künstlername in den HitStore. `deleteUnusedYouTubeMusicSongs` räumt zusätzlich alte Fake-Einträge auf (Album/Künstler `ytm-…`, Verknüpfungen der Songs). `getOrCreateYouTubeMusicSong` entfällt |
+| `SsSongParserDelegate.swift`, `SsAlbumParserDelegate.swift` | Je ein Hook: Attribute bereinigen bzw. Alben `ytm-…` (Such-Album des Proxys) überspringen |
+| `SearchVC+Fork.swift`, `SearchVC.swift` | YouTube-Sektion aus den `ytm-`-Songs der Server-Suche (`forkDidReceiveServerSongs`, 1 Zeile Hook vor `display`). Keine eigene YouTube-Anfrage mehr |
+| `UserSettings+Songpicker.swift`, `YouTubeMusicSettingsView.swift` | Songpicker-URL entfällt (`_forkSongpickerURL` bleibt ungenutzt in `Settings` stehen). „Test Connection“ fragt `getYtJobs` ab. Custom Proxy URL bleibt optional |
+| `AppDelegate.swift`, `ForkLibraryVC.swift` | Monitor mit dem Backend des aktiven Accounts konfigurieren, Texte |
+
+**Bekannte Grenzen:**
+
+- `getYtJobs` kennt nur Jobs, die über den Subsonic-Proxy gestartet wurden, ab der Einführung des Endpunkts (2026-10-29).
+- Ob der Proxy weiterlädt, wenn die App nach dem ersten Byte trennt, ist mit der Pi-Session noch zu bestätigen.
+- Die Download-Liste zeigt das Video-Thumbnail von i.ytimg.com (4:3), die Songs selbst das Cover über `getCoverArt`.
+- Nach einem Account-Wechsel konfiguriert sich der Monitor erst neu, wenn Suche oder Library geöffnet werden.
 
 ### Hilfsskript
 

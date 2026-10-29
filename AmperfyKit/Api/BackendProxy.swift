@@ -394,7 +394,36 @@ extension BackendProxy: BackendApi {
     )
   }
 
-  /// Fork: `:4534/rest/stream.view?id=ytm-<videoId>&format=mp3` with the account's credentials.
+  /// Fork: downloads of this user on the YouTube Music proxy, keyed by video ID.
+  public func forkYouTubeJobs() async throws -> [String: SongpickerJob] {
+    guard let serverApi = forkSubsonicServerApi else { throw SongpickerError.noProxy }
+    let response = try await serverApi.requestYtJobs()
+    return try SongpickerJob.parseYtJobs(data: response.data)
+  }
+
+  /// Fork: `stream.view?id=ytm-…` starts the download on the proxy, or restarts a failed one.
+  /// Only the start of the audio is read, the proxy keeps downloading on its own.
+  public func forkStartYouTubeDownload(videoId: String) async throws {
+    guard let serverApi = forkSubsonicServerApi else { throw SongpickerError.noProxy }
+    let streamUrl = try await serverApi.generateUrl(
+      forStreamingPlayableId: YouTubeMusic.playableId(videoId: videoId),
+      maxBitrate: .noLimit,
+      formatPreference: .mp3
+    )
+    var request = URLRequest(url: SongpickerConfig.proxyURL(rewriting: streamUrl))
+    request.timeoutInterval = 60
+    serverApi.httpHeaders.forEach { request.setValue($0.value, forHTTPHeaderField: $0.key) }
+    let (bytes, response) = try await URLSession.shared.bytes(for: request)
+    guard let http = response as? HTTPURLResponse, (200 ..< 300).contains(http.statusCode),
+          http.mimeType?.hasPrefix("audio/") ?? true
+    else { throw SongpickerError.invalidResponse }
+    // the first audio byte arrives after about 9 s, the job is running by then
+    for try await _ in bytes {
+      break
+    }
+  }
+
+  /// Fork: `stream.view?id=ytm-<videoId>&format=mp3` at the proxy with the account's credentials.
   private func youTubeMusicProxyUrl(for playableInfo: AbstractPlayableInfo) async throws -> URL {
     let url = try await activeApi.generateUrl(
       forStreamingPlayable: playableInfo,

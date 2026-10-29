@@ -78,7 +78,6 @@ final class SearchForkState: NSObject {
   /// Every result shown in this session, to follow a download that starts by playing it later.
   var knownHits = [String: SongpickerHit]()
   var youTubeState = YouTubeState.idle
-  var youTubeTask: Task<(), Never>?
   var isServerSearchRunning = false
   let log = OSLog(subsystem: "Amperfy", category: "YouTubeMusic")
 
@@ -113,6 +112,7 @@ extension SearchVC {
     forkLoadGenres()
 
     let meta = appDelegate.getMeta(account.info)
+    monitor.configure(backendApi: meta.backendApi)
     let sync = YouTubeMusicLibrarySync(
       account: account,
       storage: appDelegate.storage,
@@ -158,40 +158,29 @@ extension SearchVC {
 
   /// Called after the debounce, before the local search.
   func forkSearchWillStart(searchText: String, onlyCached: Bool) {
-    fork.youTubeTask?.cancel()
     fork.topHit = nil
     fork.topHitScore = 0
     fork.youTubeHits = []
     fork.isServerSearchRunning = !onlyCached
-    guard !onlyCached, SongpickerConfig.isEnabled,
-          appDelegate.storage.settings.user.isOnlineMode
-    else {
-      fork.youTubeState = .idle
-      return
-    }
-    fork.youTubeState = .loading
-    fork.youTubeTask = Task { @MainActor in
-      do {
-        let hits = try await SongpickerClient.shared.search(query: searchText)
-        guard !Task.isCancelled else { return }
-        forkApply(youTubeHits: hits)
-        fork.youTubeState = .loaded
-      } catch {
-        guard !Task.isCancelled else { return }
-        os_log("YouTube search failed: %s", log: fork.log, type: .info, error.localizedDescription)
-        fork.youTubeState = .failed
-      }
-      guard isSearchActive else { return }
-      forkUpdateTopHit(searchText: searchText)
-      updateDataSource(animated: false)
-      updateContentUnavailable()
-    }
+    // the proxy mixes the YouTube results into the server search (search3)
+    let isYouTubeSearched = !onlyCached && SongpickerConfig.isEnabled &&
+      appDelegate.storage.settings.user.isOnlineMode
+    fork.youTubeState = isYouTubeSearched ? .loading : .idle
+  }
+
+  /// Called with the song results of the server search, before they are displayed.
+  func forkDidReceiveServerSongs(_ songIDs: [NSManagedObjectID]) {
+    guard fork.youTubeState == .loading else { return }
+    let placeholders = songIDs
+      .compactMap { appDelegate.storage.main.context.object(with: $0) as? SongMO }
+      .map { Song(managedObject: $0) }
+      .filter { $0.isYouTubeMusicPlaceholder }
+    forkApply(youTubePlaceholders: placeholders)
+    fork.youTubeState = .loaded
   }
 
   /// Called when the search text is empty again.
   func forkReset() {
-    fork.youTubeTask?.cancel()
-    fork.youTubeTask = nil
     fork.youTubeState = .idle
     fork.youTubeHits = []
     fork.topHit = nil
@@ -215,18 +204,24 @@ extension SearchVC {
     fork.topHit != nil || !fork.youTubeHits.isEmpty
   }
 
-  private func forkApply(youTubeHits hits: [SongpickerHit]) {
+  private func forkApply(youTubePlaceholders songs: [Song]) {
     var seen = Set<String>()
-    let newHits = hits
-      .filter { !$0.isInLibrary && seen.insert($0.videoId).inserted }
-      .prefix(upToAsArray: SearchForkState.youTubeLimit)
-    let library = appDelegate.storage.main.library
-    for hit in newHits {
-      fork.knownHits[hit.videoId] = hit
-      fork.youTubeSongs[hit.videoId] = library.getOrCreateYouTubeMusicSong(for: account, hit: hit)
+    var newHits = [SongpickerHit]()
+    for song in songs {
+      let videoId = String(song.id.dropFirst(YouTubeMusic.idPrefix.count))
+      guard newHits.count < SearchForkState.youTubeLimit, seen.insert(videoId).inserted,
+            let hit = YouTubeMusicHitStore.shared.hit(forVideoId: videoId) ?? SongpickerHit(
+              videoId: videoId,
+              title: song.title,
+              artist: song.creatorName,
+              album: nil,
+              duration: song.duration
+            )
+      else { continue }
+      newHits.append(hit)
+      fork.knownHits[videoId] = hit
+      fork.youTubeSongs[videoId] = song
     }
-    // artwork downloads need permanent object IDs
-    library.saveContext()
     fork.youTubeHits = newHits
     if !newHits.isEmpty {
       monitor.refresh()
@@ -571,7 +566,7 @@ extension SearchVC {
 
   private func forkWillPlay(_ hit: SongpickerHit) {
     fork.knownHits[hit.videoId] = hit
-    // the proxy starts the download when it streams; the job shows up in /api/jobs
+    // the proxy starts the download when it streams; the job shows up in getYtJobs
     monitor.track(hit)
   }
 
