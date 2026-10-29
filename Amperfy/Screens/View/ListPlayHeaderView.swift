@@ -40,7 +40,11 @@ extension LibraryElementDetailTableHeaderView: ListPlayHeader {}
 
 final class ListPlayHeaderView: UIView, ListPlayHeader {
   private static let playButtonSize: CGFloat = 48
-  static let frameHeight: CGFloat = playButtonSize + DS.Space.xs + DS.Space.s
+  /// UI-18 (iPhone): "Play" and "Shuffle" as pills.
+  private static let pillHeight: CGFloat = 40
+  static var frameHeight: CGFloat {
+    (DS.isPhone ? pillHeight : playButtonSize) + DS.Space.xs + DS.Space.s
+  }
 
   /// Builds the play context asynchronously, e.g. after fetching the songs of a few artists.
   typealias ContextProvider = @MainActor (_ isShuffled: Bool) async -> PlayContext?
@@ -112,6 +116,10 @@ final class ListPlayHeaderView: UIView, ListPlayHeader {
 
   private func setupViews() {
     backgroundColor = .clear
+    if DS.isPhone {
+      setupPhonePills()
+      return
+    }
 
     infoLabel.font = DS.Font.rowSubtitle
     infoLabel.adjustsFontForContentSizeCategory = true
@@ -159,6 +167,78 @@ final class ListPlayHeaderView: UIView, ListPlayHeader {
       row.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -DS.Space.m),
       row.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -DS.Space.s),
     ])
+  }
+
+  /// UI-18: "Play" as an accent pill, "Shuffle" as a raised pill, the count on the right.
+  private func setupPhonePills() {
+    infoLabel.font = DS.Font.rowSubtitle
+    infoLabel.adjustsFontForContentSizeCategory = true
+    infoLabel.textColor = DS.Color.text2
+    infoLabel.textAlignment = .right
+    infoLabel.numberOfLines = 1
+    infoLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
+    infoLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+
+    playButton.configuration = Self.pillConfiguration(
+      title: String(localized: "Play", table: "Fork"),
+      image: .play,
+      background: DS.Color.accent,
+      foreground: DS.Color.onAccent
+    )
+    playButton.accessibilityLabel = String(localized: "Play All", table: "Fork")
+    playButton.addTarget(self, action: #selector(playPressed), for: .touchUpInside)
+
+    shuffleButton.configuration = Self.pillConfiguration(
+      title: String(localized: "Shuffle", table: "Fork"),
+      image: .shuffle,
+      background: DS.Color.surfaceRaised,
+      foreground: DS.Color.text
+    )
+    shuffleButton.accessibilityLabel = String(localized: "Shuffle All", table: "Fork")
+    shuffleButton.addTarget(self, action: #selector(shufflePressed), for: .touchUpInside)
+
+    for button in [playButton, shuffleButton] {
+      button.translatesAutoresizingMaskIntoConstraints = false
+      button.heightAnchor.constraint(equalToConstant: Self.pillHeight).isActive = true
+      button.setContentCompressionResistancePriority(.required, for: .horizontal)
+    }
+
+    let row = UIStackView(arrangedSubviews: [playButton, shuffleButton, infoLabel])
+    row.axis = .horizontal
+    row.alignment = .center
+    row.spacing = DS.Space.xs
+    row.setCustomSpacing(DS.Space.s, after: shuffleButton)
+    row.translatesAutoresizingMaskIntoConstraints = false
+    addSubview(row)
+    NSLayoutConstraint.activate([
+      row.topAnchor.constraint(equalTo: topAnchor, constant: DS.Space.xs),
+      row.leadingAnchor.constraint(equalTo: leadingAnchor, constant: DS.Space.m),
+      row.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -DS.Space.m),
+      row.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -DS.Space.s),
+    ])
+  }
+
+  private static func pillConfiguration(
+    title: String,
+    image: UIImage,
+    background: UIColor,
+    foreground: UIColor
+  )
+    -> UIButton.Configuration {
+    var config = UIButton.Configuration.filled()
+    config.title = title
+    config.image = image.withConfiguration(UIImage.SymbolConfiguration(pointSize: 13, weight: .bold))
+    config.imagePadding = 6
+    config.baseBackgroundColor = background
+    config.baseForegroundColor = foreground
+    config.cornerStyle = .capsule
+    config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 18)
+    config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer {
+      var attributes = $0
+      attributes.font = DS.Font.pill
+      return attributes
+    }
+    return config
   }
 
   // MARK: - Content

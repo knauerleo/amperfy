@@ -168,8 +168,9 @@ final class ImmersiveDetailHeaderView: UIView {
     playConfig.image = UIImage.play.withConfiguration(
       UIImage.SymbolConfiguration(pointSize: 20, weight: .bold)
     )
-    playConfig.baseBackgroundColor = .label
-    playConfig.baseForegroundColor = .systemBackground
+    // UI-18: the play button carries the accent on the iPhone
+    playConfig.baseBackgroundColor = DS.isPhone ? DS.Color.accent : .label
+    playConfig.baseForegroundColor = DS.isPhone ? DS.Color.onAccent : .systemBackground
     playConfig.cornerStyle = .capsule
     playButton.configuration = playConfig
     playButton.accessibilityLabel = String(localized: "Play", table: "Fork")
