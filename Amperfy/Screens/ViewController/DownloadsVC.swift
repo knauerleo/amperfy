@@ -60,6 +60,7 @@ class DownloadsVC: SingleFetchedResultsTableViewController<DownloadMO> {
     optionsButton = UIBarButtonItem.createOptionsBarButton()
     optionsButton.menu = createActionButtonMenu()
     navigationItem.rightBarButtonItem = optionsButton
+    forkInstallEmptyState() // Fork: UI-17
   }
 
   private func createActionButtonMenu() -> UIMenu {
@@ -101,6 +102,7 @@ class DownloadsVC: SingleFetchedResultsTableViewController<DownloadMO> {
     extendSafeAreaToAccountForMiniPlayer()
     fetchedResultsController.fetch()
     tableView.reloadData()
+    forkUpdateEmptyState() // Fork: UI-17
   }
 
   func convertCellViewToPlayContext(cell: UITableViewCell) -> PlayContext? {

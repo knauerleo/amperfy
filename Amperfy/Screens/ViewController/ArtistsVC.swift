@@ -219,7 +219,7 @@ class ArtistsVC: SingleSnapshotFetchedResultsTableViewController<ArtistMO> {
       if fetchedResultsController.isSearchActive {
         contentUnavailableConfiguration = UIContentUnavailableConfiguration.search()
       } else {
-        contentUnavailableConfiguration = emptyContentConfig
+        contentUnavailableConfiguration = forkEmptyContentConfig() ?? emptyContentConfig // Fork: UI-17
       }
     } else {
       contentUnavailableConfiguration = nil

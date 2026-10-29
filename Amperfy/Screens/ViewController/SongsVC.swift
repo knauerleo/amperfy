@@ -108,7 +108,7 @@ class SongsVC: SingleFetchedResultsTableViewController<SongMO> {
       if fetchedResultsController.isSearchActive {
         contentUnavailableConfiguration = UIContentUnavailableConfiguration.search()
       } else {
-        contentUnavailableConfiguration = emptyContentConfig
+        contentUnavailableConfiguration = forkEmptyContentConfig() ?? emptyContentConfig // Fork: UI-17
       }
       detailHeaderView?.isHidden = true
     } else {

@@ -120,7 +120,7 @@ class AlbumsCommonVCInteractions {
     }
   }
 
-  private let account: Account
+  let account: Account // Fork: read by the UI-17 empty state
 
   init(account: Account, isSetNavbarButton: Bool = true) {
     self.account = account
@@ -136,7 +136,7 @@ class AlbumsCommonVCInteractions {
       if fetchedResultsController.isSearchActive {
         rootVC?.contentUnavailableConfiguration = UIContentUnavailableConfiguration.search()
       } else {
-        rootVC?.contentUnavailableConfiguration = emptyContentConfig
+        rootVC?.contentUnavailableConfiguration = forkEmptyContentConfig() ?? emptyContentConfig // Fork: UI-17
       }
     } else {
       rootVC?.contentUnavailableConfiguration = nil

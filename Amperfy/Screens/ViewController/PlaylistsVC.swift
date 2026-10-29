@@ -184,7 +184,7 @@ class PlaylistsVC: SingleSnapshotFetchedResultsTableViewController<PlaylistMO> {
       if fetchedResultsController.isSearchActive {
         contentUnavailableConfiguration = UIContentUnavailableConfiguration.search()
       } else {
-        contentUnavailableConfiguration = emptyContentConfig
+        contentUnavailableConfiguration = forkEmptyContentConfig() // Fork: UI-17 "New Playlist"
       }
     } else {
       contentUnavailableConfiguration = nil

@@ -122,7 +122,7 @@ class PodcastsVC: MultiSourceTableViewController {
         if podcastsFetchedResultsController.isSearchActive {
           contentUnavailableConfiguration = UIContentUnavailableConfiguration.search()
         } else {
-          contentUnavailableConfiguration = emptyPodcastConfig
+          contentUnavailableConfiguration = forkEmptyContentConfig(emptyPodcastConfig) // Fork: UI-17
         }
       } else {
         contentUnavailableConfiguration = nil
@@ -132,7 +132,7 @@ class PodcastsVC: MultiSourceTableViewController {
         if episodesFetchedResultsController.isSearchActive {
           contentUnavailableConfiguration = UIContentUnavailableConfiguration.search()
         } else {
-          contentUnavailableConfiguration = emptyEpisodeConfig
+          contentUnavailableConfiguration = forkEmptyContentConfig(emptyEpisodeConfig) // Fork: UI-17
         }
       } else {
         contentUnavailableConfiguration = nil

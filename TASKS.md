@@ -29,8 +29,6 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
   - Zuerst nur Fork-Texte und `ForkMenuText.relabel`, Upstream-Literale bleiben
 - [ ] **UI-16 Entscheidung iPad/Mac**
   - Fork-Design gilt nur auf dem iPhone. Entweder in `FORK.md` festhalten oder Home, Suche und Detailseiten auf dem iPad mitnehmen
-- [ ] **UI-17 Leerzustände mit Aktion in den übrigen Listen**
-  - Favoriten („Tippe auf ♥“), Playlists („Neue Playlist“), Downloads, Podcasts
 
 ### Features
 
@@ -78,3 +76,4 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [x] ~~**UI-14 Kompakter Mini-Player im Inline-Modus**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**UI-8 „Shuffle all“/„Play“-Zeile in Songs, Artists, Genres**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**UI-9 Restliche XIB-Schriften auf `DS.Font`**~~ (2026-10-29) - FORK.md Abschnitt 10
+- [x] ~~**UI-17 Leerzustände mit Aktion in den übrigen Listen**~~ (2026-10-29) - FORK.md Abschnitt 10
