@@ -29,8 +29,6 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
   - Labels für `DownloadJobCell`, `SearchStatusCell`, `NowPlayingBarsView`, Home/Search-Fork-Zellen. Skeletons für VoiceOver ausblenden
   - Zoom-Übergang zum Player bei „Bewegung reduzieren“ prüfen
   - Fertig, wenn: Home → Album → Abspielen → Skip ist komplett mit VoiceOver bedienbar
-- [ ] **UI-13 Bewegter Cover-Verlauf im Player**
-  - `AnimatedGradientLayer` existiert. Langsamer Verlauf aus `ArtworkColorCache`-Farben, aus bei „Bewegung reduzieren“
 - [ ] **UI-14 Kompakter Mini-Player im Inline-Modus**
   - Bei minimierter Tab-Bar (`tabAccessoryEnvironment == .inline`) nur Cover, Titel, Play
 - [ ] **UI-15 Deutsche Texte per String Catalog**
@@ -82,3 +80,4 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [x] ~~**UI-6 Volle Lyrics-Ansicht im Stil der Lyrics-Karte**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**UI-11 Lyrics-Karte unter das Cover statt neben ihm**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**UI-12 Sleep Timer sichtbar im Player**~~ (2026-10-29) - FORK.md Abschnitt 10
+- [x] ~~**UI-13 Bewegter Cover-Verlauf im Player**~~ (2026-10-29) - FORK.md Abschnitt 10

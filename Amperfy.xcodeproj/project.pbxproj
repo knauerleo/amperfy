@@ -33,6 +33,7 @@
 		501944192B78F9B800082D2E /* LargeCurrentlyPlayingPlayerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 501944162B78F97F00082D2E /* LargeCurrentlyPlayingPlayerView.xib */; };
 		5019441B2B7A049A00082D2E /* PopupPlayer+Visuals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5019441A2B7A049A00082D2E /* PopupPlayer+Visuals.swift */; };
 		7703D2AE3CE20DA6CE341F2F /* LyricsCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D984B20F513CC7F17E91297 /* LyricsCardView.swift */; };
+		1A4E22F1765F3BFDD7DE5810 /* PlayerAnimatedBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F5BC5F654083DD80D046EAF /* PlayerAnimatedBackgroundView.swift */; };
 		2B08D0CE63BA26837613920E /* SleepTimerChipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F39DBEA0099A9A4018848F15 /* SleepTimerChipView.swift */; };
 		FA96F61DA89B88D3B58C1F7F /* PlayerCoverScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD0CF2FBBFFA13B912A0FC16 /* PlayerCoverScrollView.swift */; };
 		F69235E58EEBDEC2B487B197 /* PopupPlayer+Fork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7BADBB35D25E4737974A6B /* PopupPlayer+Fork.swift */; };
@@ -718,6 +719,7 @@
 		501944172B78F97F00082D2E /* LargeCurrentlyPlayingPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeCurrentlyPlayingPlayerView.swift; sourceTree = "<group>"; };
 		5019441A2B7A049A00082D2E /* PopupPlayer+Visuals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PopupPlayer+Visuals.swift"; sourceTree = "<group>"; };
 		3D984B20F513CC7F17E91297 /* LyricsCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LyricsCardView.swift"; sourceTree = "<group>"; };
+		0F5BC5F654083DD80D046EAF /* PlayerAnimatedBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlayerAnimatedBackgroundView.swift"; sourceTree = "<group>"; };
 		F39DBEA0099A9A4018848F15 /* SleepTimerChipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SleepTimerChipView.swift"; sourceTree = "<group>"; };
 		FD0CF2FBBFFA13B912A0FC16 /* PlayerCoverScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlayerCoverScrollView.swift"; sourceTree = "<group>"; };
 		5C7BADBB35D25E4737974A6B /* PopupPlayer+Fork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PopupPlayer+Fork.swift"; sourceTree = "<group>"; };
@@ -1476,6 +1478,7 @@
 				50A30E5B2B7556FB00722894 /* PopupPlayer+TableViewExtension.swift */,
 				5019441A2B7A049A00082D2E /* PopupPlayer+Visuals.swift */,
 				3D984B20F513CC7F17E91297 /* LyricsCardView.swift */,
+				0F5BC5F654083DD80D046EAF /* PlayerAnimatedBackgroundView.swift */,
 				F39DBEA0099A9A4018848F15 /* SleepTimerChipView.swift */,
 				FD0CF2FBBFFA13B912A0FC16 /* PlayerCoverScrollView.swift */,
 				5C7BADBB35D25E4737974A6B /* PopupPlayer+Fork.swift */,
@@ -2808,6 +2811,7 @@
 				50DEEE07265E27070073FF20 /* DirectoryTableCell.swift in Sources */,
 				5019441B2B7A049A00082D2E /* PopupPlayer+Visuals.swift in Sources */,
 				7703D2AE3CE20DA6CE341F2F /* LyricsCardView.swift in Sources */,
+				1A4E22F1765F3BFDD7DE5810 /* PlayerAnimatedBackgroundView.swift in Sources */,
 				2B08D0CE63BA26837613920E /* SleepTimerChipView.swift in Sources */,
 				FA96F61DA89B88D3B58C1F7F /* PlayerCoverScrollView.swift in Sources */,
 				F69235E58EEBDEC2B487B197 /* PopupPlayer+Fork.swift in Sources */,

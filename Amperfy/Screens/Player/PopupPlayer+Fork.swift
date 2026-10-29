@@ -86,6 +86,7 @@ extension PopupPlayerVC {
       ])
     }
     forkInstallSleepTimerChip()
+    forkInstallAnimatedBackground()
     forkReloadLyricsCard()
   }
 
@@ -229,6 +230,7 @@ extension PopupPlayerVC {
   func forkApplyArtworkColors() {
     forkLyricsCard?.tint(with: artworkGradientColors)
     largeCurrentlyPlayingView?.forkLyricsBackdrop?.tint(with: artworkGradientColors)
+    forkAnimatedBackground?.setColors(artworkGradientColors)
   }
 
   /// Hook: playback time for synced lyrics.
