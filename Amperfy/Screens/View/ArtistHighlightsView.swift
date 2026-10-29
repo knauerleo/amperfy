@@ -4,7 +4,8 @@
 //
 //  Fork: "Popular" (top songs by play count) and a horizontal discography shelf for the
 //  artist page, shown inside the ImmersiveDetailHeaderView. Also starts an artist radio.
-//  Biography and similar artists come from `getArtistInfo2` (F-3).
+//  Biography and similar artists come from `getArtistInfo2` (F-3). "Popular" is filled up
+//  with `getTopSongs` (Last.fm) while the own play counts give fewer than five songs (F-4).
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -34,6 +35,8 @@ final class ArtistHighlightsView: UIView {
   private weak var rootView: UIViewController?
   private let stack = UIStackView()
   private var popularSongs: [AbstractPlayable] = []
+  /// Library songs from `getTopSongs`, in Last.fm order.
+  private var topSongs: [AbstractPlayable] = []
   private var albums: [Album] = []
   private var biography: String?
   private var similarArtists: [Artist] = []
@@ -63,6 +66,7 @@ final class ArtistHighlightsView: UIView {
     ])
     reload()
     loadArtistInfo()
+    loadTopSongs()
   }
 
   required init?(coder: NSCoder) {
@@ -70,6 +74,27 @@ final class ArtistHighlightsView: UIView {
   }
 
   // MARK: - Data
+
+  /// Last.fm top songs that are in the library, once per page and only if they are needed.
+  private func loadTopSongs() {
+    guard popularSongs.count < Self.popularCount,
+          appDelegate.storage.settings.user.isOnlineMode, let account = artist.account else { return }
+    let artistName = artist.name
+    Task { @MainActor in
+      do {
+        let ids = try await self.appDelegate.getMeta(account.info).backendApi
+          .forkTopSongIds(artistName: artistName, count: 20)
+        self.topSongs = ids.compactMap {
+          self.appDelegate.storage.main.library.getSong(for: account, id: $0)
+        }
+        guard !self.topSongs.isEmpty else { return }
+        self.reload()
+        self.contentDidChange?()
+      } catch {
+        // without Last.fm "Popular" stays with the own play counts
+      }
+    }
+  }
 
   /// Biography and similar artists of the library, once per page.
   private func loadArtistInfo() {
@@ -99,6 +124,10 @@ final class ArtistHighlightsView: UIView {
         .sorted { $0.playCount > $1.playCount }
         .prefix(Self.popularCount)
     )
+    let fillUp = topSongs.filter { top in
+      (!isOffline || top.isCached) && !popularSongs.contains { $0.id == top.id }
+    }
+    popularSongs += fillUp.prefix(Self.popularCount - popularSongs.count)
     albums = artist.albums
       .filter { !isOffline || $0.isCached }
       .sorted { lhs, rhs in
@@ -350,7 +379,10 @@ private final class PopularSongRow: UIView, UIContextMenuInteractionDelegate {
     titleLabel.textColor = .label
 
     let countLabel = UILabel()
-    countLabel.text = "\(song.playCount.formatted()) play\(song.playCount == 1 ? "" : "s")"
+    // songs from Last.fm without own plays show their album instead of "0 plays"
+    countLabel.text = song.playCount > 0 ?
+      "\(song.playCount.formatted()) play\(song.playCount == 1 ? "" : "s")" :
+      (song.asSong?.album?.name ?? "")
     countLabel.font = DS.Font.rowSubtitle
     countLabel.textColor = .secondaryLabel
 
