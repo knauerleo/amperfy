@@ -3056,6 +3056,22 @@
           }
         }
       }
+    },
+    "Use white (Dark) or black (Light) for buttons and highlights instead of mint. Colors from the artwork stay.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weiß (Dunkel) oder Schwarz (Hell) für Knöpfe und Hervorhebungen statt Mint. Farben aus dem Cover bleiben."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Use white (Dark) or black (Light) for buttons and highlights instead of mint. Colors from the artwork stay."
+          }
+        }
+      }
     }
   },
   "version": "1.0"

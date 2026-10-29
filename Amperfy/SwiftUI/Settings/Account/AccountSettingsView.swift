@@ -181,7 +181,7 @@ struct AccountSettingsView: View {
                 }
               }
             }
-          }
+          }.forkHiddenWhenAccentFixed() // Fork: the iPhone has one fixed accent (UI-18)
 
           SettingsSection(content: {
             SettingsCheckBoxRow(

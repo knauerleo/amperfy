@@ -306,7 +306,7 @@ public enum ThemePreference: Int, CaseIterable, Sendable, Codable {
   }
 
   public var asColor: UIColor {
-    if ForkAccent.isNeutral { return ForkAccent.neutralColor } // Fork: neutral accent
+    if let accent = ForkAccent.accentOverride { return accent } // Fork: neutral or fixed accent (UI-18)
     switch self {
     case .blue:
       return .systemBlue
@@ -324,7 +324,7 @@ public enum ThemePreference: Int, CaseIterable, Sendable, Codable {
   }
 
   public var contrastColor: UIColor {
-    if ForkAccent.isNeutral { return ForkAccent.neutralContrastColor } // Fork: neutral accent
+    if let accent = ForkAccent.contrastOverride { return accent } // Fork: neutral or fixed accent (UI-18)
     switch self {
     case .blue:
       return .white

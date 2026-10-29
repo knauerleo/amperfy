@@ -57,4 +57,40 @@ public enum ForkAccent {
   static let neutralColor = UIColor.label
   /// Text and icons on top of the neutral accent.
   static let neutralContrastColor = UIColor.systemBackground
+
+  // MARK: Fixed accent (UI-18)
+
+  private static let _isFixed = Atomic<Bool>(wrappedValue: false)
+
+  /// Set at start on the iPhone: one fixed accent (mint) instead of the theme color of the account.
+  /// Neutral Accent still wins, it is an explicit choice.
+  public static var isFixed: Bool {
+    get { _isFixed.wrappedValue }
+    set { _isFixed.wrappedValue = newValue }
+  }
+
+  /// Mint #7FE7CB in dark mode, a darker mint in light mode so it stays readable on white.
+  public static let fixedColor = UIColor { traits in
+    traits.userInterfaceStyle == .dark ?
+      UIColor(red: 0x7F / 255, green: 0xE7 / 255, blue: 0xCB / 255, alpha: 1) :
+      UIColor(red: 0x0E / 255, green: 0x8F / 255, blue: 0x73 / 255, alpha: 1)
+  }
+
+  /// Text and icons on top of the mint: the ground color #0B0B0F, white on the darker light mint.
+  public static let fixedContrastColor = UIColor { traits in
+    traits.userInterfaceStyle == .dark ?
+      UIColor(red: 0x0B / 255, green: 0x0B / 255, blue: 0x0F / 255, alpha: 1) :
+      .white
+  }
+
+  /// Read by `ThemePreference.asColor`: neutral, fixed or nil for the theme color.
+  static var accentOverride: UIColor? {
+    if isNeutral { return neutralColor }
+    return isFixed ? fixedColor : nil
+  }
+
+  static var contrastOverride: UIColor? {
+    if isNeutral { return neutralContrastColor }
+    return isFixed ? fixedContrastColor : nil
+  }
 }

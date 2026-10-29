@@ -39,8 +39,9 @@ struct NeutralAccentSettingsSection: View {
           )
         )
       },
-      footer:
-      String(localized: "Use white (Dark) or black (Light) for buttons and highlights instead of the theme color. Colors from the artwork stay.", table: "Fork")
+      footer: ForkAccent.isFixed ?
+        String(localized: "Use white (Dark) or black (Light) for buttons and highlights instead of mint. Colors from the artwork stay.", table: "Fork") :
+        String(localized: "Use white (Dark) or black (Light) for buttons and highlights instead of the theme color. Colors from the artwork stay.", table: "Fork")
     )
     .onAppear {
       isNeutralAccent = appDelegate.storage.settings.user.isNeutralAccent
@@ -54,5 +55,19 @@ struct NeutralAccentSettingsSection: View {
       .getSetting(appDelegate.storage.settings.accounts.active).read.themePreference
     appDelegate.setAppTheme(color: theme.asColor)
     appDelegate.applyAppThemeToAlreadyLoadedViews()
+  }
+}
+
+// MARK: - Fixed accent (UI-18)
+
+extension View {
+  /// The theme color picker has no effect while the iPhone uses its fixed accent.
+  @ViewBuilder
+  func forkHiddenWhenAccentFixed() -> some View {
+    if ForkAccent.isFixed {
+      EmptyView()
+    } else {
+      self
+    }
   }
 }

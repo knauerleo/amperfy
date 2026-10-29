@@ -19,12 +19,19 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+import AmperfyKit
 import UIKit
 
 // MARK: - DS
 
 @MainActor
 enum DS {
+  /// The Drift identity (UI-18) only applies on the iPhone. iPad and Mac keep the upstream look (UI-16).
+  nonisolated static let isPhone: Bool = {
+    let read = { MainActor.assumeIsolated { UIDevice.current.userInterfaceIdiom == .phone } }
+    return Thread.isMainThread ? read() : DispatchQueue.main.sync(execute: read)
+  }()
+
   // MARK: - Spacing
 
   enum Space {
@@ -42,14 +49,28 @@ enum DS {
     static let small: CGFloat = 4
     static let medium: CGFloat = 8
     static let large: CGFloat = 12
+    /// UI-18: covers in list rows (song, album, playlist).
+    static let rowArtwork: CGFloat = 8
+    /// UI-18: cards, sheets and the highlighted row of the current song.
+    static let card: CGFloat = 14
+    static let nowPlayingRow: CGFloat = 12
   }
 
   // MARK: - Typography
 
   /// Fixed base sizes that scale with Dynamic Type.
   enum Font {
-    static var detailTitle: UIFont { scaled(26, .bold, .title1) }
-    static var sectionTitle: UIFont { scaled(22, .bold, .title2) }
+    /// UI-18: iPhone titles in SF Pro Rounded. Display = large navigation titles.
+    static var display: UIFont { rounded(34, .heavy, .largeTitle, maximum: 44) }
+    static var navTitle: UIFont { rounded(17, .bold, .headline, maximum: 22) }
+    static var detailTitle: UIFont {
+      DS.isPhone ? rounded(28, .heavy, .title1) : scaled(26, .bold, .title1)
+    }
+    static var sectionTitle: UIFont {
+      DS.isPhone ? rounded(22, .bold, .title2) : scaled(22, .bold, .title2)
+    }
+    /// UI-18: label of the pills (Play, Shuffle).
+    static var pill: UIFont { rounded(15, .bold, .subheadline, maximum: 19) }
     static var rowTitle: UIFont { scaled(16, .medium, .body) }
     static var rowSubtitle: UIFont { scaled(13, .regular, .subheadline) }
     /// List cells have a fixed row height, so their fonts only grow a little with Dynamic Type.
@@ -102,6 +123,24 @@ enum DS {
       )
     }
 
+    /// SF Pro Rounded, scaled with Dynamic Type like `scaled`.
+    private static func rounded(
+      _ size: CGFloat,
+      _ weight: UIFont.Weight,
+      _ style: UIFont.TextStyle,
+      maximum: CGFloat? = nil
+    )
+      -> UIFont {
+      let system = UIFont.systemFont(ofSize: size, weight: weight)
+      let base = system.fontDescriptor.withDesign(.rounded)
+        .map { UIFont(descriptor: $0, size: size) } ?? system
+      let metrics = UIFontMetrics(forTextStyle: style)
+      if let maximum {
+        return metrics.scaledFont(for: base, maximumPointSize: maximum)
+      }
+      return metrics.scaledFont(for: base)
+    }
+
     private static func scaled(
       _ size: CGFloat,
       _ weight: UIFont.Weight,
@@ -129,9 +168,24 @@ enum DS {
     static let placeholderIconDark = UIColor(white: 0.55, alpha: 1)
     /// Dark-first surface levels (measure 14): gray steps instead of pure black in dark mode,
     /// the matching semantic system colors in light mode.
-    static let background = dynamic(dark: 0x121212, light: .systemBackground)
-    static let surface = dynamic(dark: 0x1E1E1E, light: .secondarySystemBackground)
-    static let surfaceRaised = dynamic(dark: 0x2A2A2A, light: .tertiarySystemBackground)
+    /// UI-18: on the iPhone the Drift palette (ground, surface, raised), cool and slightly blue.
+    static let background = DS.isPhone ?
+      dynamic(dark: 0x0B0B0F, light: .systemBackground) :
+      dynamic(dark: 0x121212, light: .systemBackground)
+    static let surface = DS.isPhone ?
+      dynamic(dark: 0x15151B, light: .secondarySystemBackground) :
+      dynamic(dark: 0x1E1E1E, light: .secondarySystemBackground)
+    static let surfaceRaised = DS.isPhone ?
+      dynamic(dark: 0x1E1E26, light: .tertiarySystemBackground) :
+      dynamic(dark: 0x2A2A2A, light: .tertiarySystemBackground)
+    /// UI-18 Drift palette. Only where a line is really needed.
+    static let line = dynamic(dark: 0x2A2A33, light: .separator)
+    static let text = dynamic(dark: 0xF5F4F8, light: .label)
+    static let text2 = dynamic(dark: 0xA6A5B4, light: .secondaryLabel)
+    static let text3 = dynamic(dark: 0x8A899A, light: .tertiaryLabel)
+    /// Fixed accent of the iPhone (mint), text and icons on top of it. Light mode uses a darker mint.
+    static let accent = ForkAccent.fixedColor
+    static let onAccent = ForkAccent.fixedContrastColor
     /// Background of compact tiles and the blocks of skeleton placeholders.
     static let tileSurface = dynamic(dark: 0x1E1E1E, light: .tertiarySystemFill)
     static let skeleton = dynamic(dark: 0x2A2A2A, light: .tertiarySystemFill)

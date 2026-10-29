@@ -270,6 +270,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // Fork: dark-first (measure 14), once; neutral accent before the theme is set
     if userSettings.migrateForkDarkFirst() { storage.settings.user = userSettings }
     ForkAccent.isNeutral = userSettings.isNeutralAccent
+    ForkAccent.isFixed = DS.isPhone // Fork: mint accent on the iPhone (UI-18)
     ForkLaunchScreenCache.resetIfNeeded() // Fork
     // Fork: YouTube Music switch and proxy from the settings (phase 5)
     SongpickerConfig.apply(storage.settings.user)
