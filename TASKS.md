@@ -34,8 +34,6 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
   - Erstes Extension-Target: Link aus YouTube Music/Safari annehmen, Video-ID auslesen, `POST /api/get`
 - [ ] **F-10 Weiterhören auf anderem Gerät (`savePlayQueue`/`getPlayQueue`)**
   - Queue + Position beim Pausieren/Beenden speichern, beim Start anbieten „Weiter mit …“
-- [ ] **F-13 Statistik / Jahresrückblick**
-  - Aus `playCount`, `lastPlayedDate`, `UserStatistics`: Top-Künstler, Top-Songs, Hörzeit
 - [ ] **F-14 Widgets und Kontrollzentrum**
   - Neues Widget-Target. Interaktive Widgets „Zuletzt gehört“, „Favoriten mischen“, Taste im Kontrollzentrum. App Intents gibt es schon (`AmperfyAppShortcuts`)
 - [ ] **F-15 Spotlight-Indexierung**
@@ -69,3 +67,4 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [x] ~~**F-5 „Ähnliche Songs von YouTube“**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**F-11 Home-Shelves aus `getAlbumList2`**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**F-12 Mixe aus lokalen Daten**~~ (2026-10-29) - FORK.md Abschnitt 10
+- [x] ~~**F-13 Statistik / Jahresrückblick**~~ (2026-10-29) - FORK.md Abschnitt 10

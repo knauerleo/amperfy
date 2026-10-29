@@ -176,7 +176,17 @@ final class ForkLibraryVC: UICollectionViewController {
       primaryAction: UIAction { [weak self] _ in self?.showAllCategories() }
     )
     allCategories.accessibilityLabel = "All Categories"
-    navigationItem.rightBarButtonItem = allCategories
+    // F-13: listening statistics and year in review
+    let stats = UIBarButtonItem(
+      image: UIImage(systemName: "chart.bar.xaxis"),
+      primaryAction: UIAction { [weak self] _ in self?.showListeningStats() }
+    )
+    stats.accessibilityLabel = "Your Stats"
+    navigationItem.rightBarButtonItems = [allCategories, stats]
+  }
+
+  private func showListeningStats() {
+    navigationController?.pushViewController(ListeningStatsVC(account: account), animated: true)
   }
 
   /// The original category list, including editing which categories are shown.

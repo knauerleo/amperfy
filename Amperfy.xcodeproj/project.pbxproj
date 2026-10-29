@@ -232,6 +232,7 @@
 		50BA92FA21CC37F800E5901D /* SongsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BA92F921CC37F800E5901D /* SongsVC.swift */; };
 		50BA930021CFDEBD00E5901D /* LibraryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BA92FF21CFDEBD00E5901D /* LibraryVC.swift */; };
 		D3C6ABDCFB388514EB40FAA3 /* ForkLibraryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F013A9DF48A55FEA53DA34C /* ForkLibraryVC.swift */; };
+		709FF651ADC31601BA108391 /* ListeningStatsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADA96CDF7F016004E73C49C /* ListeningStatsVC.swift */; };
 		50BA930421D10F0000E5901D /* SyncVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BA930321D10F0000E5901D /* SyncVC.swift */; };
 		50BE5D482850F4C900156FC6 /* PlaylistTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B798B123B7F51000551E62 /* PlaylistTest.swift */; };
 		50BE5D492850F4C900156FC6 /* ArtistTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F81E8B23BB666100EAAC3E /* ArtistTest.swift */; };
@@ -403,6 +404,7 @@
 		F9B8E090F2D0A66DE3BE1942 /* LibraryStorage+ForkHome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CBB663C5523D06770B559AE /* LibraryStorage+ForkHome.swift */; };
 		E42EA01DD6301D9103A73379 /* LibraryStorage+ForkAlbumLists.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F132409820C0DA1C8F198C /* LibraryStorage+ForkAlbumLists.swift */; };
 		5A202E2C3142E5847B1268DD /* LibraryStorage+ForkMixes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B719CEE5CFB76F1B7F582DE1 /* LibraryStorage+ForkMixes.swift */; };
+		2C5620EA0D79CDFA1581A235 /* LibraryStorage+ForkStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB52D32F46C56024A936B4F /* LibraryStorage+ForkStats.swift */; };
 		93496E273E175C8F9921C884 /* LibraryStorage+ForkLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA6E357950B7A39E04A767D /* LibraryStorage+ForkLibrary.swift */; };
 		08120C7A1C58B09BA06DF1FA /* LibraryStorage+YouTubeMusic.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABDC99627E3CE2E1DF23163 /* LibraryStorage+YouTubeMusic.swift */; };
 		70A21AA802975B654743A9DE /* LibraryStorage+YouTubeMusicSwap.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45DAA42B1B34D236711510F /* LibraryStorage+YouTubeMusicSwap.swift */; };
@@ -1094,12 +1096,14 @@
 		50BA92FD21CED4AF00E5901D /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		50BA92FF21CFDEBD00E5901D /* LibraryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryVC.swift; sourceTree = "<group>"; };
 		6F013A9DF48A55FEA53DA34C /* ForkLibraryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ForkLibraryVC.swift"; sourceTree = "<group>"; };
+		AADA96CDF7F016004E73C49C /* ListeningStatsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ListeningStatsVC.swift"; sourceTree = "<group>"; };
 		50BA930121D1019B00E5901D /* AmpacheLibrarySyncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmpacheLibrarySyncer.swift; sourceTree = "<group>"; };
 		50BA930321D10F0000E5901D /* SyncVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncVC.swift; sourceTree = "<group>"; };
 		50BA930521D5715D00E5901D /* LibraryStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryStorage.swift; sourceTree = "<group>"; };
 		4CBB663C5523D06770B559AE /* LibraryStorage+ForkHome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryStorage+ForkHome.swift"; sourceTree = "<group>"; };
 		E8F132409820C0DA1C8F198C /* LibraryStorage+ForkAlbumLists.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryStorage+ForkAlbumLists.swift"; sourceTree = "<group>"; };
 		B719CEE5CFB76F1B7F582DE1 /* LibraryStorage+ForkMixes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryStorage+ForkMixes.swift"; sourceTree = "<group>"; };
+		1AB52D32F46C56024A936B4F /* LibraryStorage+ForkStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryStorage+ForkStats.swift"; sourceTree = "<group>"; };
 		BBA6E357950B7A39E04A767D /* LibraryStorage+ForkLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryStorage+ForkLibrary.swift"; sourceTree = "<group>"; };
 		CABDC99627E3CE2E1DF23163 /* LibraryStorage+YouTubeMusic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryStorage+YouTubeMusic.swift"; sourceTree = "<group>"; };
 		D45DAA42B1B34D236711510F /* LibraryStorage+YouTubeMusicSwap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryStorage+YouTubeMusicSwap.swift"; sourceTree = "<group>"; };
@@ -1922,6 +1926,7 @@
 				4CBB663C5523D06770B559AE /* LibraryStorage+ForkHome.swift */,
 				E8F132409820C0DA1C8F198C /* LibraryStorage+ForkAlbumLists.swift */,
 				B719CEE5CFB76F1B7F582DE1 /* LibraryStorage+ForkMixes.swift */,
+				1AB52D32F46C56024A936B4F /* LibraryStorage+ForkStats.swift */,
 				BBA6E357950B7A39E04A767D /* LibraryStorage+ForkLibrary.swift */,
 				CABDC99627E3CE2E1DF23163 /* LibraryStorage+YouTubeMusic.swift */,
 				D45DAA42B1B34D236711510F /* LibraryStorage+YouTubeMusicSwap.swift */,
@@ -2049,6 +2054,7 @@
 				508FDE4F21F64ED6005A0724 /* TabBarVC.swift */,
 				50BA92FF21CFDEBD00E5901D /* LibraryVC.swift */,
 				6F013A9DF48A55FEA53DA34C /* ForkLibraryVC.swift */,
+				AADA96CDF7F016004E73C49C /* ListeningStatsVC.swift */,
 				50B166AB2ED4E68400F7A1D6 /* HomeVC.swift */,
 				F867DF37971AE42C8A6569CD /* HomeVC+Fork.swift */,
 				4BE551CC17A91D8A858410CC /* DecadeAlbumsVC.swift */,
@@ -2809,6 +2815,7 @@
 				1D79DD620FF92AE4C50F8438 /* ForkEmptyState.swift in Sources */,
 				50BA930021CFDEBD00E5901D /* LibraryVC.swift in Sources */,
 				D3C6ABDCFB388514EB40FAA3 /* ForkLibraryVC.swift in Sources */,
+				709FF651ADC31601BA108391 /* ListeningStatsVC.swift in Sources */,
 				50AB3B4B2F031D0C00556CE4 /* SetRatingForCurrentlyPlayingSongIntent.swift in Sources */,
 				5074149B2EFFC6D9007AEC5D /* ContinuePlaybackIntent.swift in Sources */,
 				50BA92FA21CC37F800E5901D /* SongsVC.swift in Sources */,
@@ -2994,6 +3001,7 @@
 				F9B8E090F2D0A66DE3BE1942 /* LibraryStorage+ForkHome.swift in Sources */,
 				E42EA01DD6301D9103A73379 /* LibraryStorage+ForkAlbumLists.swift in Sources */,
 				5A202E2C3142E5847B1268DD /* LibraryStorage+ForkMixes.swift in Sources */,
+				2C5620EA0D79CDFA1581A235 /* LibraryStorage+ForkStats.swift in Sources */,
 				93496E273E175C8F9921C884 /* LibraryStorage+ForkLibrary.swift in Sources */,
 				08120C7A1C58B09BA06DF1FA /* LibraryStorage+YouTubeMusic.swift in Sources */,
 				70A21AA802975B654743A9DE /* LibraryStorage+YouTubeMusicSwap.swift in Sources */,
