@@ -86,8 +86,12 @@ xcrun devicectl device install app --device 2145C18E-BC23-508B-BAFD-2F3556A4C825
   Beantragen unter developer.apple.com/contact/carplay („CarPlay Audio App“). Nach der Freigabe die Zeile in
   `Amperfy/Amperfy.entitlements` wieder einfügen. Der CarPlay-Code selbst ist unverändert.
 - **ATS:** `NSAllowsArbitraryLoads` ist im Original schon gesetzt. HTTP zu LAN- und VPN-IPs funktioniert ohne weitere Änderung.
-- **TestFlight (später):** In App Store Connect eine App mit der Bundle-ID `de.knauerleo.amperfy-music` anlegen.
-  Dort ist ein eindeutiger App-Name nötig, „Amperfy Music“ ist durch das Original belegt.
+- **TestFlight:** App-Eintrag in App Store Connect mit der Bundle-ID `de.knauerleo.amperfy-music` ist angelegt (2026-10-29),
+  Build 2.1.2 (1) nur intern, 2.1.2 (2) auch für externe Tests. Archivieren und hochladen:
+  `xcodebuild … -configuration Release -destination 'generic/platform=iOS' -archivePath <pfad>/Drift.xcarchive -allowProvisioningUpdates archive`,
+  danach `xcodebuild -exportArchive` mit `method = app-store-connect`, `destination = upload`,
+  `testFlightInternalTestingOnly = false` und `manageAppVersionAndBuildNumber = true` (Xcode zählt die Build-Nummer hoch).
+  Mit `testFlightInternalTestingOnly = true` lässt sich der Build keiner externen Gruppe zuweisen.
 
 ---
 
