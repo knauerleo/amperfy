@@ -457,6 +457,7 @@
 		50C9D686284FAA6C007F18D0 /* PlaylistItemMO+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F81ED723BF6B1E00EAAC3E /* PlaylistItemMO+CoreDataProperties.swift */; };
 		50C9D687284FAA6C007F18D0 /* AlbumMO+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F81ED523BF6B1D00EAAC3E /* AlbumMO+CoreDataProperties.swift */; };
 		50C9D688284FAA6C007F18D0 /* SongMO+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F81EDA23BF6B1E00EAAC3E /* SongMO+CoreDataClass.swift */; };
+		FF7D8C2B2FFAACBAF39417A3 /* SongMO+ForkAlbumSort.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E04EB8D29E059F6E708699A /* SongMO+ForkAlbumSort.swift */; };
 		50C9D68A284FAA6C007F18D0 /* EmbeddedArtworkMO+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50A12F422739239800E7B2AA /* EmbeddedArtworkMO+CoreDataProperties.swift */; };
 		50C9D68B284FAA6C007F18D0 /* PodcastEpisodeMO+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501A7D442681C11C0055A51B /* PodcastEpisodeMO+CoreDataClass.swift */; };
 		50C9D68C284FAA6C007F18D0 /* ScrobbleEntryMO+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50814C9F27D9FF660072738F /* ScrobbleEntryMO+CoreDataClass.swift */; };
@@ -1377,6 +1378,7 @@
 		50F81ED823BF6B1E00EAAC3E /* ArtworkMO+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArtworkMO+CoreDataClass.swift"; sourceTree = "<group>"; };
 		50F81ED923BF6B1E00EAAC3E /* ArtworkMO+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArtworkMO+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		50F81EDA23BF6B1E00EAAC3E /* SongMO+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SongMO+CoreDataClass.swift"; sourceTree = "<group>"; };
+		5E04EB8D29E059F6E708699A /* SongMO+ForkAlbumSort.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SongMO+ForkAlbumSort.swift"; sourceTree = "<group>"; };
 		50F81EDB23BF6B1E00EAAC3E /* SongMO+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SongMO+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		50FA36522F560D670058AB56 /* SeekableTimeSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeekableTimeSlider.swift; sourceTree = "<group>"; };
 		50FBE7DD262DD86500114278 /* BasicFetchedResultsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicFetchedResultsController.swift; sourceTree = "<group>"; };
@@ -1550,6 +1552,7 @@
 				50A12F412739239800E7B2AA /* EmbeddedArtworkMO+CoreDataClass.swift */,
 				50A12F422739239800E7B2AA /* EmbeddedArtworkMO+CoreDataProperties.swift */,
 				50F81EDA23BF6B1E00EAAC3E /* SongMO+CoreDataClass.swift */,
+				5E04EB8D29E059F6E708699A /* SongMO+ForkAlbumSort.swift */,
 				50F81EDB23BF6B1E00EAAC3E /* SongMO+CoreDataProperties.swift */,
 				50CEC63C2D1EDCE500D0E696 /* RadioMO+CoreDataClass.swift */,
 				50CEC63D2D1EDCE500D0E696 /* RadioMO+CoreDataProperties.swift */,
@@ -3381,6 +3384,7 @@
 				50C9D6E6284FABCB007F18D0 /* AudioPlayer.swift in Sources */,
 				50C9D659284FAA0B007F18D0 /* SongParserDelegate.swift in Sources */,
 				50C9D688284FAA6C007F18D0 /* SongMO+CoreDataClass.swift in Sources */,
+				FF7D8C2B2FFAACBAF39417A3 /* SongMO+ForkAlbumSort.swift in Sources */,
 				50CEC6472D1F405500D0E696 /* RadioParserDelegate.swift in Sources */,
 				50C9D67D284FAA6C007F18D0 /* AbstractPlayableMO+CoreDataProperties.swift in Sources */,
 				50C9D668284FAA0B007F18D0 /* AmpacheApi.swift in Sources */,

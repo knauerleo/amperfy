@@ -837,6 +837,7 @@ public class AlbumSongsFetchedResultsController: BasicFetchedResultsController<S
   ) {
     self.album = album
     let fetchRequest = SongMO.trackNumberSortedFetchRequest
+    fetchRequest.sortDescriptors = SongMO.forkAlbumTrackSortDescriptors // Fork: track 1 → n (F-20)
     fetchRequest.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [
       SongMO.excludeServerDeleteUncachedSongsFetchPredicate,
       coreDataCompanion.library.getFetchPredicate(forAlbum: album),

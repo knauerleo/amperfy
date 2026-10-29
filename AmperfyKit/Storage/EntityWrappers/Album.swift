@@ -155,7 +155,7 @@ public class Album: AbstractLibraryEntity {
     for songMO in songsMO {
       returnSongs.append(Song(managedObject: songMO))
     }
-    return returnSongs.sortByTrackNumber()
+    return returnSongs.forkSortByAlbumTrack() // Fork: track 1 → n (F-20)
   }
 
   public var playables: [AbstractPlayable] { songs }
