@@ -289,7 +289,8 @@ extension HomeVC {
         return false
       }
       let container = homeItem.playableContainable
-      guard container is Album || container is Playlist else { return false }
+      // UI-22: an album opens its page like everywhere else, a playlist still plays
+      guard container is Playlist else { return false }
       playFromTile(container)
       return true
     }
