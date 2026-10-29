@@ -96,6 +96,9 @@ extension PopupPlayerVC {
       equalTo: view.layoutMarginsGuide.bottomAnchor,
       constant: -controlPlaceholderHeightConstraint.constant
     ).isActive = true
+    // UI-27: the queue starts below the header (the XIB puts it 20 pt below the top margin, where the header is)
+    view.constraints.first { $0.firstItem === tableView && $0.firstAttribute == .top }?.constant +=
+      PlayerNowPlayingHeaderView.height + PlayerPageScrollView.coverTopMargin
 
     forkInstallSleepTimerChip()
     forkInstallAnimatedBackground()

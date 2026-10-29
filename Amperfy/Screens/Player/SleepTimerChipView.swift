@@ -105,7 +105,7 @@ extension PopupPlayerVC {
     guard let controlView, let queue = controlView.forkQueueButton else { return }
     let chip = SleepTimerChipView()
     // inside the scrolling page next to the controls, so it scrolls with them
-    let host: UIView = forkPlayerPage ?? view
+    let host: UIView = forkPlayerPage?.contentView ?? view
     host.addSubview(chip)
     NSLayoutConstraint.activate([
       chip.leadingAnchor.constraint(equalTo: controlView.layoutMarginsGuide.leadingAnchor),
