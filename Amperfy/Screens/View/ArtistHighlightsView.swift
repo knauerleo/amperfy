@@ -4,6 +4,7 @@
 //
 //  Fork: "Popular" (top songs by play count) and a horizontal discography shelf for the
 //  artist page, shown inside the ImmersiveDetailHeaderView. Also starts an artist radio.
+//  Biography and similar artists come from `getArtistInfo2` (F-3).
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -26,14 +27,24 @@ final class ArtistHighlightsView: UIView {
   private static let popularCount = 5
   private static let rowHeight: CGFloat = 56
   private static let tileWidth: CGFloat = 140
+  private static let similarArtistSize: CGFloat = 110
+  private static let collapsedBioLines = 4
 
   private let artist: Artist
   private weak var rootView: UIViewController?
   private let stack = UIStackView()
   private var popularSongs: [AbstractPlayable] = []
   private var albums: [Album] = []
+  private var biography: String?
+  private var similarArtists: [Artist] = []
+  private var isBioExpanded = false
 
-  var hasContent: Bool { !popularSongs.isEmpty || !albums.isEmpty }
+  /// Called when server data arrived later, so the header can update its height.
+  var contentDidChange: (() -> ())?
+
+  var hasContent: Bool {
+    !popularSongs.isEmpty || !albums.isEmpty || biography != nil || !similarArtists.isEmpty
+  }
   var hasAlbums: Bool { !albums.isEmpty }
 
   init(artist: Artist, rootView: UIViewController) {
@@ -51,6 +62,7 @@ final class ArtistHighlightsView: UIView {
       stack.trailingAnchor.constraint(equalTo: trailingAnchor),
     ])
     reload()
+    loadArtistInfo()
   }
 
   required init?(coder: NSCoder) {
@@ -58,6 +70,26 @@ final class ArtistHighlightsView: UIView {
   }
 
   // MARK: - Data
+
+  /// Biography and similar artists of the library, once per page.
+  private func loadArtistInfo() {
+    guard appDelegate.storage.settings.user.isOnlineMode, let account = artist.account else { return }
+    let artistId = artist.id
+    Task { @MainActor in
+      do {
+        let info = try await self.appDelegate.getMeta(account.info).backendApi
+          .forkArtistInfo(artistId: artistId)
+        self.biography = info.biography
+        self.similarArtists = info.similarArtistIds.compactMap {
+          self.appDelegate.storage.main.library.getArtist(for: account, id: $0)
+        }
+        self.rebuild()
+        self.contentDidChange?()
+      } catch {
+        // servers without getArtistInfo2 simply show no biography
+      }
+    }
+  }
 
   func reload() {
     let isOffline = appDelegate.storage.settings.user.isOfflineMode
@@ -104,6 +136,73 @@ final class ArtistHighlightsView: UIView {
       section.addArrangedSubview(createDiscographyShelf())
       stack.addArrangedSubview(section)
     }
+    if !similarArtists.isEmpty {
+      let section = UIStackView()
+      section.axis = .vertical
+      section.spacing = DS.Space.s
+      section.addArrangedSubview(sectionTitle("Fans Also Like"))
+      section.addArrangedSubview(createSimilarArtistsShelf())
+      stack.addArrangedSubview(section)
+    }
+    if let biography {
+      let section = UIStackView()
+      section.axis = .vertical
+      section.spacing = DS.Space.xs
+      section.addArrangedSubview(sectionTitle("About"))
+      section.addArrangedSubview(createBiographyLabel(text: biography))
+      stack.addArrangedSubview(section)
+    }
+  }
+
+  private func createBiographyLabel(text: String) -> UILabel {
+    let label = UILabel()
+    label.text = text
+    label.font = DS.Font.rowSubtitle
+    label.adjustsFontForContentSizeCategory = true
+    label.textColor = .secondaryLabel
+    label.numberOfLines = isBioExpanded ? 0 : Self.collapsedBioLines
+    label.isUserInteractionEnabled = true
+    label.accessibilityTraits = .button
+    label.accessibilityHint = isBioExpanded ? "Collapses the biography" : "Shows the whole biography"
+    label.addGestureRecognizer(UITapGestureRecognizer(
+      target: self,
+      action: #selector(biographyTapped)
+    ))
+    return label
+  }
+
+  private func createSimilarArtistsShelf() -> UIView {
+    let scrollView = UIScrollView()
+    scrollView.showsHorizontalScrollIndicator = false
+    scrollView.clipsToBounds = false
+    let row = UIStackView()
+    row.axis = .horizontal
+    row.spacing = DS.Space.m
+    row.alignment = .top
+    row.translatesAutoresizingMaskIntoConstraints = false
+    scrollView.addSubview(row)
+    for (index, similar) in similarArtists.enumerated() {
+      let tile = ArtistCircleTile(
+        artist: similar,
+        theme: theme(for: similar.account),
+        size: Self.similarArtistSize
+      )
+      tile.tag = index
+      tile.addGestureRecognizer(UITapGestureRecognizer(
+        target: self,
+        action: #selector(similarArtistTapped(_:))
+      ))
+      row.addArrangedSubview(tile)
+    }
+    NSLayoutConstraint.activate([
+      row.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+      row.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
+      row.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
+      row.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
+      row.heightAnchor.constraint(equalTo: scrollView.frameLayoutGuide.heightAnchor),
+      scrollView.heightAnchor.constraint(equalToConstant: Self.similarArtistSize + 28),
+    ])
+    return scrollView
   }
 
   private func theme(for account: Account?) -> ThemePreference {
@@ -175,6 +274,25 @@ final class ArtistHighlightsView: UIView {
           let navigationController = rootView?.navigationController else { return }
     navigationController.pushViewController(
       AppStoryboard.Main.segueToAlbumDetail(account: account, album: albums[index]),
+      animated: true
+    )
+  }
+
+  @objc
+  private func biographyTapped() {
+    DS.haptic(.light)
+    isBioExpanded.toggle()
+    rebuild()
+    contentDidChange?()
+  }
+
+  @objc
+  private func similarArtistTapped(_ recognizer: UITapGestureRecognizer) {
+    guard let index = recognizer.view?.tag, similarArtists.indices.contains(index),
+          let account = similarArtists[index].account,
+          let navigationController = rootView?.navigationController else { return }
+    navigationController.pushViewController(
+      AppStoryboard.Main.segueToArtistDetail(account: account, artist: similarArtists[index]),
       animated: true
     )
   }
@@ -312,6 +430,46 @@ private final class AlbumTile: UIView {
     ])
     isUserInteractionEnabled = true
     accessibilityLabel = album.name
+  }
+
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+}
+
+// MARK: - ArtistCircleTile
+
+private final class ArtistCircleTile: UIView {
+  init(artist: Artist, theme: ThemePreference, size: CGFloat) {
+    super.init(frame: .zero)
+    let artwork = EntityImageView(frame: .zero)
+    artwork.display(theme: theme, container: artist, cornerRadius: .small)
+    artwork.layer.cornerRadius = size / 2
+    artwork.clipsToBounds = true
+
+    let nameLabel = UILabel()
+    nameLabel.text = artist.name
+    nameLabel.font = DS.Font.tileTitle
+    nameLabel.textColor = .label
+    nameLabel.textAlignment = .center
+
+    let stack = UIStackView(arrangedSubviews: [artwork, nameLabel])
+    stack.axis = .vertical
+    stack.spacing = DS.Space.xs
+    stack.translatesAutoresizingMaskIntoConstraints = false
+    addSubview(stack)
+    NSLayoutConstraint.activate([
+      widthAnchor.constraint(equalToConstant: size),
+      artwork.heightAnchor.constraint(equalTo: artwork.widthAnchor),
+      stack.topAnchor.constraint(equalTo: topAnchor),
+      stack.leadingAnchor.constraint(equalTo: leadingAnchor),
+      stack.trailingAnchor.constraint(equalTo: trailingAnchor),
+      stack.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor),
+    ])
+    isUserInteractionEnabled = true
+    isAccessibilityElement = true
+    accessibilityTraits = .button
+    accessibilityLabel = artist.name
   }
 
   required init?(coder: NSCoder) {

@@ -94,6 +94,7 @@ class ArtistDetailVC: MultiSourceTableViewController {
       .createTableHeader(configuration: detailHeaderConfig)
     highlightsView = ArtistHighlightsView(artist: artist, rootView: self)
     detailOperationsView?.radioAction = { [weak self] in self?.highlightsView?.playRadio() }
+    highlightsView?.contentDidChange = { [weak self] in self?.refreshHighlights() } // Fork: F-3
     refreshHighlights()
 
     optionsButton = UIBarButtonItem.createOptionsBarButton()

@@ -347,6 +347,7 @@
 		50C9D649284FAA02007F18D0 /* SubsonicVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E964A925E8E20E00E3210F /* SubsonicVersion.swift */; };
 		50C9D64A284FAA02007F18D0 /* SsPodcastParserDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501A7D402680B0710055A51B /* SsPodcastParserDelegate.swift */; };
 		50C9D64B284FAA02007F18D0 /* SubsonicServerApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5086F87E22399D1900546F5A /* SubsonicServerApi.swift */; };
+		B7A0D987587FF47CD0E122FC /* SubsonicArtistInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897037E435A119392BFB0C3C /* SubsonicArtistInfo.swift */; };
 		50C9D64C284FAA02007F18D0 /* SubsonicLibrarySyncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5086F88022399F3700546F5A /* SubsonicLibrarySyncer.swift */; };
 		50C9D64D284FAA02007F18D0 /* SubsonicArtworkDownloadDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502C0044224C0B1400DA0D1E /* SubsonicArtworkDownloadDelegate.swift */; };
 		50C9D64E284FAA02007F18D0 /* SsArtistParserDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5086F886223BD68B00546F5A /* SsArtistParserDelegate.swift */; };
@@ -887,6 +888,7 @@
 		5086F87A22397B8400546F5A /* BackendApi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackendApi.swift; sourceTree = "<group>"; };
 		5086F87C22397B9A00546F5A /* AmpacheApi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AmpacheApi.swift; sourceTree = "<group>"; };
 		5086F87E22399D1900546F5A /* SubsonicServerApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubsonicServerApi.swift; sourceTree = "<group>"; };
+		897037E435A119392BFB0C3C /* SubsonicArtistInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SubsonicArtistInfo.swift"; sourceTree = "<group>"; };
 		5086F88022399F3700546F5A /* SubsonicLibrarySyncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubsonicLibrarySyncer.swift; sourceTree = "<group>"; };
 		5086F8822239A2B700546F5A /* ScrobbleSyncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrobbleSyncer.swift; sourceTree = "<group>"; };
 		5086F884223A1E4600546F5A /* SsPingParserDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SsPingParserDelegate.swift; sourceTree = "<group>"; };
@@ -1641,6 +1643,7 @@
 			children = (
 				5086F875223852F200546F5A /* SubsonicApi.swift */,
 				5086F87E22399D1900546F5A /* SubsonicServerApi.swift */,
+				897037E435A119392BFB0C3C /* SubsonicArtistInfo.swift */,
 				5086F88022399F3700546F5A /* SubsonicLibrarySyncer.swift */,
 				502C0044224C0B1400DA0D1E /* SubsonicArtworkDownloadDelegate.swift */,
 				501267B6264C058500E13F08 /* SsXmlParser.swift */,
@@ -2924,6 +2927,7 @@
 				50C9D6D4284FAB88007F18D0 /* PlayerDownloadPreparationHandler.swift in Sources */,
 				50C9D673284FAA4D007F18D0 /* LibraryUpdater.swift in Sources */,
 				50C9D64B284FAA02007F18D0 /* SubsonicServerApi.swift in Sources */,
+				B7A0D987587FF47CD0E122FC /* SubsonicArtistInfo.swift in Sources */,
 				50C9D65C284FAA0B007F18D0 /* GenreParserDelegate.swift in Sources */,
 				50C9D6D2284FAB0C007F18D0 /* StringHasher.swift in Sources */,
 				50C9D667284FAA0B007F18D0 /* PlaylistSongsParserDelegate.swift in Sources */,

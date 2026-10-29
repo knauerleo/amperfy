@@ -963,6 +963,31 @@ final class SubsonicServerApi: URLCleanser, Sendable {
     }
   }
 
+  /// Fork: biography and similar artists (`getArtistInfo2`, JSON), see SubsonicArtistInfo.swift.
+  public func requestArtistInfo2(id: String) async throws -> APIDataResponse {
+    try await request { version in
+      var urlComp = try self.createAuthApiUrlComponent(
+        version: version,
+        forAction: "getArtistInfo2",
+        id: id
+      )
+      urlComp.addQueryItem(name: "count", value: 12)
+      urlComp.addQueryItem(name: "f", value: "json")
+      return try self.createUrl(from: urlComp)
+    }
+  }
+
+  /// Fork: most popular songs of an artist on Last.fm (`getTopSongs`, JSON).
+  public func requestTopSongs(artistName: String, count: Int) async throws -> APIDataResponse {
+    try await request { version in
+      var urlComp = try self.createAuthApiUrlComponent(version: version, forAction: "getTopSongs")
+      urlComp.addQueryItem(name: "artist", value: artistName)
+      urlComp.addQueryItem(name: "count", value: count)
+      urlComp.addQueryItem(name: "f", value: "json")
+      return try self.createUrl(from: urlComp)
+    }
+  }
+
   private func createUrl(from urlComp: URLComponents) throws -> URL {
     if let url = urlComp.url {
       return url

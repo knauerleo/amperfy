@@ -7,8 +7,6 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 
 - [ ] **F-2 Server-URL automatisch umschalten** - mit F-1 meist überflüssig (nur noch die Domain), nur falls LAN-Adresse weiter genutzt wird
   - Bei Netzwechsel (`NetworkMonitor`) die erste erreichbare URL aus `activeBackendServerUrl` + `alternativeServerURLs` per `ping` wählen
-- [ ] **F-3 Künstlerseite mit `getArtistInfo2`**
-  - Neue Extension am Subsonic-Syncer: Künstlerbild, Bio, ähnliche Künstler. Bild in den Header, Bio aufklappbar, ähnliche Künstler als `ShelfLayout.circle`
 - [ ] **F-4 „Popular“ mit `getTopSongs`** - auffüllen, solange eigene `playCount`s zu wenige Treffer liefern
   - `ArtistHighlightsView.swift`, neue Extension am Subsonic-Syncer
 
@@ -87,3 +85,4 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [x] ~~**UI-2 „All Albums“-Raster mit `LargeAlbumCell`**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**UI-3 Playlists-Liste modernisieren**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**UI-4 Player-Schriften auf `DS.Font`**~~ (2026-10-29) - FORK.md Abschnitt 10
+- [x] ~~**F-3 Künstlerseite mit `getArtistInfo2`**~~ (2026-10-29) - FORK.md Abschnitt 10
