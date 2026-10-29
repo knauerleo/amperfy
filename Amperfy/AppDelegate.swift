@@ -298,6 +298,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     SpotlightIndexer.shared.start() // Fork: F-15 albums, artists, playlists in Spotlight
     ShareExtensionBridge.shared.start() // Fork: F-9 configuration of Share → Drift
     DriftWidgetBridge.shared.start() // Fork: F-14 widgets and Control Center
+    forkCleanUpStaleAlbumsOnce(accountInfo: activeAccountInfo) // Fork: albums with new IDs on the server
 
     guard AmperKit.shared.storage.settings.app.isLibrarySynced else {
       return true

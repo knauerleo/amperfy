@@ -4,7 +4,8 @@
 //
 //  Fork (TASKS F-19): below the track list of a library album the songs YouTube Music has for
 //  this album but the library doesn't ("Missing from Your Library"), each with its state
-//  (cloud, ring, check), and a pill "Download Missing" that starts one job per missing song.
+//  (cloud, ring, check), and a pill "Download Missing" that starts one job per missing song
+//  (F-19c: `downloadAlbumMissing` with the library album).
 //  Tap on a song plays the missing songs from there through the proxy. Jobs are followed by
 //  `YouTubeMusicJobMonitor` (F-6 sync, F-7 notification) like everywhere else.
 //
@@ -30,8 +31,6 @@ import UIKit
 @MainActor
 final class YouTubeAlbumGapsView: UIView {
   private static let pillHeight: CGFloat = 40
-  /// Downloads started at the same time, each one holds a stream until its first audio byte.
-  private static let parallelDownloads = 2
 
   private let account: Account
   private let backendApi: BackendProxy
@@ -207,27 +206,23 @@ final class YouTubeAlbumGapsView: UIView {
       return
     }
     let jobs = jobStatuses
-    let hits = gaps.missing
-      .filter { [.online, .failed].contains(status(of: $0, jobs: jobs)) }
-      .compactMap { $0.hit(album: gaps.album.name) }
-    guard !hits.isEmpty else { return }
+    guard gaps.missing.contains(where: { [.online, .failed].contains(status(of: $0, jobs: jobs)) })
+    else { return }
     DS.haptic(.light)
     isDownloadRunning = true
     refresh()
     Task { @MainActor in
       var failure: Error?
-      for batchStart in stride(from: 0, to: hits.count, by: Self.parallelDownloads) {
-        let batch = hits[batchStart ..< min(batchStart + Self.parallelDownloads, hits.count)]
-        let tasks = batch.map { hit in
-          Task { @MainActor in try await self.monitor.addToLibrary(hit) }
-        }
-        for task in tasks {
-          do {
-            try await task.value
-          } catch {
-            if failure == nil { failure = error }
+      do {
+        // F-19c: the proxy starts one job per missing track (2 at a time), `getYtJobs` shows them
+        let result = try await backendApi.forkDownloadAlbumMissing(albumId: gaps.libraryAlbumId)
+        for song in result.songs where !song.downloaded && song.status.isLoading {
+          if let hit = song.hit(album: gaps.album.name) {
+            monitor.track(hit)
           }
         }
+      } catch {
+        failure = error
       }
       isDownloadRunning = false
       refresh()

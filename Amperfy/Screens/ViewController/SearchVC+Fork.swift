@@ -4,6 +4,8 @@
 //
 //  Fork (design phase 4): search start page (recently searched, genre tiles), top result,
 //  loading state without "No Results" flicker and the YouTube Music section.
+//  Fork (TASKS F-21): the scope "Lyrics" finds songs by a line of their lyrics (`searchLyrics`),
+//  asked only when Search is tapped and with at least 3 words; each result shows the line.
 //  SearchVC only calls into this file through small hooks.
 //
 //  This program is free software: you can redistribute it and/or modify
@@ -34,6 +36,8 @@ enum SearchItem: Hashable {
   case topHit
   case youTube(String)
   case youTubeStatus
+  case lyrics(Int)
+  case lyricsStatus
 }
 
 // MARK: - SearchTopHit
@@ -64,6 +68,14 @@ final class SearchForkState: NSObject {
     case failed
   }
 
+  enum LyricsState {
+    /// Waiting for Search, with the number of words typed.
+    case hint
+    case loading
+    case loaded
+    case failed(String)
+  }
+
   static let historyLimit = 8
   static let genreLimit = 12
   static let youTubeLimit = 15
@@ -79,6 +91,11 @@ final class SearchForkState: NSObject {
   var knownHits = [String: SongpickerHit]()
   var youTubeState = YouTubeState.idle
   var isServerSearchRunning = false
+  var lyricsState = LyricsState.hint
+  var lyricsHits = [LyricsSearchHit]()
+  var lyricsTask: Task<Void, Never>?
+  /// The text of the last lyrics search, focus changes also update the search results.
+  var lyricsText = ""
   let log = OSLog(subsystem: "Amperfy", category: "YouTubeMusic")
 
   @objc
@@ -171,6 +188,7 @@ extension SearchVC {
 
   /// Called when the search text is empty again.
   func forkReset() {
+    forkResetLyrics()
     fork.youTubeState = .idle
     fork.youTubeHits = []
     fork.topHit = nil
@@ -191,7 +209,7 @@ extension SearchVC {
   }
 
   var forkHasResults: Bool {
-    fork.topHit != nil || !fork.youTubeHits.isEmpty
+    fork.topHit != nil || !fork.youTubeHits.isEmpty || forkIsLyricsScope
   }
 
   private func forkApply(youTubePlaceholders songs: [Song]) {
@@ -283,6 +301,17 @@ extension SearchVC {
       snapshot.reloadItems([.genreGrid])
     }
     guard isSearchActive else { return }
+    if forkIsLyricsScope {
+      if case .loaded = fork.lyricsState, !fork.lyricsHits.isEmpty {
+        let items = fork.lyricsHits.indices.map { SearchItem.lyrics($0) }
+        snapshot.appendItems(items, toSection: SearchSection.Lyrics.rawValue)
+        snapshot.reloadItems(items)
+      } else {
+        snapshot.appendItems([.lyricsStatus], toSection: SearchSection.Lyrics.rawValue)
+        snapshot.reloadItems([.lyricsStatus])
+      }
+      return
+    }
     if fork.topHit != nil {
       snapshot.appendItems([.topHit], toSection: SearchSection.TopHit.rawValue)
       snapshot.reloadItems([.topHit])
@@ -315,6 +344,7 @@ extension SearchVC {
     case .Genres: return String(localized: "Genres", table: "Fork")
     case .TopHit: return String(localized: "Top Result", table: "Fork")
     case .YouTube: return "YouTube Music"
+    case .Lyrics: return String(localized: "Lyrics", table: "Fork")
     default: return nil
     }
   }
@@ -324,7 +354,7 @@ extension SearchVC {
     case .Genres:
       return (!isSearchActive && !fork.genres.isEmpty) ? CommonScreenOperations
         .tableSectionHeightLarge : 0
-    case .TopHit, .YouTube:
+    case .TopHit, .Lyrics, .YouTube:
       return (isSearchActive && forkSectionHasRows(section)) ? CommonScreenOperations
         .tableSectionHeightLarge : 0
     default:
@@ -336,6 +366,9 @@ extension SearchVC {
     switch SearchSection(rawValue: indexPath.section) {
     case .Genres: return SearchGenreGridCell.height(itemCount: fork.genres.count)
     case .TopHit: return SearchTopHitCell.rowHeight
+    case .Lyrics:
+      return forkLyricsHit(at: indexPath) != nil ? PlayableTableCell.rowHeight : SearchStatusCell
+        .rowHeight
     case .YouTube:
       return forkYouTubeHit(at: indexPath) != nil ? PlayableTableCell.rowHeight : SearchStatusCell
         .rowHeight
@@ -371,6 +404,8 @@ extension SearchVC {
       case .none: break
       }
       return cell
+    case .Lyrics:
+      return forkLyricsCell(at: indexPath)
     case .YouTube:
       guard let hit = forkYouTubeHit(at: indexPath),
             let song = fork.youTubeSongs[hit.videoId] else {
@@ -407,6 +442,8 @@ extension SearchVC {
       }
     case .YouTube:
       return forkYouTubeHit(at: indexPath).flatMap { fork.youTubeSongs[$0.videoId] }
+    case .Lyrics:
+      return forkLyricsHit(at: indexPath)?.song
     default:
       return nil
     }
@@ -414,7 +451,8 @@ extension SearchVC {
 
   func forkPlayContext(at indexPath: IndexPath) -> PlayContext? {
     guard let containable = forkContainable(at: indexPath) else { return nil }
-    if let hit = forkYouTubeHit(at: indexPath) ?? forkTopYouTubeHit(at: indexPath) {
+    if let hit = forkYouTubeHit(at: indexPath) ?? forkTopYouTubeHit(at: indexPath) ??
+      forkLyricsYouTubeHit(at: indexPath) {
       forkWillPlay(hit)
     }
     return PlayContext(containable: containable)
@@ -471,7 +509,7 @@ extension SearchVC {
         forkPlay(hit)
       case .none: break
       }
-    case .YouTube:
+    case .YouTube, .Lyrics:
       // the song cell plays on tap itself
       if let song = forkContainable(at: indexPath) {
         _ = library.createOrUpdateSearchHistory(container: song)
@@ -483,7 +521,8 @@ extension SearchVC {
   // MARK: Context menu
 
   func forkContextMenuConfiguration(at indexPath: IndexPath) -> UIContextMenuConfiguration? {
-    guard let hit = forkYouTubeHit(at: indexPath) ?? forkTopYouTubeHit(at: indexPath)
+    guard let hit = forkYouTubeHit(at: indexPath) ?? forkTopYouTubeHit(at: indexPath) ??
+      forkLyricsYouTubeHit(at: indexPath)
     else { return nil }
     return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [weak self] _ in
       guard let self else { return nil }
@@ -593,6 +632,9 @@ extension SearchVC {
       if let hit = forkYouTubeHit(at: indexPath),
          let badge = cell.accessoryView as? SourceBadgeView {
         badge.status = monitor.status(for: hit)
+      } else if let hit = forkLyricsYouTubeHit(at: indexPath),
+                let badge = cell.accessoryView as? SourceBadgeView {
+        badge.status = monitor.status(for: hit)
       } else if let hit = forkTopYouTubeHit(at: indexPath),
                 let topCell = cell as? SearchTopHitCell {
         topCell.update(status: monitor.status(for: hit))
@@ -612,5 +654,143 @@ extension SearchVC {
           case let .youTube(hit) = fork.topHit
     else { return nil }
     return hit
+  }
+
+  // MARK: Lyrics (F-21)
+
+  var forkScopeButtonTitles: [String] {
+    var titles = ["All", "Cached"]
+    if SongpickerConfig.isEnabled { titles.append(String(localized: "Lyrics", table: "Fork")) }
+    return titles
+  }
+
+  var forkIsLyricsScope: Bool {
+    let searchBar = searchController.searchBar
+    return (searchBar.scopeButtonTitles?.count ?? 0) > 2 && searchBar.selectedScopeButtonIndex == 2
+  }
+
+  /// While the lyrics scope is selected typing only shows the hint, true if it took over.
+  func forkShowLyricsScope() -> Bool {
+    guard forkIsLyricsScope else {
+      forkResetLyrics()
+      return false
+    }
+    if searchController.searchBar.text ?? "" != fork.lyricsText { forkResetLyrics() }
+    displayLyricsScope()
+    return true
+  }
+
+  func forkSearchButtonClicked() {
+    guard forkIsLyricsScope else { return }
+    let query = (searchController.searchBar.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+    guard BackendProxy.lyricsSearchWordCount(query) >= BackendProxy.lyricsSearchMinWords else {
+      DS.haptic(.error)
+      return
+    }
+    guard appDelegate.storage.settings.user.isOnlineMode else {
+      fork.lyricsState = .failed(String(localized: "The lyrics search needs online mode.", table: "Fork"))
+      displayLyricsScope()
+      return
+    }
+    fork.lyricsTask?.cancel()
+    fork.lyricsText = searchController.searchBar.text ?? ""
+    fork.lyricsHits = []
+    fork.lyricsState = .loading
+    displayLyricsScope()
+    let backendApi = appDelegate.getMeta(account.info).backendApi
+    fork.lyricsTask = Task { @MainActor in
+      do {
+        let hits = try await backendApi.forkSearchLyrics(
+          query: query,
+          account: self.account,
+          storage: self.appDelegate.storage
+        )
+        guard !Task.isCancelled else { return }
+        for hit in hits {
+          guard let youTubeHit = self.forkYouTubeHit(for: hit.song) else { continue }
+          self.fork.knownHits[youTubeHit.videoId] = youTubeHit
+          self.fork.youTubeSongs[youTubeHit.videoId] = hit.song
+        }
+        self.fork.lyricsHits = hits
+        self.fork.lyricsState = .loaded
+        if hits.contains(where: { $0.song.isYouTubeMusicPlaceholder }) { self.monitor.refresh() }
+      } catch {
+        guard !Task.isCancelled else { return }
+        self.appDelegate.eventLogger.debug(topic: "Lyrics Search", message: error.localizedDescription)
+        self.fork.lyricsState = .failed(error.localizedDescription)
+      }
+      self.displayLyricsScope()
+    }
+  }
+
+  private func forkResetLyrics() {
+    fork.lyricsTask?.cancel()
+    fork.lyricsTask = nil
+    fork.lyricsText = ""
+    fork.lyricsHits = []
+    fork.lyricsState = .hint
+  }
+
+  private func forkLyricsCell(at indexPath: IndexPath) -> UITableViewCell {
+    guard let hit = forkLyricsHit(at: indexPath) else {
+      let cell = tableView.dequeueReusableCell(
+        withIdentifier: SearchStatusCell.reuseID,
+        for: indexPath
+      ) as! SearchStatusCell
+      switch fork.lyricsState {
+      case .hint:
+        let words = BackendProxy.lyricsSearchWordCount(searchController.searchBar.text ?? "")
+        cell.display(
+          text: words < BackendProxy.lyricsSearchMinWords
+            ? String(localized: "Type at least 3 words of the lyrics, then tap Search", table: "Fork")
+            : String(localized: "Tap Search to find songs with these lyrics", table: "Fork"),
+          isLoading: false
+        )
+      case .loading:
+        cell.display(text: String(localized: "Searching lyrics…", table: "Fork"), isLoading: true)
+      case .loaded:
+        cell.display(text: String(localized: "No songs found with these lyrics", table: "Fork"), isLoading: false)
+      case let .failed(message):
+        cell.display(text: message, isLoading: false)
+      }
+      return cell
+    }
+    let cell: PlayableTableCell = dequeueCell(for: tableView, at: indexPath)
+    cell.accessoryView = nil
+    // the matching line instead of the artist, e.g. "„I hope you're happy now“ · Artist"
+    cell.forkSubtitleOverride = hit.snippet.isEmpty
+      ? nil
+      : "„\(hit.snippet)“ · \(hit.song.creatorName)"
+    cell.display(playable: hit.song, playContextCb: convertCellViewToPlayContext, rootView: self)
+    if let youTubeHit = forkYouTubeHit(for: hit.song) {
+      cell.accessoryView = SourceBadgeView(status: monitor.status(for: youTubeHit))
+      cell.optionsButton.menu = UIMenu(children: forkYouTubeActions(for: youTubeHit))
+    }
+    return cell
+  }
+
+  private func forkLyricsHit(at indexPath: IndexPath) -> LyricsSearchHit? {
+    guard forkIsLyricsScope, SearchSection(rawValue: indexPath.section) == .Lyrics,
+          case .loaded = fork.lyricsState, fork.lyricsHits.indices.contains(indexPath.row)
+    else { return nil }
+    return fork.lyricsHits[indexPath.row]
+  }
+
+  private func forkLyricsYouTubeHit(at indexPath: IndexPath) -> SongpickerHit? {
+    forkLyricsHit(at: indexPath).flatMap { forkYouTubeHit(for: $0.song) }
+  }
+
+  /// A `ytm-` result as a search hit, to follow its download like the YouTube Music section.
+  private func forkYouTubeHit(for song: Song) -> SongpickerHit? {
+    guard song.isYouTubeMusicPlaceholder else { return nil }
+    let videoId = String(song.id.dropFirst(YouTubeMusic.idPrefix.count))
+    return fork.knownHits[videoId] ?? YouTubeMusicHitStore.shared.hit(forVideoId: videoId) ??
+      SongpickerHit(
+        videoId: videoId,
+        title: song.title,
+        artist: song.creatorName,
+        album: song.album?.name,
+        duration: song.duration
+      )
   }
 }

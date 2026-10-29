@@ -230,7 +230,8 @@ public struct YouTubeAlbumError: LocalizedError, Sendable {
 
   /// No album or artist exists for the song (e.g. a plain YouTube upload): asking again won't help.
   public var isPermanent: Bool {
-    ["missing_id", "invalid_id", "song_not_found", "no_album", "no_artist"].contains(code)
+    ["missing_id", "invalid_id", "song_not_found", "no_album", "no_artist", "album_not_on_ytm"]
+      .contains(code)
   }
 
   public var errorDescription: String? {
@@ -247,6 +248,12 @@ public struct YouTubeAlbumError: LocalizedError, Sendable {
       return String(localized: "There is no artist for this video on YouTube Music.", table: "Fork")
     case "album_not_found":
       return String(localized: "YouTube Music doesn't know this album, or it isn't reachable right now.", table: "Fork")
+    case "query_too_short":
+      return String(localized: "Type at least 3 words of the lyrics.", table: "Fork")
+    case "lyrics_unavailable":
+      return String(localized: "The lyrics search isn't available right now. Try again later.", table: "Fork")
+    case "album_not_on_ytm":
+      return String(localized: "This album isn't on YouTube Music.", table: "Fork")
     case "artist_not_found":
       return String(localized: "YouTube Music doesn't know this artist, or it isn't reachable right now.", table: "Fork")
     case "yt_unavailable":
@@ -328,6 +335,31 @@ extension BackendProxy {
     return album
   }
 
+  /// F-19c: `getAlbum.view?id=<NavidromeAlbumId>&drift=full`, the matching YouTube Music album
+  /// of a library album. Only the `ytm-` entries (missing from the library) are kept as songs,
+  /// real and `ndv-` entries are dropped; the album ID is its `ytAlbumId`. nil without a match.
+  /// Nothing of the answer goes into Core Data, its counts include all three kinds of entries.
+  public func forkDriftFullAlbum(albumId: String) async throws -> YouTubeAlbum? {
+    let data = try await forkYouTubeRequest(
+      action: "getAlbum",
+      id: albumId,
+      extraQuery: [URLQueryItem(name: "drift", value: "full")]
+    )
+    var dict = try YouTubeAlbumJSON.payload(data, key: "album")
+    guard let ytAlbumId = dict["ytAlbumId"] as? String, !ytAlbumId.isEmpty else { return nil }
+    dict["id"] = ytAlbumId
+    dict["songCount"] = nil
+    dict["duration"] = nil
+    return YouTubeAlbum(dict: dict)
+  }
+
+  /// F-19c: `downloadAlbumMissing.view?id=<NavidromeAlbumId>`, one job per missing track of the
+  /// library album (in `getYtJobs`). Answers like `downloadYtAlbum`.
+  public func forkDownloadAlbumMissing(albumId: String) async throws -> YouTubeAlbumDownload {
+    let data = try await forkYouTubeRequest(action: "downloadAlbumMissing", id: albumId)
+    return YouTubeAlbumDownload(dict: try YouTubeAlbumJSON.payload(data, key: "ytAlbumDownload"))
+  }
+
   /// `getYtArtist.view?id=ytm-<videoId>|ytm-artist-<channelId>`
   public func forkYouTubeArtist(id: String) async throws -> YouTubeArtist {
     let data = try await forkYouTubeRequest(action: "getYtArtist", id: id)
@@ -358,9 +390,21 @@ extension BackendProxy {
 
   /// Subsonic request at the proxy with the account's credentials, built from the
   /// `getCoverArt` URL of the account (same auth parameters), action and `f=json` replaced.
-  private func forkYouTubeRequest(action: String, id: String) async throws -> Data {
+  /// Without `id` the request has none (e.g. `searchLyrics`).
+  func forkYouTubeRequest(
+    action: String,
+    id: String?,
+    extraQuery: [URLQueryItem] = []
+  ) async throws -> Data {
     guard let serverApi = forkSubsonicServerApi else { throw SongpickerError.noProxy }
-    let url = try await forkYouTubeRequestURL(action: action, id: id)
+    var url = try await forkYouTubeRequestURL(action: action, id: id ?? "0")
+    if id == nil || !extraQuery.isEmpty,
+       var components = URLComponents(url: url, resolvingAgainstBaseURL: false) {
+      var queryItems = components.queryItems ?? []
+      if id == nil { queryItems.removeAll { $0.name == "id" } }
+      components.queryItems = queryItems + extraQuery
+      url = components.url ?? url
+    }
     let (data, response) = try await load(url, serverApi)
     guard let http = response as? HTTPURLResponse, (200 ..< 300).contains(http.statusCode)
     else { throw SongpickerError.invalidResponse }
@@ -430,7 +474,7 @@ extension BackendProxy {
 
   /// Real songs by Navidrome ID through `getSong` and the regular song parser.
   @MainActor
-  private func forkFetchLibrarySongs(
+  func forkFetchLibrarySongs(
     ids: [String],
     account: Account,
     storage: PersistentStorage
@@ -451,21 +495,25 @@ extension BackendProxy {
     let performanceMonitor: ThreadPerformanceMonitor = ThreadPerformanceObserver.shared
     _ = try? await storage.async.performAndGet { asyncCompanion in
       let accountAsync = asyncCompanion.library.getAccount(managedObjectId: accountObjectId)
+      // one prefetch and one parser for all answers: songs of the same album share the album
+      // created for the first one instead of creating it once per answer
+      let idParserDelegate = SsIDsParserDelegate(performanceMonitor: performanceMonitor)
       for response in responses {
-        let idParserDelegate = SsIDsParserDelegate(performanceMonitor: performanceMonitor)
         let idParser = XMLParser(data: response.data)
         idParser.delegate = idParserDelegate
         idParser.parse()
-        let prefetch = asyncCompanion.library.getElements(
-          account: accountAsync,
-          prefetchIDs: idParserDelegate.prefetchIDs
-        )
-        let parserDelegate = SsSongParserDelegate(
-          performanceMonitor: performanceMonitor,
-          prefetch: prefetch,
-          account: accountAsync,
-          library: asyncCompanion.library
-        )
+      }
+      let prefetch = asyncCompanion.library.getElements(
+        account: accountAsync,
+        prefetchIDs: idParserDelegate.prefetchIDs
+      )
+      let parserDelegate = SsSongParserDelegate(
+        performanceMonitor: performanceMonitor,
+        prefetch: prefetch,
+        account: accountAsync,
+        library: asyncCompanion.library
+      )
+      for response in responses {
         let parser = XMLParser(data: response.data)
         parser.delegate = parserDelegate
         parser.parse()
@@ -482,7 +530,7 @@ extension BackendProxy {
   /// `ytm-` placeholders for the songs, keyed by playable ID. The JSON attributes run through
   /// the song parser, so they are sanitized and their artist goes to the HitStore like search3.
   @MainActor
-  private func forkCreateYouTubePlaceholders(
+  func forkCreateYouTubePlaceholders(
     _ songs: [YouTubeAlbumSong],
     account: Account,
     storage: PersistentStorage

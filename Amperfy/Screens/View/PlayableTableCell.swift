@@ -80,6 +80,9 @@ class PlayableTableCell: BasicTableCell {
   @IBOutlet
   weak var playOverNumberButton: UIButton!
 
+  /// Fork (F-21): the lyrics search shows the matching line here instead of the artist.
+  var forkSubtitleOverride: String?
+
   private var ratingStackView: UIStackView?
   private var ratingStarViews: [UIImageView] = []
 
@@ -188,6 +191,7 @@ class PlayableTableCell: BasicTableCell {
   }
 
   func resetForReuse() {
+    forkSubtitleOverride = nil // Fork: F-21
     playIndicator?.reset()
     deleteButton.isHidden = true
     playOverArtworkButton.isHidden = true
@@ -317,7 +321,7 @@ class PlayableTableCell: BasicTableCell {
   func refresh() {
     guard let playable = playable else { return }
     titleLabel.text = playable.title
-    artistLabel.text = playable.creatorName
+    artistLabel.text = forkSubtitleOverride ?? playable.creatorName
     // Fork: on an album page the artist line only matters for guest/compilation tracks
     artistLabel.isHidden = isDislayAlbumTrackNumberStyle &&
       playable.asSong?.album?.artist?.name == playable.creatorName

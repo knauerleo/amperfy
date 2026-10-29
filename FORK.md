@@ -521,7 +521,14 @@ Beispiel-Spec im Kopf des Skripts.
 
 ### Server-Vertrag vom 2026-10-29 (TASKS F-19c, F-21), live über :4534
 
-Mit der Pi-Session abgestimmt. Drift-Seite noch nicht gebaut.
+Mit der Pi-Session abgestimmt. Drift-Seite gebaut (2026-10-29):
+F-19c in `YouTubeMusicAlbumGaps.swift` (`forkDriftFullAlbum`, bei jedem Öffnen frisch, kein Cache in der App) und
+`YouTubeAlbumGapsView.swift` („Fehlende laden“ über `forkDownloadAlbumMissing`, Jobs per `YouTubeMusicJobMonitor.track`);
+F-21 in `BackendProxy+ForkLyricsSearch.swift` und `SearchVC+Fork.swift` (Scope „Songtext“ nur mit YouTube Music, nicht auf
+Mac Catalyst, weil dort die Scope-Leiste fehlt; Fundzeile statt Künstler in `PlayableTableCell.forkSubtitleOverride`).
+Album-IDs nach der Doppel-Album-Reparatur: `BackendProxy+ForkAlbumCleanup.swift` gleicht einmal pro Konto alle IDs aus
+`getAlbumList2` ab, blendet verwaiste Alben aus (nicht `markAsRemoteDeleted`, die Songs gibt es noch) und liest ihre Songs
+per `getSong` neu, damit sie im aktuellen Album landen (Start in `AppDelegate+ForkAlbumCleanup.swift`).
 
 - **`getAlbum.view?id=<NavidromeAlbumId>&drift=full`** (nur auf Wunsch): alle Tracks des passenden YouTube-Music-Albums.
   Ohne `drift=full` kommt die reine Navidrome-Antwort, `getArtist`/`getAlbumList2` zählen nur Navidrome.

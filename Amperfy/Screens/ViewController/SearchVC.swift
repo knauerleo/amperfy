@@ -29,6 +29,7 @@ public enum SearchSection: Int, CaseIterable {
   case History
   case Genres // fork
   case TopHit // fork
+  case Lyrics // fork: F-21
   case Song
   case YouTube // fork
   case Artist
@@ -66,7 +67,7 @@ class SearchDiffableDataSource: UITableViewDiffableDataSource<Int, SearchItem> {
       return "Albums"
     case .Song:
       return "Songs"
-    case .Genres, .TopHit, .YouTube:
+    case .Genres, .TopHit, .Lyrics, .YouTube:
       return searchVC.forkTitle(for: SearchSection(rawValue: section)!)
     case .none:
       return ""
@@ -188,7 +189,7 @@ class SearchVC: BasicTableViewController {
         return self.albums[indexPath.row]
       case .Song:
         return self.songs[indexPath.row]
-      case .Genres, .TopHit, .YouTube:
+      case .Genres, .TopHit, .Lyrics, .YouTube:
         return self.forkContainable(at: indexPath)
       case .none:
         return nil
@@ -212,7 +213,7 @@ class SearchVC: BasicTableViewController {
       case .Song:
         let entity = self.songs[indexPath.row]
         return PlayContext(containable: entity)
-      case .Genres, .TopHit, .YouTube:
+      case .Genres, .TopHit, .Lyrics, .YouTube:
         return self.forkPlayContext(at: indexPath)
       case .none:
         return nil
@@ -249,8 +250,13 @@ class SearchVC: BasicTableViewController {
     appDelegate.userStatistics.visited(.search)
     configureSearchController(
       placeholder: "Search in \"Library\"",
-      scopeButtonTitles: ["All", "Cached"]
+      scopeButtonTitles: forkScopeButtonTitles // Fork: F-21 lyrics scope
     )
+  }
+
+  override func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+    super.searchBarSearchButtonClicked(searchBar)
+    forkSearchButtonClicked() // Fork: F-21 the lyrics search starts here
   }
 
   public func activateSearchBar() {
@@ -356,7 +362,7 @@ class SearchVC: BasicTableViewController {
     case .Song:
       let song = songs[indexPath.row]
       completionHandler(SwipeActionContext(containable: song))
-    case .Genres, .TopHit, .YouTube:
+    case .Genres, .TopHit, .Lyrics, .YouTube:
       forkDetermSwipeActionContext(at: indexPath, completionHandler: completionHandler)
     case .none:
       completionHandler(nil)
@@ -422,7 +428,7 @@ class SearchVC: BasicTableViewController {
       let song = songs[indexPath.row]
       cell.display(playable: song, playContextCb: convertCellViewToPlayContext, rootView: self)
       return cell
-    case .Genres, .TopHit, .YouTube:
+    case .Genres, .TopHit, .Lyrics, .YouTube:
       return forkCell(at: indexPath)
     case .none:
       return UITableViewCell()
@@ -448,7 +454,7 @@ class SearchVC: BasicTableViewController {
         .tableSectionHeightLarge : 0
     case .Song:
       return (isSearchActive && !songs.isEmpty) ? CommonScreenOperations.tableSectionHeightLarge : 0
-    case .Genres, .TopHit, .YouTube:
+    case .Genres, .TopHit, .Lyrics, .YouTube:
       return forkHeaderHeight(for: SearchSection(rawValue: section)!)
     case .none:
       return 0.0
@@ -479,7 +485,7 @@ class SearchVC: BasicTableViewController {
       return GenericTableCell.rowHeight
     case .Song:
       return PlayableTableCell.rowHeight
-    case .Genres, .TopHit, .YouTube:
+    case .Genres, .TopHit, .Lyrics, .YouTube:
       return forkRowHeight(at: indexPath)
     case .none:
       return 0.0
@@ -519,7 +525,7 @@ class SearchVC: BasicTableViewController {
     case .Song:
       let song = songs[indexPath.row]
       let _ = appDelegate.storage.main.library.createOrUpdateSearchHistory(container: song)
-    case .Genres, .TopHit, .YouTube:
+    case .Genres, .TopHit, .Lyrics, .YouTube:
       forkDidSelect(at: indexPath)
     case .none: break
     }
@@ -578,6 +584,7 @@ class SearchVC: BasicTableViewController {
       updateContentUnavailable()
       return
     }
+    if forkShowLyricsScope() { return } // Fork: F-21 no search while typing
     let onlyCached = searchController.searchBar.isCachedScopeSelected
     searchTask = Task { @MainActor in
       do { try await Task.sleep(for: Self.searchDebounce) } catch { return }
@@ -667,6 +674,19 @@ class SearchVC: BasicTableViewController {
       ).compactMap { $0.managedObject.objectID }
       return result
     }
+  }
+
+  /// Fork (F-21): only the lyrics section, its search runs when Search is tapped.
+  func displayLyricsScope() {
+    isSearchActive = true
+    searchHistory = []
+    artists = []
+    albums = []
+    playlists = []
+    songs = []
+    tableView.separatorStyle = DS.isPhone ? .none : .singleLine
+    updateDataSource(animated: false)
+    updateContentUnavailable()
   }
 
   private func display(searchResult: SearchResultObjectContainer) {

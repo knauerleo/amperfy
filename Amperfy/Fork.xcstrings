@@ -4064,6 +4064,134 @@
           }
         }
       }
+    },
+    "This album isn't on YouTube Music.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieses Album gibt es nicht auf YouTube Music."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This album isn't on YouTube Music."
+          }
+        }
+      }
+    },
+    "Type at least 3 words of the lyrics.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gib mindestens 3 Wörter aus dem Songtext ein."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Type at least 3 words of the lyrics."
+          }
+        }
+      }
+    },
+    "The lyrics search isn't available right now. Try again later.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Songtext-Suche ist gerade nicht erreichbar. Versuch es später noch mal."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The lyrics search isn't available right now. Try again later."
+          }
+        }
+      }
+    },
+    "The lyrics search needs online mode.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Songtext-Suche geht nur im Online-Modus."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The lyrics search needs online mode."
+          }
+        }
+      }
+    },
+    "Type at least 3 words of the lyrics, then tap Search": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mindestens 3 Wörter aus dem Songtext eingeben, dann auf Suchen tippen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Type at least 3 words of the lyrics, then tap Search"
+          }
+        }
+      }
+    },
+    "Tap Search to find songs with these lyrics": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auf Suchen tippen, um Songs mit diesem Text zu finden"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap Search to find songs with these lyrics"
+          }
+        }
+      }
+    },
+    "Searching lyrics…": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suche in Songtexten…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Searching lyrics…"
+          }
+        }
+      }
+    },
+    "No songs found with these lyrics": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Songs mit diesem Text gefunden"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No songs found with these lyrics"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

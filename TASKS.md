@@ -17,8 +17,6 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 
 ### Features
 
-- [ ] **F-19c „Fehlt in deiner Sammlung“ aus `getAlbum&drift=full`** - statt `search3` (zeigte z. B. Gzuz im BMTH-Album). Albumseite lädt die volle Antwort frisch beim Öffnen, nur `ytm-`-Einträge in die Sektion, nichts in Core Data; „Fehlende laden“ über `downloadAlbumMissing`. Vertrag: FORK.md „Roadmap“ › „Server-Vertrag vom 2026-10-29“
-- [ ] **F-21 Suche nach Songtext** - eigener Such-Scope „Songtext“, Anfrage nur beim Drücken auf Suchen, ab 3 Wörtern, Treffer mit Fundzeile (`lyricSnippet`). Route `searchLyrics`, Vertrag wie F-19c
 
 ## Backlog (ganz hinten)
 
@@ -27,6 +25,8 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 
 ## Done
 
+- [x] ~~**F-19c „Fehlt in deiner Sammlung“ aus `getAlbum&drift=full`**~~ (2026-10-29) - FORK.md Roadmap › „Server-Vertrag vom 2026-10-29“
+- [x] ~~**F-21 Suche nach Songtext**~~ (2026-10-29) - FORK.md Roadmap › „Server-Vertrag vom 2026-10-29“
 - [x] ~~**F-1 YouTube Music nur noch über Subsonic am Login-Host**~~ (2026-10-29) - FORK.md Abschnitt 9
 - [x] ~~**F-1a Fake-Songs des Proxys aus der Bibliothek halten**~~ (2026-10-29) - FORK.md Abschnitt 9
 - [x] ~~**F-1b Download-Liste über `/rest/getYtJobs.view`**~~ (2026-10-29) - FORK.md Abschnitt 9

@@ -7,6 +7,7 @@
 //  Fork (TASKS UI-23): track rows 56 pt on the iPhone.
 //  Fork (TASKS F-19): above it the songs of the album that are only on YouTube Music
 //  (`YouTubeAlbumGapsView`). Both load independently, the footer shows what is there.
+//  Fork (TASKS F-19c): the missing songs come from `getAlbum&drift=full`, fresh on every open.
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -42,10 +43,8 @@ extension AlbumDetailVC {
     Task { @MainActor in
       let gaps = await YouTubeMusicAlbumGapFinder.gaps(
         for: self.album,
-        account: self.account,
         storage: self.appDelegate.storage,
-        backendApi: meta.backendApi,
-        librarySyncer: meta.librarySyncer
+        backendApi: meta.backendApi
       )
       guard let gaps, !gaps.missing.isEmpty, self.isViewLoaded else { return }
       let view = YouTubeAlbumGapsView(gaps: gaps, albumArtist: artistName, account: self.account)
