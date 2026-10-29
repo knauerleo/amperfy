@@ -124,7 +124,15 @@ public struct YouTubeAlbum: Sendable, Equatable {
   public let duration: Int
   public let year: Int?
   public let kind: YouTubeAlbumKind
-  public let songs: [YouTubeAlbumSong]
+  public private(set) var songs: [YouTubeAlbumSong]
+
+  /// The songs with their state from the answer of `downloadYtAlbum`.
+  public func updated(with download: YouTubeAlbumDownload) -> YouTubeAlbum {
+    let newSongs = Dictionary(download.songs.map { ($0.id, $0) }) { first, _ in first }
+    var album = self
+    album.songs = songs.map { newSongs[$0.id] ?? $0 }
+    return album
+  }
 
   init?(dict: [String: Any]) {
     let attributes = YouTubeAlbumJSON.stringAttributes(dict)
