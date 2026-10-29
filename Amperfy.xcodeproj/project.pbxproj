@@ -360,6 +360,7 @@
 		BD7A5178A0532BFFB7EE1584 /* YouTubeMusicSuggestions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A80130D307A947E2214C5BAA /* YouTubeMusicSuggestions.swift */; };
 		924C3A5106973CAF2D5E92BD /* YouTubeMusicJobMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E21FE95408900B8E814BD39 /* YouTubeMusicJobMonitor.swift */; };
 		8B4BAC794538A4B8AF01ED4B /* SongpickerClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42BFC033C14B5C648BE2F3D /* SongpickerClient.swift */; };
+		CCBF0351B12ABC9569AD47EF /* BackendProxy+ForkShare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A35660F813FF3FE6A2B22D4 /* BackendProxy+ForkShare.swift */; };
 		50C9D647284FAA02007F18D0 /* SsMusicFolderParserDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DEEDFF265D46CB0073FF20 /* SsMusicFolderParserDelegate.swift */; };
 		50C9D648284FAA02007F18D0 /* SsPingParserDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5086F884223A1E4600546F5A /* SsPingParserDelegate.swift */; };
 		50C9D649284FAA02007F18D0 /* SubsonicVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E964A925E8E20E00E3210F /* SubsonicVersion.swift */; };
@@ -557,6 +558,7 @@
 		C7E95B84474CA6A5CE25D04A /* AppDelegate+ForkSleepTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BFD60E6105862FBD9147F27 /* AppDelegate+ForkSleepTimer.swift */; };
 		9FEFE31CCA516A2538F28D44 /* YouTubeMusicDownloadCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3D5D52506A052EDF56B0C17 /* YouTubeMusicDownloadCoordinator.swift */; };
 		BBA534416618E50736E2B752 /* PlayQueueSyncCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA2C16F8FBFBDCB1EB02AB9 /* PlayQueueSyncCoordinator.swift */; };
+		4089222425864E19E048A1AA /* ShareExtensionBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD87E11ECC21B06C0AEF342F /* ShareExtensionBridge.swift */; };
 		9B1A459227B8FAEC6FBF19C6 /* SpotlightIndexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA73B339974206200A83FAB /* SpotlightIndexer.swift */; };
 		50D54B6D2E30FFDB0078631E /* Magnitude.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D54B642E30F9350078631E /* Magnitude.swift */; };
 		50D54B6E2E30FFDB0078631E /* AudioAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D54B622E30F9350078631E /* AudioAnalyzer.swift */; };
@@ -620,6 +622,10 @@
 		638920F02C8C8E9000932EE8 /* SettingsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638920EF2C8C8E9000932EE8 /* SettingsList.swift */; };
 		63DCDB7A2C674B5D00522F68 /* SettingsSceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DCDB792C674B5D00522F68 /* SettingsSceneDelegate.swift */; };
 		641708592C13BF5100BA2619 /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 641708582C13BF5100BA2619 /* Haptics.swift */; };
+		B2599AC0800042657EC06B25 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48848EDB764A2DAE6AC88A4C /* ShareViewController.swift */; };
+		00471E39311265AEBE00888E /* DriftShareConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAC4A0AF7195BFB0CC13B199 /* DriftShareConfig.swift */; };
+		1B840D298A2504502E12D58C /* DriftShareConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = EAC4A0AF7195BFB0CC13B199 /* DriftShareConfig.swift */; };
+		45FC4C35834B16E6300002AE /* DriftShare.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 4EE70D60DB415F71408714F2 /* DriftShare.appex */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -644,6 +650,13 @@
 			remoteGlobalIDString = 50C9D604284FA847007F18D0;
 			remoteInfo = AmpertyKit;
 		};
+		AC33538A653F4939E87F1375 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 508385DC21C5965B00C4BB32 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 88DC17D668E196A0932773B9;
+			remoteInfo = DriftShare;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -653,6 +666,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				45FC4C35834B16E6300002AE /* DriftShare.appex in Embed Foundation Extensions */,
 			);
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1089,6 +1103,7 @@
 		A80130D307A947E2214C5BAA /* YouTubeMusicSuggestions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "YouTubeMusicSuggestions.swift"; sourceTree = "<group>"; };
 		1E21FE95408900B8E814BD39 /* YouTubeMusicJobMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "YouTubeMusicJobMonitor.swift"; sourceTree = "<group>"; };
 		A42BFC033C14B5C648BE2F3D /* SongpickerClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SongpickerClient.swift"; sourceTree = "<group>"; };
+		7A35660F813FF3FE6A2B22D4 /* BackendProxy+ForkShare.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BackendProxy+ForkShare.swift"; sourceTree = "<group>"; };
 		50BA92F721CC318D00E5901D /* PlayableTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayableTableCell.swift; sourceTree = "<group>"; };
 		80531DC3A51437B29F0727F9 /* PlayableTableCell+NowPlaying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlayableTableCell+NowPlaying.swift"; sourceTree = "<group>"; };
 		37B3F295C576D297B2C71F01 /* NowPlayingBarsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NowPlayingBarsView.swift"; sourceTree = "<group>"; };
@@ -1194,6 +1209,7 @@
 		2BFD60E6105862FBD9147F27 /* AppDelegate+ForkSleepTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+ForkSleepTimer.swift"; sourceTree = "<group>"; };
 		B3D5D52506A052EDF56B0C17 /* YouTubeMusicDownloadCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "YouTubeMusicDownloadCoordinator.swift"; sourceTree = "<group>"; };
 		EBA2C16F8FBFBDCB1EB02AB9 /* PlayQueueSyncCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlayQueueSyncCoordinator.swift"; sourceTree = "<group>"; };
+		AD87E11ECC21B06C0AEF342F /* ShareExtensionBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ShareExtensionBridge.swift"; sourceTree = "<group>"; };
 		CAA73B339974206200A83FAB /* SpotlightIndexer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SpotlightIndexer.swift"; sourceTree = "<group>"; };
 		50D54B612E30F9350078631E /* AmplitudeSpectrumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmplitudeSpectrumView.swift; sourceTree = "<group>"; };
 		50D54B622E30F9350078631E /* AudioAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioAnalyzer.swift; sourceTree = "<group>"; };
@@ -1325,6 +1341,11 @@
 		641708582C13BF5100BA2619 /* Haptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
 		643A04712CD29AB20012DEA3 /* Amperfy v39.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Amperfy v39.xcdatamodel"; sourceTree = "<group>"; };
 		64C433822E1391FA0082A165 /* Amperfy v46.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Amperfy v46.xcdatamodel"; sourceTree = "<group>"; };
+		48848EDB764A2DAE6AC88A4C /* ShareViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareViewController.swift; sourceTree = "<group>"; };
+		13609C8BC6CA9D755C6C9106 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D390D9A8ADA3671B6A4BB4E1 /* DriftShare.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DriftShare.entitlements; sourceTree = "<group>"; };
+		4EE70D60DB415F71408714F2 /* DriftShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = DriftShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		EAC4A0AF7195BFB0CC13B199 /* DriftShareConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DriftShareConfig.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1366,6 +1387,13 @@
 			files = (
 				502B8A4D2EE0CE40004CA3AD /* AudioStreaming in Frameworks */,
 				50C9D60F284FA847007F18D0 /* AmperfyKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D9D8A1BBF820877CCD67E895 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1642,6 +1670,8 @@
 				50C9D614284FA847007F18D0 /* AmperfyKitTests */,
 				508385E521C5965B00C4BB32 /* Products */,
 				5091857E23A753C800A8891E /* Frameworks */,
+				147C342CA211200D534D418E /* DriftShare */,
+				F5B9AB1D4EC77B49DEA3BB54 /* Shared */,
 			);
 			sourceTree = "<group>";
 		};
@@ -1651,6 +1681,7 @@
 				508385E421C5965B00C4BB32 /* Amperfy.app */,
 				50C9D605284FA847007F18D0 /* AmperfyKit.framework */,
 				50C9D60E284FA847007F18D0 /* AmperfyKitTests.xctest */,
+				4EE70D60DB415F71408714F2 /* DriftShare.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -1668,6 +1699,7 @@
 				2BFD60E6105862FBD9147F27 /* AppDelegate+ForkSleepTimer.swift */,
 				B3D5D52506A052EDF56B0C17 /* YouTubeMusicDownloadCoordinator.swift */,
 				EBA2C16F8FBFBDCB1EB02AB9 /* PlayQueueSyncCoordinator.swift */,
+				AD87E11ECC21B06C0AEF342F /* ShareExtensionBridge.swift */,
 				CAA73B339974206200A83FAB /* SpotlightIndexer.swift */,
 				509001B72716C8F400A8056D /* AppDelegateNotificationExtensions.swift */,
 				509001B52716C7F600A8056D /* AppDelegateAlertExtensions.swift */,
@@ -1698,6 +1730,7 @@
 				A80130D307A947E2214C5BAA /* YouTubeMusicSuggestions.swift */,
 				1E21FE95408900B8E814BD39 /* YouTubeMusicJobMonitor.swift */,
 				A42BFC033C14B5C648BE2F3D /* SongpickerClient.swift */,
+				7A35660F813FF3FE6A2B22D4 /* BackendProxy+ForkShare.swift */,
 				509A7D8128059A0D009791D1 /* BackgroundLibrarySyncer.swift */,
 				5040B2C5269D947F00911451 /* BackgroundFetchTriggeredSyncer.swift */,
 				5086F87422384B5500546F5A /* Subsonic */,
@@ -2423,6 +2456,24 @@
 			path = Player;
 			sourceTree = "<group>";
 		};
+		147C342CA211200D534D418E /* DriftShare */ = {
+			isa = PBXGroup;
+			children = (
+				48848EDB764A2DAE6AC88A4C /* ShareViewController.swift */,
+				13609C8BC6CA9D755C6C9106 /* Info.plist */,
+				D390D9A8ADA3671B6A4BB4E1 /* DriftShare.entitlements */,
+			);
+			path = DriftShare;
+			sourceTree = "<group>";
+		};
+		F5B9AB1D4EC77B49DEA3BB54 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				EAC4A0AF7195BFB0CC13B199 /* DriftShareConfig.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -2452,6 +2503,7 @@
 			);
 			dependencies = (
 				50C9D619284FA847007F18D0 /* PBXTargetDependency */,
+				C9061B794ED03D74EBA25196 /* PBXTargetDependency */,
 			);
 			name = Amperfy;
 			packageProductDependencies = (
@@ -2518,6 +2570,23 @@
 			productReference = 50C9D60E284FA847007F18D0 /* AmperfyKitTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		88DC17D668E196A0932773B9 /* DriftShare */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D874E2994A06920EE820934D /* Build configuration list for PBXNativeTarget "DriftShare" */;
+			buildPhases = (
+				C4E05E6FDDD41C23C53CF16D /* Sources */,
+				D9D8A1BBF820877CCD67E895 /* Frameworks */,
+				CBE78EC25E3DA4053AF9C414 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DriftShare;
+			productName = DriftShare;
+			productReference = 4EE70D60DB415F71408714F2 /* DriftShare.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -2578,6 +2647,7 @@
 				508385E321C5965B00C4BB32 /* Amperfy */,
 				50C9D604284FA847007F18D0 /* AmperfyKit */,
 				50C9D60D284FA847007F18D0 /* AmperfyKitTests */,
+				88DC17D668E196A0932773B9 /* DriftShare */,
 			);
 		};
 /* End PBXProject section */
@@ -2667,6 +2737,13 @@
 				50BE5D5B2850F4F600156FC6 /* musicFolders_example_1.xml in Resources */,
 				50BE5D622850F4F600156FC6 /* directory_example_1.xml in Resources */,
 				50BE5D5E2850F4F600156FC6 /* indexes_example_1.xml in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CBE78EC25E3DA4053AF9C414 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2858,6 +2935,7 @@
 				C7E95B84474CA6A5CE25D04A /* AppDelegate+ForkSleepTimer.swift in Sources */,
 				9FEFE31CCA516A2538F28D44 /* YouTubeMusicDownloadCoordinator.swift in Sources */,
 				BBA534416618E50736E2B752 /* PlayQueueSyncCoordinator.swift in Sources */,
+				4089222425864E19E048A1AA /* ShareExtensionBridge.swift in Sources */,
 				9B1A459227B8FAEC6FBF19C6 /* SpotlightIndexer.swift in Sources */,
 				50C1714C2D106BEE00C0C53A /* PlaylistAddArtistDetailVC.swift in Sources */,
 				50C171442D0F07E300C0C53A /* PlaylistAddSongsVC.swift in Sources */,
@@ -2948,6 +3026,7 @@
 				50AB3B3C2F01D5AC00556CE4 /* OpenAppWithConfigurationIntent.swift in Sources */,
 				50C171482D10644600C0C53A /* PlaylistAddAlbumDetailVC.swift in Sources */,
 				50DE29EB2B8FCEB700ABA78E /* LibraryNavigatorConfigurator.swift in Sources */,
+				00471E39311265AEBE00888E /* DriftShareConfig.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3122,6 +3201,7 @@
 				BD7A5178A0532BFFB7EE1584 /* YouTubeMusicSuggestions.swift in Sources */,
 				924C3A5106973CAF2D5E92BD /* YouTubeMusicJobMonitor.swift in Sources */,
 				8B4BAC794538A4B8AF01ED4B /* SongpickerClient.swift in Sources */,
+				CCBF0351B12ABC9569AD47EF /* BackendProxy+ForkShare.swift in Sources */,
 				50C9D6EB284FAD51007F18D0 /* PodcastsShowType.swift in Sources */,
 				50C9D71828508005007F18D0 /* CommonString.swift in Sources */,
 				50C9D63F284FA9C7007F18D0 /* ScrobbleSyncer.swift in Sources */,
@@ -3241,6 +3321,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C4E05E6FDDD41C23C53CF16D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B2599AC0800042657EC06B25 /* ShareViewController.swift in Sources */,
+				1B840D298A2504502E12D58C /* DriftShareConfig.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -3258,6 +3347,12 @@
 			isa = PBXTargetDependency;
 			target = 50C9D604284FA847007F18D0 /* AmperfyKit */;
 			targetProxy = 50C9D618284FA847007F18D0 /* PBXContainerItemProxy */;
+		};
+		C9061B794ED03D74EBA25196 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			platformFilter = ios;
+			target = 88DC17D668E196A0932773B9 /* DriftShare */;
+			targetProxy = AC33538A653F4939E87F1375 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -3647,6 +3742,66 @@
 			};
 			name = Release;
 		};
+		29C69D3296E72516E3BF91F4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = DriftShare/DriftShare.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 45L48D96FZ;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DriftShare/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Drift;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 2.1.2;
+				PRODUCT_BUNDLE_IDENTIFIER = "de.knauerleo.amperfy-music.Share";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+			};
+			name = Debug;
+		};
+		3DDD3DA910FBB102B0064C78 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = DriftShare/DriftShare.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 45L48D96FZ;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = DriftShare/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Drift;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 2.1.2;
+				PRODUCT_BUNDLE_IDENTIFIER = "de.knauerleo.amperfy-music.Share";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -3682,6 +3837,15 @@
 			buildConfigurations = (
 				50C9D620284FA847007F18D0 /* Debug */,
 				50C9D621284FA847007F18D0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D874E2994A06920EE820934D /* Build configuration list for PBXNativeTarget "DriftShare" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				29C69D3296E72516E3BF91F4 /* Debug */,
+				3DDD3DA910FBB102B0064C78 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

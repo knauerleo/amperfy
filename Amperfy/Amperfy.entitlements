@@ -8,5 +8,10 @@
 	<true/>
 	<key>com.apple.security.network.client</key>
 	<true/>
+	<key>keychain-access-groups</key>
+	<array>
+		<string>$(AppIdentifierPrefix)de.knauerleo.amperfy-music</string>
+		<string>$(AppIdentifierPrefix)de.knauerleo.amperfy-music.shared</string>
+	</array>
 </dict>
 </plist>

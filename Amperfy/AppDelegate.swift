@@ -294,6 +294,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     YouTubeMusicDownloadCoordinator.shared.start() // Fork: F-7 sync and notify downloads app-wide
     PlayQueueSyncCoordinator.shared.start() // Fork: F-10 continue listening on another device
     SpotlightIndexer.shared.start() // Fork: F-15 albums, artists, playlists in Spotlight
+    ShareExtensionBridge.shared.start() // Fork: F-9 configuration of Share → Drift
 
     guard AmperKit.shared.storage.settings.app.isLibrarySynced else {
       return true

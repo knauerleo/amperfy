@@ -30,10 +30,9 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 
 - [ ] **F-8 Ganzes Album / Künstler von YouTube laden**
   - Braucht einen Endpunkt im Songpicker (`album_id`, `kind`). In der App: Menüeintrag am YouTube-Treffer „Ganzes Album laden“
-- [ ] **F-9 Teilen-Erweiterung „Teilen → Drift“**
-  - Erstes Extension-Target: Link aus YouTube Music/Safari annehmen, Video-ID auslesen, `POST /api/get`
 - [ ] **F-14 Widgets und Kontrollzentrum**
   - Neues Widget-Target. Interaktive Widgets „Zuletzt gehört“, „Favoriten mischen“, Taste im Kontrollzentrum. App Intents gibt es schon (`AmperfyAppShortcuts`)
+  - Blockiert (2026-10-29): Die App Group lässt sich nicht registrieren, solange im Developer-Account die neue Program License Agreement nicht akzeptiert ist („PLA Update available“). Danach erneut bauen
 - [ ] **F-17 Crossfade**
   - Engine `AudioStreaming` (AVAudioEngine) lädt den nächsten Song schon vor. Größter Eingriff in AmperfyKit, zuletzt
 
@@ -66,3 +65,4 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [x] ~~**F-13 Statistik / Jahresrückblick**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**F-10 Weiterhören auf anderem Gerät (`savePlayQueue`/`getPlayQueue`)**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**F-15 Spotlight-Indexierung**~~ (2026-10-29) - FORK.md Abschnitt 10
+- [x] ~~**F-9 Teilen-Erweiterung „Teilen → Drift“**~~ (2026-10-29) - FORK.md Abschnitt 10
