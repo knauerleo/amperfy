@@ -26,18 +26,15 @@ import UIKit
 final class FloatingMiniPlayerView: UIView {
   static let height: CGFloat = 60
   static let sideMargin: CGFloat = 8
-  /// Gap between the card and the visible top of the tab bar.
+  /// Gap between the card and the top of the tab bar.
   static let bottomGap: CGFloat = 8
 
   let miniPlayer: MiniPlayerView
   private let player: PlayerFacade
   /// Called when a song starts or the queue runs empty, the card shows or hides then.
   var visibilityChanged: (() -> ())?
-  /// Called when the tab bar changes its frame, e.g. when it minimizes on scroll.
-  var tabBarChanged: (() -> ())?
 
   private let surface = UIView()
-  private var layerObservations = [ObjectIdentifier: [NSKeyValueObservation]]()
 
   var hasSong: Bool { player.currentlyPlaying != nil }
 
@@ -82,36 +79,6 @@ final class FloatingMiniPlayerView: UIView {
   override func layoutSubviews() {
     super.layoutSubviews()
     layer.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: DS.Radius.card).cgPath
-  }
-
-  // MARK: Tab bar tracking
-
-  /// The tab bar draws its glass in internal subviews that shrink when it minimizes.
-  /// Their layers are observed, so the card can follow without a public API for the state.
-  func track(tabBar: UITabBar) {
-    let layers = [tabBar.layer] + (tabBar.layer.sublayers ?? [])
-    let ids = Set(layers.map { ObjectIdentifier($0) })
-    layerObservations = layerObservations.filter { ids.contains($0.key) }
-    for trackedLayer in layers where layerObservations[ObjectIdentifier(trackedLayer)] == nil {
-      let onChange: (CALayer, Any) -> () = { [weak self] _, _ in
-        DispatchQueue.main.async { self?.tabBarChanged?() }
-      }
-      layerObservations[ObjectIdentifier(trackedLayer)] = [
-        trackedLayer.observe(\.bounds, changeHandler: onChange),
-        trackedLayer.observe(\.position, changeHandler: onChange),
-      ]
-    }
-  }
-
-  /// The top edge of what is visible of the tab bar, in the coordinates of `view`.
-  static func visibleTop(of tabBar: UITabBar, in view: UIView) -> CGFloat {
-    let barFrame = tabBar.convert(tabBar.bounds, to: view)
-    let visible = tabBar.subviews.filter {
-      !$0.isHidden && $0.alpha > 0.01 && $0.bounds.height > 0 && $0.bounds.width > 0
-    }
-    guard !visible.isEmpty else { return barFrame.minY }
-    let top = visible.map { $0.convert($0.bounds, to: view).minY }.min() ?? barFrame.minY
-    return max(barFrame.minY, top)
   }
 }
 

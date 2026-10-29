@@ -4,6 +4,7 @@
 //
 //  Fork (UI-19): on the iPhone the mini player is a floating card above the tab bar
 //  (`FloatingMiniPlayerView`) instead of the glass `bottomAccessory`. iPad keeps the accessory.
+//  The tab bar stays put while scrolling, the card hovers above it.
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -34,12 +35,12 @@ extension TabBarVC {
   func forkInstallFloatingMiniPlayer() {
     guard DS.isPhone, let miniPlayer else { return }
     bottomAccessory = nil
+    tabBarMinimizeBehavior = .never
     miniPlayer.removeFromSuperview()
 
     let card = FloatingMiniPlayerView(miniPlayer: miniPlayer, player: appDelegate.player)
     card.alpha = card.hasSong ? 1 : 0
     card.visibilityChanged = { [weak self] in self?.forkLayoutFloatingMiniPlayer(animated: true) }
-    card.tabBarChanged = { [weak self] in self?.forkLayoutFloatingMiniPlayer(animated: true) }
     view.insertSubview(card, belowSubview: tabBar)
     miniPlayer.forkConfigureAsFloatingCard()
   }
@@ -49,17 +50,14 @@ extension TabBarVC {
     forkLayoutFloatingMiniPlayer(animated: false)
   }
 
-  /// Card 8 pt above the visible top of the tab bar. When the tab bar minimizes on scroll,
-  /// its glass gets lower and the card moves down with it. Without a song the card hides.
+  /// Card 8 pt above the tab bar. Without a song the card hides.
   func forkLayoutFloatingMiniPlayer(animated: Bool) {
     guard let card = forkFloatingMiniPlayer else { return }
-    card.track(tabBar: tabBar)
-
     let height = FloatingMiniPlayerView.height
     let margin = FloatingMiniPlayerView.sideMargin
     let tabBarVisible = !tabBar.isHidden && tabBar.alpha > 0.01 && tabBar.frame.minY < view.bounds.maxY
     let bottom = tabBarVisible ?
-      FloatingMiniPlayerView.visibleTop(of: tabBar, in: view) - FloatingMiniPlayerView.bottomGap :
+      tabBar.frame.minY - FloatingMiniPlayerView.bottomGap :
       view.bounds.maxY - view.safeAreaInsets.bottom - FloatingMiniPlayerView.bottomGap
     let frame = CGRect(
       x: view.safeAreaInsets.left + margin,
