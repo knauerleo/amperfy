@@ -171,6 +171,7 @@ class LargeCurrentlyPlayingPlayerView: UIView, UIGestureRecognizerDelegate {
     titleLabel.applyAmperfyStyle()
     albumLabel.applyAmperfyStyle()
     artistLabel.applyAmperfyStyle()
+    applyForkStyle() // Fork: player fonts on DS.Font
 
     lyricsView = LyricsView()
     lyricsView!.frame = upperContainerView.bounds

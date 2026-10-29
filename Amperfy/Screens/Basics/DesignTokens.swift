@@ -60,6 +60,16 @@ enum DS {
     static var miniPlayerTitle: UIFont { scaled(14, .semibold, .subheadline, maximum: 18) }
     static var miniPlayerSubtitle: UIFont { scaled(12, .regular, .footnote, maximum: 16) }
     static var caption: UIFont { scaled(11, .medium, .caption2) }
+    /// Full player (UI-4): grows with Dynamic Type up to a cap the layout still fits.
+    static var playerTitle: UIFont { scaled(20, .bold, .title3, maximum: 26) }
+    static var playerSubtitle: UIFont { scaled(17, .regular, .body, maximum: 22) }
+    static var playerAlbum: UIFont { scaled(15, .regular, .subheadline, maximum: 19) }
+    static var playerTime: UIFont {
+      UIFontMetrics(forTextStyle: .caption1).scaledFont(
+        for: .monospacedDigitSystemFont(ofSize: 12, weight: .medium),
+        maximumPointSize: 16
+      )
+    }
     /// Compact Home tiles (Recently Played grid) and shelf cells.
     static var tileTitle: UIFont { scaled(13, .semibold, .footnote, maximum: 16) }
     static var shelfTitle: UIFont { scaled(14, .semibold, .subheadline, maximum: 18) }

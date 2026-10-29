@@ -7,9 +7,6 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 
 - [ ] **F-2 Server-URL automatisch umschalten** - mit F-1 meist überflüssig (nur noch die Domain), nur falls LAN-Adresse weiter genutzt wird
   - Bei Netzwechsel (`NetworkMonitor`) die erste erreichbare URL aus `activeBackendServerUrl` + `alternativeServerURLs` per `ping` wählen
-- [ ] **UI-4 Player-Schriften auf `DS.Font`**
-  - 16 feste `pointSize` in `PlayerControlView.xib`, 5 in `LargeCurrentlyPlayingPlayerView.xib`. Im Code überschreiben (`PlayerControlView+ForkStyle.swift`), Dynamic Type mit Obergrenze
-  - Fertig, wenn: größere Systemschrift vergrößert Titel/Zeiten im Player, ohne dass das Layout bricht
 - [ ] **F-3 Künstlerseite mit `getArtistInfo2`**
   - Neue Extension am Subsonic-Syncer: Künstlerbild, Bio, ähnliche Künstler. Bild in den Header, Bio aufklappbar, ähnliche Künstler als `ShelfLayout.circle`
 - [ ] **F-4 „Popular“ mit `getTopSongs`** - auffüllen, solange eigene `playCount`s zu wenige Treffer liefern
@@ -89,3 +86,4 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [x] ~~**UI-1 Podcast-Detailseite mit `ImmersiveDetailHeaderView`**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**UI-2 „All Albums“-Raster mit `LargeAlbumCell`**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**UI-3 Playlists-Liste modernisieren**~~ (2026-10-29) - FORK.md Abschnitt 10
+- [x] ~~**UI-4 Player-Schriften auf `DS.Font`**~~ (2026-10-29) - FORK.md Abschnitt 10
