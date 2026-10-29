@@ -88,9 +88,14 @@ extension PopupPlayerVC {
     )
     page.delegate = self
     page.card.addTarget(self, action: #selector(forkLyricsCardTapped), for: .touchUpInside)
-    tableView.bottomAnchor.constraint(equalTo: controlPlaceholderView.topAnchor).isActive = true
-    // UI-21: the transport row got more room, before the chip takes its base height
+    // UI-21: the transport row got more room (UI-27b: minus the option row)
     controlPlaceholderHeightConstraint.constant += PlayerControlView.forkStreamingExtraHeight
+    // UI-27: the queue ends where the controls start on the first page, at a fixed line of the root
+    // view. Tied to the controls inside the page it held the page in place and nothing scrolled.
+    tableView.bottomAnchor.constraint(
+      equalTo: view.layoutMarginsGuide.bottomAnchor,
+      constant: -controlPlaceholderHeightConstraint.constant
+    ).isActive = true
 
     forkInstallSleepTimerChip()
     forkInstallAnimatedBackground()
