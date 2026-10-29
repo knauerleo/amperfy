@@ -988,6 +988,7 @@ extension MiniPlayerView {
     subtitleLabel.textAlignment = .natural
     timeSlider.minimumTrackTintColor = DS.Color.onArtwork
     timeSlider.maximumTrackTintColor = DS.Color.onArtworkTrack
+    forkApplyPhoneIdentity()
 
     let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(forkSwiped(_:)))
     swipeLeft.direction = .left
@@ -997,6 +998,18 @@ extension MiniPlayerView {
     swipeUp.direction = .up
     [swipeLeft, swipeRight, swipeUp].forEach { addGestureRecognizer($0) }
     forkConfigureAccessibility()
+  }
+
+  /// UI-18 (iPhone): progress 2 pt in the accent. Texts keep the label colors, which adapt to
+  /// the Liquid Glass of the tab accessory (a floating card would replace the glass, see TASKS).
+  private func forkApplyPhoneIdentity() {
+    guard DS.isPhone else { return }
+    timeSlider.minimumTrackTintColor = DS.Color.accent
+    timeSlider.maximumTrackTintColor = DS.Color.text3.withAlphaComponent(0.3)
+    for constraint in constraints
+      where constraint.firstItem === timeSlider && constraint.firstAttribute == .height {
+      constraint.constant = 2
+    }
   }
 
   /// UI-10: cover and labels are one VoiceOver element with skip actions, then play and next.
