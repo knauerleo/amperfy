@@ -16,9 +16,24 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 
 - [ ] **UI-19 Mini-Player als schwebende Karte** - Rest von UI-18
   - Mockup: Fläche „Erhöht“, Radius 14, Schatten, Fortschritt 2 pt Mint (Fortschritt und Farbe sind erledigt). Der Mini-Player ist das `bottomAccessory` der iOS-26-Tab-Bar, das System zeichnet dort Liquid Glass und Form. Eine eigene Karte hieße, die Accessory-Logik (`TabBarVC`, Inline-Modus UI-14) umzubauen
+  - Geprüft (2026-10-29): `UITabAccessory` hat nur `contentView`, keine API für Hintergrund, Form oder Schatten, das System zeichnet immer die Glas-Kapsel. Die Karte geht nur als eigene View über der Tab-Bar statt `bottomAccessory` (Umbau `TabBarVC`, Entscheidung offen)
   - Ebenso offen: Tab-Bar „in Grund mit leichter Transparenz“ – ein eigener Hintergrund würde das Glas ersetzen, darum nur die Farben
 - [ ] **UI-15c Restliche Upstream-Texte auf Deutsch** - Rest von UI-15b
   - Offen: Alerts in Upstream-VCs (Texte direkt in `UIAlertController`), XIB-Texte (bräuchten `Base.lproj`, XIBs bleiben unangetastet), Texte mit Einsetzungen („Rating: \(rating)“), Titel von Untermenüs („More Queue Options“ ist ein `UIMenu`, dessen Titel nur lesbar ist), `EventLogger`-Themen, Upstream-Texte außerhalb der Engstellen von UI-15b. Neue Texte in `Amperfy/Localizable.xcstrings` eintragen, sie greifen dann über `ForkMenuText.upstream`
+
+- [ ] **UI-23 Albumseite wie im Mockup** - Abgleich mit „Drift Identität + Listen“, Board „Albumseite“ (2026-10-29, aus dem Code, nicht am Gerät)
+  - Cover 220 pt (heute bis 260 pt, Breite − 128), Radius 14 statt 8 (`DS.Radius.card` statt `medium`), Schatten kräftiger (Mockup 0,55 Deckkraft, 24 pt Versatz, 48 pt Unschärfe; heute 0,35 / 8 / 18)
+  - Play-Knopf 56 statt 52 pt; Trackzeilen auf der Albumseite 56 statt 60 pt
+  - Infozeile als „Album · 2000 · 12 Songs · 37 Min“ (heute `info(.long)` des Upstreams, Inhalt prüfen)
+  - Zurück und „…“ oben als runde, halbdunkle 44-pt-Knöpfe über dem Farbverlauf (iOS 26 zeichnet Glas-Knöpfe, ggf. so lassen)
+- [ ] **UI-24 Alben-Liste wie im Mockup** - Board „Alben-Liste“
+  - Großer Titel „Alben“ mit der Anzahl rechts auf derselben Grundlinie, oben rechts Sortieren/Filtern
+  - Filter-Chips (34 pt, rund): „Zuletzt hinzugefügt“ (aktiv in Mint), „Favoriten“, „Geladen“
+  - Abspielen/Zufall-Zeile auch bei Alben (heute nur Songs, Künstler, Genres)
+  - Offen: Mockup zeigt eine Liste (72-pt-Zeilen, 56-pt-Cover), UI-2 hat „All Albums“ als Raster gebaut
+- [ ] **UI-25 Abspielen/Zufall-Zeile wie im Mockup** - Boards „Alben-Liste“ und „Drift Identität“
+  - Zwei gleich breite Pillen über die volle Breite, 44 pt hoch (heute 40 pt, nebeneinander links, Anzahl rechts in der Zeile); die Anzahl wandert neben den großen Titel (siehe UI-24)
+- [ ] **UI-26 Player nach UI-21 abnehmen** - Screenshot nötig, dann Feinschliff
 
 ### Features
 
