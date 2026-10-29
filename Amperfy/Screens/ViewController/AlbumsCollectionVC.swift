@@ -248,6 +248,7 @@ class AlbumsCollectionVC: SingleSnapshotFetchedResultsCollectionViewController<A
       UINib(nibName: AlbumCollectionCell.typeName, bundle: .main),
       forCellWithReuseIdentifier: AlbumCollectionCell.typeName
     )
+    forkRegisterAlbumCell() // Fork: LargeAlbumCell like the library grid
 
     switch common.sortType {
     case .artist, .duration, .name, .rating, .year:
@@ -299,6 +300,7 @@ class AlbumsCollectionVC: SingleSnapshotFetchedResultsCollectionViewController<A
     album: Album
   )
     -> UICollectionViewCell {
+    if let cell = forkCreateCell(collectionView, at: indexPath, album: album) { return cell } // Fork
     let cell: AlbumCollectionCell = collectionView.dequeueReusableCell(
       withReuseIdentifier: AlbumCollectionCell.typeName,
       for: indexPath
@@ -395,7 +397,7 @@ extension AlbumsCollectionVC: UICollectionViewDelegateFlowLayout {
         (collectionView.bounds.size.width - marginsAndInsets) /
           CGFloat(gridSize)
       ).rounded(.down)
-    let itemSize = CGSize(width: itemWidth, height: itemWidth + 45)
+    let itemSize = CGSize(width: itemWidth, height: itemWidth + Self.forkCaptionHeight) // Fork: was + 45
     cachedItemSize = itemSize
     return itemSize
   }

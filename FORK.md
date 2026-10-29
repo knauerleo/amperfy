@@ -395,6 +395,7 @@ Die App spricht nur noch Subsonic mit dem Login-Host. Die Songpicker-API (`/api/
 |---|---|---|
 | UI-1 | `PodcastDetailVC.swift` | Header `ImmersiveDetailHeaderView` statt `GenericDetailTableHeader` (2 Zeilen). Play spielt die neueste Episode, Shuffle bleibt aus |
 | UI-1 | `TableCells+ForkStyle.swift`, `PodcastEpisodeTableCell.swift` | `PodcastEpisodeTableCell.applyForkStyle()`: `DS.Font.songTitle`/`cellSubtitle`/`caption`, Cover-Radius 4, transparenter Hintergrund. Hook am Ende von `refresh()` statt `backgroundColor = .systemBackground` |
+| UI-2 | `AlbumsCollectionVC+Fork.swift` (neu), `AlbumsCollectionVC.swift` | All Albums nutzt `LargeAlbumCell` statt `AlbumCollectionCell`. 3 Hooks: Zelle registrieren, Zelle erzeugen, Zellenhöhe = Breite + `forkCaptionHeight`. Flow-Layout bleibt (Rastergröße aus den Settings, Abschnittsköpfe, Index). Mac Catalyst unverändert |
 
 ### Hilfsskript
 

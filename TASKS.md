@@ -7,9 +7,6 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 
 - [ ] **F-2 Server-URL automatisch umschalten** - mit F-1 meist überflüssig (nur noch die Domain), nur falls LAN-Adresse weiter genutzt wird
   - Bei Netzwechsel (`NetworkMonitor`) die erste erreichbare URL aus `activeBackendServerUrl` + `alternativeServerURLs` per `ping` wählen
-- [ ] **UI-2 „All Albums“-Raster mit `LargeAlbumCell`**
-  - `AlbumsCollectionVC.swift` nutzt noch `AlbumCollectionCell` (XIB). Hook auf die neue Zelle und `ShelfLayout`
-  - Fertig, wenn: Albenraster aus Library › Albums › All Albums zeigt dieselben Zellen wie das Filter-Raster
 - [ ] **UI-3 Playlists-Liste modernisieren**
   - `PlaylistTableCell` per `+ForkStyle`-Extension: Collage-Cover 56 pt, Radius 4, `DS.Font.songTitle`/`cellSubtitle`, kein Chevron
 - [ ] **UI-4 Player-Schriften auf `DS.Font`**
@@ -92,3 +89,4 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [x] ~~**F-1a Fake-Songs des Proxys aus der Bibliothek halten**~~ (2026-10-29) - FORK.md Abschnitt 9
 - [x] ~~**F-1b Download-Liste über `/rest/getYtJobs.view`**~~ (2026-10-29) - FORK.md Abschnitt 9
 - [x] ~~**UI-1 Podcast-Detailseite mit `ImmersiveDetailHeaderView`**~~ (2026-10-29) - FORK.md Abschnitt 10
+- [x] ~~**UI-2 „All Albums“-Raster mit `LargeAlbumCell`**~~ (2026-10-29) - FORK.md Abschnitt 10
