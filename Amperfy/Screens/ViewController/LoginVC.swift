@@ -590,6 +590,7 @@ class LoginVC: UIViewController {
     let isModal = presentingViewController != nil || navigationController?
       .presentingViewController != nil
     closeButton.isHidden = !isModal
+    applyForkStyle(amperfyLabel, iconView, [serverUrlTF, usernameTF, passwordTF], apiLabel) // Fork: UI-7
   }
 
   override func updateProperties() {

@@ -41,6 +41,7 @@ class UpdateVC: UIViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
+    applyForkStyle() // Fork: Drift look (UI-7)
     progressBar.setProgress(0.0, animated: true)
     progressInfo.text = ""
     progressLabel.text = String(format: "%.1f", 0.0) + "%"

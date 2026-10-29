@@ -143,6 +143,7 @@
 		508385E821C5965B00C4BB32 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508385E721C5965B00C4BB32 /* AppDelegate.swift */; };
 		C5F16F9D533EB1D67FE936E8 /* ForkLaunchScreenCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCCBF5C62DA75F6B9059A33 /* ForkLaunchScreenCache.swift */; };
 		508385EA21C5965B00C4BB32 /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508385E921C5965B00C4BB32 /* LoginVC.swift */; };
+		8E09ED6024C4B5CB3DA78AD6 /* OnboardingScreens+ForkStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFAD9CCA29E972D4B3F65FE0 /* OnboardingScreens+ForkStyle.swift */; };
 		508385ED21C5965B00C4BB32 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 508385EB21C5965B00C4BB32 /* Main.storyboard */; };
 		5084F70F2ED9E2F400D8D3DA /* AccountMO+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5084F70D2ED9E2F400D8D3DA /* AccountMO+CoreDataClass.swift */; };
 		5084F7102ED9E2F400D8D3DA /* AccountMO+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5084F70E2ED9E2F400D8D3DA /* AccountMO+CoreDataProperties.swift */; };
@@ -894,6 +895,7 @@
 		508385E721C5965B00C4BB32 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DDCCBF5C62DA75F6B9059A33 /* ForkLaunchScreenCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ForkLaunchScreenCache.swift"; sourceTree = "<group>"; };
 		508385E921C5965B00C4BB32 /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
+		CFAD9CCA29E972D4B3F65FE0 /* OnboardingScreens+ForkStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OnboardingScreens+ForkStyle.swift"; sourceTree = "<group>"; };
 		508385EC21C5965B00C4BB32 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		508385EE21C5965E00C4BB32 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		508385F321C5965E00C4BB32 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -2008,6 +2010,7 @@
 				4C80FF632A335FB813CDD28E /* SearchVC+Fork.swift */,
 				5077F935221E6D0E0099CA91 /* DownloadsVC.swift */,
 				508385E921C5965B00C4BB32 /* LoginVC.swift */,
+				CFAD9CCA29E972D4B3F65FE0 /* OnboardingScreens+ForkStyle.swift */,
 				50BA930321D10F0000E5901D /* SyncVC.swift */,
 				5023D9B12BDAA48200310144 /* UpdateVC.swift */,
 				5003D8FA267B3390006946BF /* LibrarySyncPopupVC.swift */,
@@ -2776,6 +2779,7 @@
 				50C171522D10777400C0C53A /* PlaylistAddPlaylistsVC.swift in Sources */,
 				500B7D4921EDD6250083ED6F /* ViewCreator.swift in Sources */,
 				508385EA21C5965B00C4BB32 /* LoginVC.swift in Sources */,
+				8E09ED6024C4B5CB3DA78AD6 /* OnboardingScreens+ForkStyle.swift in Sources */,
 				507BA5CB2F01CFA800B4EA8B /* OnlineOfflineModeAppEnum.swift in Sources */,
 				50B137022EFC85D700738475 /* AccountAppEntity.swift in Sources */,
 				50C9D7152850759B007F18D0 /* AnimatedGradientLayer.swift in Sources */,

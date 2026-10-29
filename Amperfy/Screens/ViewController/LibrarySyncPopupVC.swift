@@ -79,6 +79,7 @@ class LibrarySyncPopupVC: UIViewController {
 
     iconImage.image = icon
     iconImage.tintColor = .white
+    applyForkStyle() // Fork: Drift look (UI-7)
   }
 
   override func viewIsAppearing(_ animated: Bool) {

@@ -16,8 +16,6 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 
 ### Oberfläche
 
-- [ ] **UI-7 Login, Sync, Update im Drift-Stil**
-  - `LoginVC` (3× `systemFont(ofSize:)`), `SyncVC`, `UpdateVC`, `LibrarySyncPopupVC`: Fläche `DS.Color.background`, Wellen-Glyph, Fortschritt in Label-Farbe
 - [ ] **UI-10 Barrierefreiheit der Fork-Views**
   - Mini-Player: `accessibilityCustomActions` für Skip vor/zurück und Player öffnen
   - Labels für `DownloadJobCell`, `SearchStatusCell`, `NowPlayingBarsView`, Home/Search-Fork-Zellen. Skeletons für VoiceOver ausblenden
@@ -76,3 +74,4 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [x] ~~**UI-9 Restliche XIB-Schriften auf `DS.Font`**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**UI-17 Leerzustände mit Aktion in den übrigen Listen**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**UI-5 „Zu Playlist hinzufügen“ als schlankes Sheet**~~ (2026-10-29) - FORK.md Abschnitt 10
+- [x] ~~**UI-7 Login, Sync, Update im Drift-Stil**~~ (2026-10-29) - FORK.md Abschnitt 10

@@ -81,6 +81,9 @@ enum DS {
     /// Context menu preview (EntityPreviewVC).
     static var previewTitle: UIFont { scaled(18, .semibold, .headline, maximum: 21) }
     static var previewSubtitle: UIFont { scaled(15, .regular, .subheadline, maximum: 17) }
+    /// Login, sync, update and the welcome popups (UI-7). Their label frames are fixed, so they barely grow.
+    static var loginBrand: UIFont { scaled(44, .bold, .largeTitle, maximum: 50) }
+    static var onboardingTitle: UIFont { scaled(22, .bold, .title2, maximum: 26) }
     /// Compact Home tiles (Recently Played grid) and shelf cells.
     static var tileTitle: UIFont { scaled(13, .semibold, .footnote, maximum: 16) }
     static var shelfTitle: UIFont { scaled(14, .semibold, .subheadline, maximum: 18) }
