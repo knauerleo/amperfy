@@ -522,10 +522,13 @@ extension SearchVC {
     ) { [weak self] _ in
       self?.forkAddToLibrary(hit)
     }
-    return [
+    let menus: [UIMenuElement] = [
       UIMenu(options: .displayInline, children: [play, playNext, addToQueue]),
       UIMenu(options: .displayInline, children: [addToLibrary]),
     ]
+    // F-8: album and artist of the song on YouTube Music
+    let albumMenu = YouTubeAlbumActions.menu(videoId: hit.videoId) { [weak self] in self }
+    return menus + [albumMenu].compactMap { $0 }
   }
 
   // MARK: Actions

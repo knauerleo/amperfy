@@ -157,6 +157,12 @@ final class YouTubeMusicShelfView: UIView {
         }
         children.append(UIMenu(options: .displayInline, children: [addToLibrary]))
       }
+      // F-8: album and artist of the song on YouTube Music
+      if let albumMenu = YouTubeAlbumActions.menu(videoId: videoId, host: { [weak self] in
+        self?.forkHostViewController
+      }) {
+        children.append(albumMenu)
+      }
       return UIMenu(children: children)
     }
   }
