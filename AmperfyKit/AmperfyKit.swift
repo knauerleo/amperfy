@@ -158,11 +158,8 @@ public class AmperKit {
     playerAudioSessionHandler!.configureObserverForAudioSessionInterruption()
     backendAudioPlayer.triggerReinsertPlayableCB = curPlayer.play
     curPlayer.autoplayCB = { [weak self] song in
-      guard let self, let accountInfo = song.account?.info else { return [] }
-      return try await getMeta(accountInfo).librarySyncer.requestSimilarSongs(
-        song: song,
-        count: 99
-      )
+      guard let self else { return [] }
+      return try await forkAutoplaySongs(after: song) // Fork: F-5 YouTube when the library runs dry
     }
     backendAudioPlayer.updateEqualizerEnabled(isEnabled: storage.settings.user.isEqualizerEnabled)
     backendAudioPlayer

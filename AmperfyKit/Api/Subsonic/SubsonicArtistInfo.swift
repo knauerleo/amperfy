@@ -29,6 +29,8 @@ public struct SubsonicArtistInfo: Sendable {
   public let biography: String?
   public let largeImageUrl: URL?
   public let similarArtistIds: [String]
+  /// F-5: names of all similar artists, also the ones without library ID (`includeNotPresent`).
+  public let similarArtistNames: [String]
 
   static func parse(data: Data) throws -> SubsonicArtistInfo {
     let response = try subsonicResponse(data: data)
@@ -38,7 +40,8 @@ public struct SubsonicArtistInfo: Sendable {
     return SubsonicArtistInfo(
       biography: plainText(fromHtml: info["biography"] as? String),
       largeImageUrl: imageUrl,
-      similarArtistIds: similar.compactMap { $0["id"] as? String }
+      similarArtistIds: similar.compactMap { $0["id"] as? String },
+      similarArtistNames: similar.compactMap { $0["name"] as? String }.filter { !$0.isEmpty }
     )
   }
 
@@ -80,9 +83,15 @@ public struct SubsonicArtistInfo: Sendable {
 // MARK: - BackendProxy
 
 extension BackendProxy {
-  public func forkArtistInfo(artistId: String) async throws -> SubsonicArtistInfo {
+  public func forkArtistInfo(
+    artistId: String,
+    includeNotPresent: Bool = false
+  ) async throws -> SubsonicArtistInfo {
     guard let serverApi = forkSubsonicServerApi else { throw BackendError.notSupported }
-    let response = try await serverApi.requestArtistInfo2(id: artistId)
+    let response = try await serverApi.requestArtistInfo2(
+      id: artistId,
+      includeNotPresent: includeNotPresent
+    )
     return try SubsonicArtistInfo.parse(data: response.data)
   }
 

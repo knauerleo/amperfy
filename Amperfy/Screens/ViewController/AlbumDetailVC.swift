@@ -133,6 +133,7 @@ class AlbumDetailVC: SingleSnapshotFetchedResultsTableViewController<SongMO> {
       let playContext = self.convertIndexPathToPlayContext(songIndexPath: indexPath)
       completionHandler(SwipeActionContext(containable: song, playContext: playContext))
     }
+    forkLoadYouTubeShelf() // Fork: F-5
   }
 
   override func viewWillAppear(_ animated: Bool) {

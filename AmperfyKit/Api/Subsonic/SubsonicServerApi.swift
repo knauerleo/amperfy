@@ -964,7 +964,11 @@ final class SubsonicServerApi: URLCleanser, Sendable {
   }
 
   /// Fork: biography and similar artists (`getArtistInfo2`, JSON), see SubsonicArtistInfo.swift.
-  public func requestArtistInfo2(id: String) async throws -> APIDataResponse {
+  /// `includeNotPresent` (F-5) also lists similar artists that are not in the library.
+  public func requestArtistInfo2(
+    id: String,
+    includeNotPresent: Bool = false
+  ) async throws -> APIDataResponse {
     try await request { version in
       var urlComp = try self.createAuthApiUrlComponent(
         version: version,
@@ -972,6 +976,9 @@ final class SubsonicServerApi: URLCleanser, Sendable {
         id: id
       )
       urlComp.addQueryItem(name: "count", value: 12)
+      if includeNotPresent {
+        urlComp.addQueryItem(name: "includeNotPresent", value: "true")
+      }
       urlComp.addQueryItem(name: "f", value: "json")
       return try self.createUrl(from: urlComp)
     }

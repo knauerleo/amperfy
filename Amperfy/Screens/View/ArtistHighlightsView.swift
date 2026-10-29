@@ -40,13 +40,16 @@ final class ArtistHighlightsView: UIView {
   private var albums: [Album] = []
   private var biography: String?
   private var similarArtists: [Artist] = []
+  /// F-5: YouTube Music songs of similar artists, not in the library.
+  private var youTubeSongs: [Song] = []
   private var isBioExpanded = false
 
   /// Called when server data arrived later, so the header can update its height.
   var contentDidChange: (() -> ())?
 
   var hasContent: Bool {
-    !popularSongs.isEmpty || !albums.isEmpty || biography != nil || !similarArtists.isEmpty
+    !popularSongs.isEmpty || !albums.isEmpty || biography != nil || !similarArtists.isEmpty ||
+      !youTubeSongs.isEmpty
   }
   var hasAlbums: Bool { !albums.isEmpty }
 
@@ -67,6 +70,7 @@ final class ArtistHighlightsView: UIView {
     reload()
     loadArtistInfo()
     loadTopSongs()
+    loadYouTubeSongs()
   }
 
   required init?(coder: NSCoder) {
@@ -113,6 +117,28 @@ final class ArtistHighlightsView: UIView {
       } catch {
         // servers without getArtistInfo2 simply show no biography
       }
+    }
+  }
+
+  /// F-5: "Similar on YouTube Music", once per page.
+  private func loadYouTubeSongs() {
+    guard let account = artist.account else { return }
+    let meta = appDelegate.getMeta(account.info)
+    let artistName = artist.name
+    let artistId = artist.id
+    Task { @MainActor in
+      let songs = await YouTubeMusicSuggestions.similarSongs(
+        artistName: artistName,
+        artistId: artistId,
+        account: account,
+        storage: self.appDelegate.storage,
+        backendApi: meta.backendApi,
+        librarySyncer: meta.librarySyncer
+      )
+      guard !songs.isEmpty else { return }
+      self.youTubeSongs = songs
+      self.rebuild()
+      self.contentDidChange?()
     }
   }
 
@@ -172,6 +198,12 @@ final class ArtistHighlightsView: UIView {
       section.addArrangedSubview(sectionTitle("Fans Also Like"))
       section.addArrangedSubview(createSimilarArtistsShelf())
       stack.addArrangedSubview(section)
+    }
+    if !youTubeSongs.isEmpty {
+      stack.addArrangedSubview(YouTubeMusicShelfView(
+        songs: youTubeSongs,
+        contextName: "\(artist.name): \(YouTubeMusicShelfView.title)"
+      ))
     }
     if let biography {
       let section = UIStackView()
