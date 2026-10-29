@@ -65,6 +65,7 @@ public final class YouTubeMusicLibrarySync {
         try await Task.sleep(for: .seconds(delay))
         if let song = try await findAndSync(hit: hit, songId: job.songId, pathSuffix: pathSuffix) {
           os_log("Synced YouTube download: %s", log: log, type: .info, song.displayString)
+          await replacePlaceholder(videoId: hit.videoId, with: song)
           NotificationCenter.default.post(name: .youTubeMusicSongSynced, object: song)
           return song
         }
@@ -105,6 +106,23 @@ public final class YouTubeMusicLibrarySync {
     // the regular sync creates song, album and artist with `addedDate` (Home: Recently Added)
     try await librarySyncer.searchSongs(searchText: hit.title)
     return storage.main.library.getSong(for: account, id: match.id)
+  }
+
+  /// F-6: the real song takes the place of the placeholder in queues, playlists and history.
+  /// Server playlists get the song again at its position (the proxy dropped the `ytm-` ID).
+  private func replacePlaceholder(videoId: String, with song: Song) async {
+    let playlists = storage.main.library.replaceYouTubeMusicPlaceholder(
+      videoId: videoId,
+      with: song,
+      account: account
+    )
+    for playlist in playlists {
+      do {
+        try await librarySyncer.syncUpload(playlistToUpdateOrder: playlist)
+      } catch {
+        os_log("Playlist upload failed: %s", log: log, type: .info, error.localizedDescription)
+      }
+    }
   }
 
   /// `/music/YouTube/A/B/01 - C.opus` and `YouTube/A/B/01 - C.opus` both become `A/B/01 - C.opus`.

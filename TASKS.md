@@ -30,9 +30,6 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 
 - [ ] **F-5 „Ähnliche Songs von YouTube“** - Roadmap 4
   - Shelf auf Künstler- und Albumseite (`ShelfLayout.section(.large)`, `display(title:…, image:)`). Song-Radio läuft mit YouTube-Treffern weiter, wenn die Sammlung leer läuft
-- [ ] **F-6 YouTube-Platzhalter nach dem Sync ersetzen**
-  - `ytm-…`-Songs in Queue, Verlauf und Playlists gegen den echten Navidrome-Song tauschen, sobald `YouTubeMusicLibrarySync` ihn gefunden hat
-  - Playlists: Der Proxy entfernt Fake-IDs aus `createPlaylist`/`updatePlaylist` und startet nur den Download. Die App muss den Song nach der Zuordnung selbst erneut hinzufügen (an der gemerkten Position)
 - [ ] **F-7 Mitteilung bei fertigem Download**
   - Lokale Notification bei `fertig`/`fehler`, Tap öffnet das Album. Optional Live Activity, solange Jobs laufen
 - [ ] **F-8 Ganzes Album / Künstler von YouTube laden**
@@ -75,3 +72,4 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [x] ~~**UI-17 Leerzustände mit Aktion in den übrigen Listen**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**UI-5 „Zu Playlist hinzufügen“ als schlankes Sheet**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**UI-7 Login, Sync, Update im Drift-Stil**~~ (2026-10-29) - FORK.md Abschnitt 10
+- [x] ~~**F-6 YouTube-Platzhalter nach dem Sync ersetzen**~~ (2026-10-29) - FORK.md Abschnitt 10
