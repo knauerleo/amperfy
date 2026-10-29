@@ -389,6 +389,13 @@ Die App spricht nur noch Subsonic mit dem Login-Host. Die Songpicker-API (`/api/
 - Die Download-Liste zeigt das Video-Thumbnail von i.ytimg.com (4:3), die Songs selbst das Cover über `getCoverArt`.
 - Nach einem Account-Wechsel konfiguriert sich der Monitor erst neu, wenn Suche oder Library geöffnet werden.
 
+### 10. Tasks aus TASKS.md
+
+| Task | Datei | Änderung |
+|---|---|---|
+| UI-1 | `PodcastDetailVC.swift` | Header `ImmersiveDetailHeaderView` statt `GenericDetailTableHeader` (2 Zeilen). Play spielt die neueste Episode, Shuffle bleibt aus |
+| UI-1 | `TableCells+ForkStyle.swift`, `PodcastEpisodeTableCell.swift` | `PodcastEpisodeTableCell.applyForkStyle()`: `DS.Font.songTitle`/`cellSubtitle`/`caption`, Cover-Radius 4, transparenter Hintergrund. Hook am Ende von `refresh()` statt `backgroundColor = .systemBackground` |
+
 ### Hilfsskript
 
 `Helper/add-swift-file.py <Neu.swift> <Nachbar.swift>` trägt eine neue Datei ins Projekt ein, in dieselbe Gruppe und

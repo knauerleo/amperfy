@@ -112,7 +112,7 @@ class PodcastEpisodeTableCell: BasicTableCell {
       cacheIconImage.isHidden = true
       playProgressLabel.textColor = .secondaryLabelColor
     }
-    backgroundColor = .systemBackground
+    applyForkStyle() // Fork: streaming-style episode rows
   }
 
   override func prepareForReuse() {

@@ -71,3 +71,22 @@ extension GenericTableCell {
     accessoryType = .none
   }
 }
+
+extension PodcastEpisodeTableCell {
+  /// Same type scale and cover radius as song rows (UI-1).
+  func applyForkStyle() {
+    podcastEpisodeLabel.font = DS.Font.songTitle
+    infoLabel.font = DS.Font.caption
+    descriptionLabel.font = DS.Font.cellSubtitle
+    playProgressLabel.font = DS.Font.caption
+    [podcastEpisodeLabel, infoLabel, descriptionLabel, playProgressLabel]
+      .forEach { $0?.adjustsFontForContentSizeCategory = true }
+    infoLabel.textColor = .secondaryLabel
+    descriptionLabel.textColor = .secondaryLabel
+    entityImage.layer.cornerRadius = DS.Radius.small
+    entityImage.clipsToBounds = true
+    playEpisodeButton.tintColor = .label
+    optionsButton.tintColor = .secondaryLabel
+    backgroundColor = ForkSurface.isEnabled ? .clear : .systemBackground
+  }
+}

@@ -29,7 +29,7 @@ class PodcastDetailVC: SingleFetchedResultsTableViewController<PodcastEpisodeMO>
   var episodeToScrollTo: PodcastEpisode?
   private var fetchedResultsController: PodcastEpisodesFetchedResultsController!
   private var optionsButton: UIBarButtonItem!
-  private var detailOperationsView: GenericDetailTableHeader?
+  private var detailOperationsView: ImmersiveDetailHeaderView?
 
   init(account: Account, podcast: Podcast) {
     self.podcast = podcast
@@ -94,7 +94,7 @@ class PodcastDetailVC: SingleFetchedResultsTableViewController<PodcastEpisodeMO>
       playShuffleInfoConfig: playShuffleInfoConfig,
       descriptionText: podcast.depiction
     )
-    detailOperationsView = GenericDetailTableHeader
+    detailOperationsView = ImmersiveDetailHeaderView
       .createTableHeader(configuration: detailHeaderConfig)
     refreshControl?.addTarget(
       self,
