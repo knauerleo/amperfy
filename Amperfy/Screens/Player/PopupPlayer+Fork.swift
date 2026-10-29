@@ -37,6 +37,15 @@ enum ForkPlayerTransition {
     guard isActive else { return false }
     // the player always opens on the cover, the queue is one swipe away
     player.appDelegate.storage.settings.user.playerDisplayStyle = .large
+    player.modalPresentationStyle = .fullScreen
+
+    // UI-10: with Reduce Motion the player fades in instead of zooming out of the cover
+    if UIAccessibility.isReduceMotionEnabled {
+      player.preferredTransition = nil
+      player.modalTransitionStyle = .crossDissolve
+      return true
+    }
+    player.modalTransitionStyle = .coverVertical
 
     let options = UIViewController.Transition.ZoomOptions()
     options.alignmentRectProvider = { context in
@@ -52,7 +61,6 @@ enum ForkPlayerTransition {
     player.preferredTransition = .zoom(options: options) { [weak sourceView] _ in
       sourceView?.window == nil ? nil : sourceView
     }
-    player.modalPresentationStyle = .fullScreen
     return true
   }
 }
@@ -155,6 +163,13 @@ extension PopupPlayerVC {
     DS.haptic(.light)
     switchDisplayStyleOptionPersistent()
     controlView?.refreshView()
+  }
+
+  /// UI-10: the VoiceOver escape gesture (two-finger Z) closes the full-screen player.
+  override func accessibilityPerformEscape() -> Bool {
+    guard ForkPlayerTransition.isActive else { return super.accessibilityPerformEscape() }
+    closePopupPlayer()
+    return true
   }
 
   // MARK: Close grabber

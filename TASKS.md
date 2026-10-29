@@ -16,11 +16,6 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 
 ### Oberfläche
 
-- [ ] **UI-10 Barrierefreiheit der Fork-Views**
-  - Mini-Player: `accessibilityCustomActions` für Skip vor/zurück und Player öffnen
-  - Labels für `DownloadJobCell`, `SearchStatusCell`, `NowPlayingBarsView`, Home/Search-Fork-Zellen. Skeletons für VoiceOver ausblenden
-  - Zoom-Übergang zum Player bei „Bewegung reduzieren“ prüfen
-  - Fertig, wenn: Home → Album → Abspielen → Skip ist komplett mit VoiceOver bedienbar
 - [ ] **UI-15 Deutsche Texte per String Catalog**
   - Zuerst nur Fork-Texte und `ForkMenuText.relabel`, Upstream-Literale bleiben
 - [ ] **UI-16 Entscheidung iPad/Mac**
@@ -66,3 +61,4 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [x] ~~**F-10 Weiterhören auf anderem Gerät (`savePlayQueue`/`getPlayQueue`)**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**F-15 Spotlight-Indexierung**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**F-9 Teilen-Erweiterung „Teilen → Drift“**~~ (2026-10-29) - FORK.md Abschnitt 10
+- [x] ~~**UI-10 Barrierefreiheit der Fork-Views**~~ (2026-10-29) - FORK.md Abschnitt 10

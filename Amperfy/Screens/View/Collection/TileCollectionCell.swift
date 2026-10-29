@@ -97,13 +97,18 @@ final class TileCollectionCell: UICollectionViewCell {
     artwork.showSkeleton()
     titleLabel.isHidden = true
     titleBar.isHidden = false
-    accessibilityLabel = "Loading"
+    // skeletons are hidden from VoiceOver until the real item arrives (UI-10)
+    accessibilityLabel = nil
+    isAccessibilityElement = false
+    accessibilityElementsHidden = true
   }
 
   private func setTitle(_ title: String) {
     titleLabel.text = title
     titleLabel.isHidden = false
     titleBar.isHidden = true
+    isAccessibilityElement = true
+    accessibilityElementsHidden = false
     accessibilityLabel = title
   }
 }

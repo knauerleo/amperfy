@@ -88,12 +88,17 @@ final class ArtistCircleCell: UICollectionViewCell {
     // keeps the label height so the skeleton is as tall as a real cell
     nameLabel.text = " "
     nameBar.isHidden = false
-    accessibilityLabel = "Loading"
+    // skeletons are hidden from VoiceOver until the real item arrives (UI-10)
+    accessibilityLabel = nil
+    isAccessibilityElement = false
+    accessibilityElementsHidden = true
   }
 
   private func setName(_ name: String) {
     nameLabel.text = name
     nameBar.isHidden = true
+    isAccessibilityElement = true
+    accessibilityElementsHidden = false
     accessibilityLabel = name
   }
 }

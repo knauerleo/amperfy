@@ -57,6 +57,10 @@ final class SearchStatusCell: UITableViewCell {
 
   func display(text: String, isLoading: Bool) {
     label.text = text
+    // read as one line, the spinner itself says nothing (UI-10)
+    isAccessibilityElement = true
+    accessibilityLabel = text
+    accessibilityTraits = isLoading ? [.staticText, .updatesFrequently] : .staticText
     spinner.isHidden = !isLoading
     if isLoading {
       spinner.startAnimating()

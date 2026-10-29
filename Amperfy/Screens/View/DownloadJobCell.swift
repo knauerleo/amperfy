@@ -81,6 +81,7 @@ final class DownloadJobCell: UICollectionViewListCell {
       reservedLayoutWidth: .custom(SourceBadgeView.size)
     )))
     self.accessories = accessories
+    configureAccessibility(entry: entry)
 
     if cached == nil, let url = entry.thumbURL {
       thumbTask?.cancel()
@@ -95,6 +96,23 @@ final class DownloadJobCell: UICollectionViewListCell {
     }
   }
 
+  /// One element per job: title, artist and state; Retry as an action (UI-10).
+  private func configureAccessibility(entry: YouTubeMusicJobEntry) {
+    isAccessibilityElement = true
+    accessibilityLabel = [entry.title, entry.artist].compactMap { $0 }.filter { !$0.isEmpty }
+      .joined(separator: ", ")
+    accessibilityValue = Self.detailText(for: entry, includeArtist: false)
+    accessibilityTraits = entry.status.isLoading ? [.updatesFrequently] : []
+    if entry.isRetryable {
+      accessibilityCustomActions = [UIAccessibilityCustomAction(name: "Retry") { [weak self] _ in
+        self?.onRetry?()
+        return true
+      }]
+    } else {
+      accessibilityCustomActions = nil
+    }
+  }
+
   private static var placeholder: UIImage? {
     UIImage(systemName: "music.note")?.withTintColor(.tertiaryLabel, renderingMode: .alwaysOriginal)
   }
@@ -105,7 +123,11 @@ final class DownloadJobCell: UICollectionViewListCell {
     return formatter
   }()
 
-  private static func detailText(for entry: YouTubeMusicJobEntry) -> String {
+  private static func detailText(
+    for entry: YouTubeMusicJobEntry,
+    includeArtist: Bool = true
+  )
+    -> String {
     let state: String
     switch entry.status {
     case .waiting: state = "Waiting…"
@@ -117,7 +139,7 @@ final class DownloadJobCell: UICollectionViewListCell {
     case .online: state = "Only on YouTube Music"
     }
     var parts = [String]()
-    if let artist = entry.artist, !artist.isEmpty { parts.append(artist) }
+    if includeArtist, let artist = entry.artist, !artist.isEmpty { parts.append(artist) }
     parts.append(state)
     if !entry.status.isLoading, let started = entry.started {
       parts.append(relativeFormatter.localizedString(for: started, relativeTo: Date()))

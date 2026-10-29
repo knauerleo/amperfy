@@ -31,6 +31,7 @@ final class NowPlayingCellDecorator: UIView {
   private let artworkEqualizer = NowPlayingBarsView()
   private let numberEqualizer = NowPlayingBarsView()
 
+  private weak var cell: PlayableTableCell?
   private weak var titleLabel: UILabel?
   private weak var trackNumberLabel: UILabel?
   private var playable: AbstractPlayable?
@@ -39,6 +40,7 @@ final class NowPlayingCellDecorator: UIView {
 
   init(cell: PlayableTableCell) {
     super.init(frame: .zero)
+    self.cell = cell
     titleLabel = cell.titleLabel
     trackNumberLabel = cell.trackNumberLabel
     isUserInteractionEnabled = false
@@ -111,6 +113,8 @@ final class NowPlayingCellDecorator: UIView {
     trackNumberLabel?.alpha = (isCurrent && isTrackNumberStyle) ? 0 : 1
     artworkEqualizer.isPlaying = isPlaying && !isTrackNumberStyle
     numberEqualizer.isPlaying = isPlaying && isTrackNumberStyle
+    // the equalizer is only visual, VoiceOver hears the state on the row (UI-10)
+    cell?.accessibilityValue = isCurrent ? (isPlaying ? "Now Playing" : "Paused") : nil
   }
 }
 

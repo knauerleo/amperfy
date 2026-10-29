@@ -32,6 +32,9 @@ final class SkeletonView: UIView {
     layer.cornerRadius = cornerRadius
     clipsToBounds = true
     isUserInteractionEnabled = false
+    // placeholders say nothing to VoiceOver (UI-10)
+    isAccessibilityElement = false
+    accessibilityElementsHidden = true
     shimmer.startPoint = CGPoint(x: 0, y: 0.5)
     shimmer.endPoint = CGPoint(x: 1, y: 0.5)
     shimmer.locations = [0, 0, 0]

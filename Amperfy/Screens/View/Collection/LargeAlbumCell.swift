@@ -114,7 +114,10 @@ final class LargeAlbumCell: UICollectionViewCell {
     subtitleLabel.isHidden = false
     titleBar.isHidden = false
     subtitleBar.isHidden = false
-    accessibilityLabel = "Loading"
+    // skeletons are hidden from VoiceOver until the real item arrives (UI-10)
+    accessibilityLabel = nil
+    isAccessibilityElement = false
+    accessibilityElementsHidden = true
   }
 
   private func setText(title: String, subtitle: String?) {
@@ -124,6 +127,8 @@ final class LargeAlbumCell: UICollectionViewCell {
     subtitleLabel.text = shownSubtitle ?? " "
     titleBar.isHidden = true
     subtitleBar.isHidden = true
+    isAccessibilityElement = true
+    accessibilityElementsHidden = false
     accessibilityLabel = [title, shownSubtitle].compactMap { $0 }.joined(separator: ", ")
   }
 }

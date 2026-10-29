@@ -996,6 +996,33 @@ extension MiniPlayerView {
     let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(forkSwiped(_:)))
     swipeUp.direction = .up
     [swipeLeft, swipeRight, swipeUp].forEach { addGestureRecognizer($0) }
+    forkConfigureAccessibility()
+  }
+
+  /// UI-10: cover and labels are one VoiceOver element with skip actions, then play and next.
+  private func forkConfigureAccessibility() {
+    let summary = MiniPlayerAccessibilityElement(
+      container: self,
+      titleLabel: titleLabel,
+      subtitleLabel: subtitleLabel,
+      frameProvider: { [weak self] in
+        guard let self else { return .zero }
+        return CGRect(x: 0, y: 0, width: max(0, playButton.frame.minX - 4), height: bounds.height)
+      },
+      actions: .init(
+        open: { [weak self] in self?.openPlayerView() },
+        next: { [weak self] in
+          guard let self, player.currentlyPlaying != nil else { return }
+          playerHandler?.nextButtonPushed()
+        },
+        previous: { [weak self] in
+          guard let self, player.currentlyPlaying != nil else { return }
+          playerHandler?.previousButtonPushed()
+        }
+      )
+    )
+    nextButton.accessibilityLabel = "Next"
+    accessibilityElements = [summary, playButton, nextButton]
   }
 
   @objc
