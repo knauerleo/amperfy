@@ -37,6 +37,12 @@ public enum HomeSection: Int, Sendable, CaseIterable, Codable {
   case recentlyPlayed
   // Fork: albums of the newest songs by addedDate, filled up with the server's newest albums
   case recentlyAdded
+  // Fork (F-11): getAlbumList2 type=frequent, local play counts offline
+  case mostPlayedAlbums
+  // Fork (F-11): getAlbumList2 type=highest, local ratings offline
+  case topRatedAlbums
+  // Fork (F-11): one tile per decade, opens the albums of getAlbumList2 type=byYear
+  case decades
 
   // Fork: what the user played comes first, random sections go to the end
   static let defaultValue: [HomeSection] = [
@@ -45,6 +51,9 @@ public enum HomeSection: Int, Sendable, CaseIterable, Codable {
     .recentlyPlayedAlbums,
     .lastTimePlayedPlaylists,
     .newestAlbums,
+    .mostPlayedAlbums,
+    .topRatedAlbums,
+    .decades,
     .randomArtists,
     .randomAlbums,
   ]
@@ -63,6 +72,9 @@ public enum HomeSection: Int, Sendable, CaseIterable, Codable {
     case .randomSongs: return "Random Songs"
     case .recentlyPlayed: return "Recently Played"
     case .recentlyAdded: return "Recently Added"
+    case .mostPlayedAlbums: return "Most Played"
+    case .topRatedAlbums: return "Top Rated"
+    case .decades: return "Decades"
     }
   }
 
@@ -84,6 +96,9 @@ public enum HomeSection: Int, Sendable, CaseIterable, Codable {
     case .randomSongs: return true
     case .recentlyPlayed: return false
     case .recentlyAdded: return false
+    case .mostPlayedAlbums: return false
+    case .topRatedAlbums: return false
+    case .decades: return false
     }
   }
 }

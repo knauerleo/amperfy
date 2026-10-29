@@ -100,6 +100,12 @@ final class LargeAlbumCell: UICollectionViewCell {
     setText(title: title, subtitle: subtitle)
   }
 
+  /// Fork (F-11/F-12): generated cover, e.g. a decade or a mix.
+  func display(title: String, subtitle: String?, generatedArtwork: UIView) {
+    artwork.show(generated: generatedArtwork)
+    setText(title: title, subtitle: subtitle)
+  }
+
   func displaySkeleton() {
     artwork.showSkeleton()
     // placeholder text keeps the real cell height

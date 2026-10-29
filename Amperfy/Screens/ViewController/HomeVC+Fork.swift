@@ -31,6 +31,8 @@ enum HomeCellItem: Hashable, @unchecked Sendable {
   /// Fixed first tile of the Recently Played grid.
   case favoriteSongs
   case skeleton(section: HomeSection, index: Int)
+  /// F-11: tile of the Decades section, opens DecadeAlbumsVC.
+  case decade(AlbumDecade)
 
   var containable: PlayableContainable? {
     if case let .entity(homeItem) = self { return homeItem.playableContainable }
@@ -46,6 +48,14 @@ extension HomeSection {
     case .randomArtists: return .circle
     default: return .standard
     }
+  }
+}
+
+extension GradientArtworkView {
+  /// F-11: one hue per decade, the 60s and 2010s are apart on the color wheel.
+  static func decade(_ decade: AlbumDecade) -> GradientArtworkView {
+    let hue = CGFloat((decade.startYear / 10) % 10) * 0.13 + 0.55
+    return GradientArtworkView(colors: colors(hue: hue), text: decade.shortTitle)
   }
 }
 
@@ -87,6 +97,14 @@ extension HomeVC {
     -> UICollectionViewCell {
     let style = dataSource.sectionIdentifier(for: indexPath.section)?.shelfStyle ?? .standard
     switch (item, style) {
+    case let (.decade(decade), _):
+      let cell = dequeue(LargeAlbumCell.self, LargeAlbumCell.reuseID, indexPath)
+      cell.display(
+        title: decade.title,
+        subtitle: decade.albumCount == 1 ? "1 Album" : "\(decade.albumCount) Albums",
+        generatedArtwork: GradientArtworkView.decade(decade)
+      )
+      return cell
     case (.favoriteSongs, _):
       let cell = dequeue(TileCollectionCell.self, TileCollectionCell.reuseID, indexPath)
       cell.display(title: "Favorite Songs", generatedArtwork: GradientArtworkView.favoriteSongs())
@@ -151,6 +169,10 @@ extension HomeVC {
         entities = Array(entities.prefix(Self.recentlyPlayedTileCount))
       }
       var items = entities.map { HomeCellItem.entity($0) }
+      if section == .decades {
+        items = sharedHome.forkDecades.map { HomeCellItem.decade($0) }
+        hasContent = hasContent || !items.isEmpty
+      }
       if items.isEmpty, sharedHome.isLoading(section) {
         isAnyLoading = true
         let count = section == .recentlyPlayed
@@ -230,6 +252,13 @@ extension HomeVC {
     guard let item = dataSource.itemIdentifier(for: indexPath) else { return true }
     switch item {
     case .skeleton:
+      return true
+    case let .decade(decade):
+      navigationController?.pushViewController(
+        DecadeAlbumsVC(account: account, decade: decade),
+        animated: true
+      )
+      navigationController?.navigationBar.prefersLargeTitles = false
       return true
     case .favoriteSongs:
       navigationController?.pushViewController(

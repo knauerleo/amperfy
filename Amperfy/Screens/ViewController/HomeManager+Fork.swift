@@ -110,9 +110,11 @@ extension HomeManager {
       }
       updateRecentlyAdded()
     }
+    createForkShelves()
   }
 
   func forkUpdateFromRemote() {
+    forkShelvesUpdateFromRemote()
     // the newest albums fill up Recently Added, sync them unless the stock section already does
     guard orderedVisibleSections.contains(.recentlyAdded),
           !orderedVisibleSections.contains(.newestAlbums) else { return }

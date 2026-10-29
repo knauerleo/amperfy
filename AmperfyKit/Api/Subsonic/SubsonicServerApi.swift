@@ -995,6 +995,24 @@ final class SubsonicServerApi: URLCleanser, Sendable {
     }
   }
 
+  /// Fork (F-11): album lists for Home (`getAlbumList2`, JSON), see SubsonicAlbumList.swift.
+  public func requestAlbumList2(
+    type: String,
+    size: Int,
+    fromYear: Int? = nil,
+    toYear: Int? = nil
+  ) async throws -> APIDataResponse {
+    try await request { version in
+      var urlComp = try self.createAuthApiUrlComponent(version: version, forAction: "getAlbumList2")
+      urlComp.addQueryItem(name: "type", value: type)
+      urlComp.addQueryItem(name: "size", value: size)
+      if let fromYear { urlComp.addQueryItem(name: "fromYear", value: fromYear) }
+      if let toYear { urlComp.addQueryItem(name: "toYear", value: toYear) }
+      urlComp.addQueryItem(name: "f", value: "json")
+      return try self.createUrl(from: urlComp)
+    }
+  }
+
   private func createUrl(from urlComp: URLComponents) throws -> URL {
     if let url = urlComp.url {
       return url

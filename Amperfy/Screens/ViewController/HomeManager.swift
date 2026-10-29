@@ -70,6 +70,7 @@ class HomeManager: NSObject {
   // Fork: sections with a running remote sync (skeletons) and observers, see HomeManager+Fork
   var loadingSections = Set<HomeSection>()
   var forkObserver: HomeForkObserver?
+  var forkDecades = [AlbumDecade]() // Fork (F-11): tiles of the Decades section, see HomeManager+ForkShelves
 
   let account: Account
   let storage: PersistentStorage

@@ -34,8 +34,6 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
   - Erstes Extension-Target: Link aus YouTube Music/Safari annehmen, Video-ID auslesen, `POST /api/get`
 - [ ] **F-10 Weiterhören auf anderem Gerät (`savePlayQueue`/`getPlayQueue`)**
   - Queue + Position beim Pausieren/Beenden speichern, beim Start anbieten „Weiter mit …“
-- [ ] **F-11 Home-Shelves aus `getAlbumList2`**
-  - „Am meisten gehört“ (`frequent`), „Bestbewertet“ (`highest`), „Jahrzehnte“ (`byYear`). Neue `HomeSection`-Fälle **am Ende**
 - [ ] **F-12 Mixe aus lokalen Daten**
   - „Lieblinge, lange nicht gehört“ (Favoriten mit altem `lastPlayedDate`), „In Dauerschleife“ (viele Plays in 14 Tagen), Tagesmix (Favoriten + `getSimilarSongs2`)
 - [ ] **F-13 Statistik / Jahresrückblick**
@@ -71,3 +69,4 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [x] ~~**F-6 YouTube-Platzhalter nach dem Sync ersetzen**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**F-7 Mitteilung bei fertigem Download**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**F-5 „Ähnliche Songs von YouTube“**~~ (2026-10-29) - FORK.md Abschnitt 10
+- [x] ~~**F-11 Home-Shelves aus `getAlbumList2`**~~ (2026-10-29) - FORK.md Abschnitt 10

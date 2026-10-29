@@ -32,10 +32,27 @@ extension HomeSection {
     let rest = sections.filter { !forkTopSections.contains($0) }
     return top + rest.filter { !$0.isRandomSection } + rest.filter(\.isRandomSection)
   }
+
+  /// Sections added by later fork tasks, keyed by the settings version that introduced them.
+  /// They are shown once, in front of the random sections.
+  static let forkAddedSections: [(version: Int, sections: [HomeSection])] = [
+    (2, [.mostPlayedAlbums, .topRatedAlbums, .decades]), // F-11
+  ]
+
+  static func forkInsertingBeforeRandom(
+    _ added: [HomeSection],
+    into sections: [HomeSection]
+  )
+    -> [HomeSection] {
+    var result = sections.filter { !added.contains($0) }
+    let index = result.firstIndex(where: \.isRandomSection) ?? result.endIndex
+    result.insert(contentsOf: added, at: index)
+    return result
+  }
 }
 
 extension AccountSetting {
-  static let forkHomeSectionsVersion = 1
+  static let forkHomeSectionsVersion = 2
 
   public var needsForkHomeSectionsMigration: Bool {
     (_forkHomeSectionsVersion ?? 0) < Self.forkHomeSectionsVersion
@@ -45,12 +62,19 @@ extension AccountSetting {
   /// the end. Which of the existing sections are visible stays untouched.
   public mutating func migrateForkHomeSections() {
     guard needsForkHomeSectionsMigration else { return }
-    let visible = homeSections
-    let order = homeSectionOrder
-    homeSections = HomeSection.forkArranged(
-      HomeSection.forkTopSections + visible.filter { !HomeSection.forkTopSections.contains($0) }
-    )
-    homeSectionOrder = HomeSection.forkArranged(order)
+    let storedVersion = _forkHomeSectionsVersion ?? 0
+    if storedVersion < 1 {
+      let visible = homeSections
+      let order = homeSectionOrder
+      homeSections = HomeSection.forkArranged(
+        HomeSection.forkTopSections + visible.filter { !HomeSection.forkTopSections.contains($0) }
+      )
+      homeSectionOrder = HomeSection.forkArranged(order)
+    }
+    for step in HomeSection.forkAddedSections where storedVersion < step.version {
+      homeSections = HomeSection.forkInsertingBeforeRandom(step.sections, into: homeSections)
+      homeSectionOrder = HomeSection.forkInsertingBeforeRandom(step.sections, into: homeSectionOrder)
+    }
     _forkHomeSectionsVersion = Self.forkHomeSectionsVersion
   }
 }
