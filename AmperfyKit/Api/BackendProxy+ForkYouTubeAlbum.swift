@@ -360,6 +360,16 @@ extension BackendProxy {
   /// `getCoverArt` URL of the account (same auth parameters), action and `f=json` replaced.
   private func forkYouTubeRequest(action: String, id: String) async throws -> Data {
     guard let serverApi = forkSubsonicServerApi else { throw SongpickerError.noProxy }
+    let url = try await forkYouTubeRequestURL(action: action, id: id)
+    let (data, response) = try await load(url, serverApi)
+    guard let http = response as? HTTPURLResponse, (200 ..< 300).contains(http.statusCode)
+    else { throw SongpickerError.invalidResponse }
+    return data
+  }
+
+  /// The URL of `forkYouTubeRequest`, also kept as a template for the share extension (F-9b).
+  func forkYouTubeRequestURL(action: String, id: String) async throws -> URL {
+    guard let serverApi = forkSubsonicServerApi else { throw SongpickerError.noProxy }
     let artworkUrl = try await serverApi.generateUrl(forArtworkId: id)
     guard var components = URLComponents(
       url: SongpickerConfig.proxyURL(rewriting: artworkUrl),
@@ -372,10 +382,7 @@ extension BackendProxy {
     queryItems.append(URLQueryItem(name: "f", value: "json"))
     components.queryItems = queryItems
     guard let url = components.url else { throw SongpickerError.invalidResponse }
-    let (data, response) = try await load(url, serverApi)
-    guard let http = response as? HTTPURLResponse, (200 ..< 300).contains(http.statusCode)
-    else { throw SongpickerError.invalidResponse }
-    return data
+    return url
   }
 
   private func load(_ url: URL, _ serverApi: SubsonicServerApi) async throws -> (Data, URLResponse) {

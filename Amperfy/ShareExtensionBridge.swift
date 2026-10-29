@@ -65,10 +65,15 @@ final class ShareExtensionBridge: NSObject {
         let template = try await backendApi.forkYouTubeStreamTemplate(
           placeholder: DriftShareConfig.placeholder
         )
+        // F-9b: album links, without it the extension still takes songs
+        let albumTemplate = try? await backendApi.forkYouTubeAlbumDownloadTemplate(
+          placeholder: DriftShareConfig.albumPlaceholder
+        )
         let config = DriftShareConfig(
           streamURLTemplate: template.url.absoluteString,
           headers: template.headers,
-          serverName: template.url.host ?? template.url.absoluteString
+          serverName: template.url.host ?? template.url.absoluteString,
+          albumDownloadURLTemplate: albumTemplate?.absoluteString
         )
         if !config.save() {
           os_log("Share config not saved", log: log, type: .error)

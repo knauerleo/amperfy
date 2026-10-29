@@ -22,8 +22,6 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 
 ### Features
 
-- [ ] **F-9b Album-Links in der Teilen-Erweiterung** - Idee aus F-8, nicht gebaut
-  - `music.youtube.com/browse/MPREb_…` ginge direkt über `downloadYtAlbum.view?id=ytm-album-MPREb_…` (eine Anfrage, Antwort sofort, kein Warten aufs erste Byte). Die Extension kennt nur die Stream-URL-Vorlage (`forkYouTubeStreamTemplate`), bräuchte also eine zweite Vorlage für `downloadYtAlbum` in der Keychain-Gruppe. `list=`-Links (Playlists, `OLAK5uy_…`) bleiben Fehler, dafür gibt es keinen Endpunkt
 - [ ] **F-17 Crossfade**
   - Engine `AudioStreaming` (AVAudioEngine) lädt den nächsten Song schon vor. Größter Eingriff in AmperfyKit, zuletzt
   - Analysiert (2026-10-29): nicht mit einzeiligen Hooks machbar, `BackendAudioPlayer` braucht zwei Kanäle. Umsetzungsplan in FORK.md, „Roadmap“ › „Crossfade (TASKS F-17): Umsetzungsplan“
@@ -71,3 +69,4 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [x] ~~**UI-22 Album auf Home öffnet das Album**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**F-19 Fehlende Album-Songs von YouTube**~~ (2026-10-29) - FORK.md Abschnitt 10, auf dem iPhone noch nicht geprüft
 - [x] ~~**UI-15b Upstream-Texte auf Deutsch**~~ (2026-10-29) - FORK.md Abschnitt 10, Rest in UI-15c
+- [x] ~~**F-9b Album-Links in der Teilen-Erweiterung**~~ (2026-10-29) - FORK.md Abschnitt 10, Teilen auf dem iPhone noch nicht geprüft

@@ -29,6 +29,8 @@ import Security
 struct DriftShareConfig: Codable, Equatable, Sendable {
   /// Replaced by the video ID in `streamURLTemplate`.
   static let placeholder = "DRIFTSHAREVIDEOID"
+  /// Replaced by the album's browse ID (`MPREb_…`) in `albumDownloadURLTemplate` (F-9b).
+  static let albumPlaceholder = "DRIFTSHAREALBUMID"
   /// Keychain group in both entitlements, `$(AppIdentifierPrefix)` is the team ID.
   static let keychainGroup = "45L48D96FZ.de.knauerleo.amperfy-music.shared"
   private static let keychainService = "de.knauerleo.amperfy-music.share"
@@ -39,9 +41,18 @@ struct DriftShareConfig: Codable, Equatable, Sendable {
   var headers: [String: String]
   /// Host shown in the extension, e.g. "musik.leokna.de".
   var serverName: String
+  /// F-9b: `…/rest/downloadYtAlbum.view?id=ytm-album-DRIFTSHAREALBUMID&f=json&u=…`. Optional,
+  /// a config saved by an older build has none until the app runs again.
+  var albumDownloadURLTemplate: String?
 
   func streamURL(videoId: String) -> URL? {
     URL(string: streamURLTemplate.replacingOccurrences(of: Self.placeholder, with: videoId))
+  }
+
+  func albumDownloadURL(browseId: String) -> URL? {
+    albumDownloadURLTemplate.flatMap {
+      URL(string: $0.replacingOccurrences(of: Self.albumPlaceholder, with: browseId))
+    }
   }
 
   // MARK: Keychain
@@ -121,6 +132,33 @@ enum YouTubeShareLink {
       if let url = match.url, let id = videoId(from: url) { return id }
     }
     return nil
+  }
+
+  /// F-9b: browse ID of an album link, `music.youtube.com/browse/MPREb_…` (also with
+  /// `youtube.com`). Playlist links (`list=OLAK5uy_…`) have no endpoint and stay unsupported.
+  static func albumBrowseId(from url: URL) -> String? {
+    guard let host = url.host?.lowercased(),
+          host == "youtube.com" || host.hasSuffix(".youtube.com")
+    else { return nil }
+    let path = url.pathComponents.filter { $0 != "/" }
+    guard path.count >= 2, path[0] == "browse", isValidAlbumBrowseId(path[1]) else { return nil }
+    return path[1]
+  }
+
+  static func albumBrowseId(fromText text: String) -> String? {
+    guard let detector = try? NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
+    else { return nil }
+    let range = NSRange(text.startIndex..., in: text)
+    for match in detector.matches(in: text, options: [], range: range) {
+      if let url = match.url, let id = albumBrowseId(from: url) { return id }
+    }
+    return nil
+  }
+
+  static func isValidAlbumBrowseId(_ id: String) -> Bool {
+    id.hasPrefix("MPREb_") && id.count > 6 && id.count <= 64 && id.allSatisfy {
+      ($0.isASCII && ($0.isLetter || $0.isNumber)) || $0 == "-" || $0 == "_"
+    }
   }
 
   static func isValidVideoId(_ id: String) -> Bool {

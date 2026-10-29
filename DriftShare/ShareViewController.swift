@@ -53,7 +53,7 @@ final class ShareViewController: UIViewController {
     let items = (extensionContext?.inputItems as? [NSExtensionItem]) ?? []
     task = Task { @MainActor in
       await self.model.run(items: items)
-      if case .added = self.model.state {
+      if self.model.state.isAdded {
         try? await Task.sleep(nanoseconds: 1_500_000_000)
         self.close()
       }
@@ -75,7 +75,22 @@ final class ShareModel {
     case reading
     case adding(server: String)
     case added
+    /// F-9b: an album link, `downloadYtAlbum` started one job per missing song.
+    case addingAlbum(server: String)
+    case albumAdded(name: String, queued: Int, skipped: Int)
     case failed(String)
+
+    var isAdded: Bool {
+      switch self {
+      case .added, .albumAdded: return true
+      default: return false
+      }
+    }
+  }
+
+  enum SharedLink {
+    case song(videoId: String)
+    case album(browseId: String)
   }
 
   var state = State.reading
@@ -84,10 +99,21 @@ final class ShareModel {
 
   func run(items: [NSExtensionItem]) async {
     sharedText = items.compactMap { $0.attributedContentText?.string }
-      .first { !$0.isEmpty && YouTubeShareLink.videoId(fromText: $0) == nil }
-    guard let videoId = await Self.videoId(in: items) else {
+      .first {
+        !$0.isEmpty && YouTubeShareLink.videoId(fromText: $0) == nil &&
+          YouTubeShareLink.albumBrowseId(fromText: $0) == nil
+      }
+    guard let link = await Self.link(in: items) else {
       state = .failed(String(localized: "No YouTube or YouTube Music link found.", table: "Fork"))
       return
+    }
+    let videoId: String
+    switch link {
+    case let .album(browseId):
+      await runAlbum(browseId: browseId)
+      return
+    case let .song(id):
+      videoId = id
     }
     guard let config = DriftShareConfig.load(), let url = config.streamURL(videoId: videoId) else {
       state = .failed(String(localized: "Open Drift once with your server account, then try again.", table: "Fork"))
@@ -119,25 +145,76 @@ final class ShareModel {
     }
   }
 
-  private static func videoId(in items: [NSExtensionItem]) async -> String? {
+  /// F-9b: `downloadYtAlbum` answers right away with the number of started jobs.
+  private func runAlbum(browseId: String) async {
+    guard let config = DriftShareConfig.load(), let url = config.albumDownloadURL(browseId: browseId)
+    else {
+      state = .failed(String(localized: "Open Drift once with your server account, then try again.", table: "Fork"))
+      return
+    }
+    state = .addingAlbum(server: config.serverName)
+    do {
+      let result = try await Self.startAlbumDownload(url: url, headers: config.headers)
+      state = .albumAdded(name: result.name, queued: result.queued, skipped: result.skipped)
+    } catch is CancellationError {
+      return
+    } catch {
+      state = .failed(error.localizedDescription)
+    }
+  }
+
+  private static func startAlbumDownload(
+    url: URL,
+    headers: [String: String]
+  ) async throws -> (name: String, queued: Int, skipped: Int) {
+    var request = URLRequest(url: url)
+    request.timeoutInterval = 60
+    headers.forEach { request.setValue($0.value, forHTTPHeaderField: $0.key) }
+    let (data, response) = try await URLSession.shared.data(for: request)
+    guard let http = response as? HTTPURLResponse else { throw ShareError.invalidResponse }
+    guard (200 ..< 300).contains(http.statusCode) else { throw ShareError.status(http.statusCode) }
+    guard let root = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+          let answer = root["subsonic-response"] as? [String: Any]
+    else { throw ShareError.invalidResponse }
+    guard answer["status"] as? String == "ok" else {
+      let error = answer["error"] as? [String: Any]
+      throw ShareError.album(code: error?["ytError"] as? String, message: error?["message"] as? String)
+    }
+    guard let payload = answer["ytAlbumDownload"] as? [String: Any] else {
+      throw ShareError.invalidResponse
+    }
+    func int(_ key: String) -> Int {
+      (payload[key] as? NSNumber)?.intValue ?? Int(payload[key] as? String ?? "") ?? 0
+    }
+    return ((payload["name"] as? String) ?? "", int("queued"), int("skipped"))
+  }
+
+  private static func link(in items: [NSExtensionItem]) async -> SharedLink? {
+    func link(url: URL) -> SharedLink? {
+      if let id = YouTubeShareLink.albumBrowseId(from: url) { return .album(browseId: id) }
+      return YouTubeShareLink.videoId(from: url).map { .song(videoId: $0) }
+    }
+    func link(text: String) -> SharedLink? {
+      if let id = YouTubeShareLink.albumBrowseId(fromText: text) { return .album(browseId: id) }
+      return YouTubeShareLink.videoId(fromText: text).map { .song(videoId: $0) }
+    }
     let providers = items.flatMap { $0.attachments ?? [] }
     for provider in providers where provider.hasItemConformingToTypeIdentifier(UTType.url.identifier) {
       if let url = try? await provider.loadItem(forTypeIdentifier: UTType.url.identifier) as? URL,
-         let id = YouTubeShareLink.videoId(from: url) {
-        return id
+         let found = link(url: url) {
+        return found
       }
     }
     for provider in providers
       where provider.hasItemConformingToTypeIdentifier(UTType.plainText.identifier) {
       if let text = try? await provider.loadItem(forTypeIdentifier: UTType.plainText.identifier)
-        as? String, let id = YouTubeShareLink.videoId(fromText: text) {
-        return id
+        as? String, let found = link(text: text) {
+        return found
       }
     }
     for item in items {
-      if let text = item.attributedContentText?.string,
-         let id = YouTubeShareLink.videoId(fromText: text) {
-        return id
+      if let text = item.attributedContentText?.string, let found = link(text: text) {
+        return found
       }
     }
     return nil
@@ -149,11 +226,22 @@ final class ShareModel {
 enum ShareError: LocalizedError {
   case invalidResponse
   case status(Int)
+  /// F-9b: `ytError` and German `message` of the proxy.
+  case album(code: String?, message: String?)
 
   var errorDescription: String? {
     switch self {
     case .invalidResponse: return String(localized: "The server did not start the download.", table: "Fork")
     case let .status(code): return String(localized: "The server answered with status \(code).", table: "Fork")
+    case let .album(code, message):
+      switch code {
+      case "album_not_found", "invalid_id":
+        return String(localized: "YouTube Music doesn't know this album, or it isn't reachable right now.", table: "Fork")
+      case "yt_unavailable":
+        return String(localized: "YouTube Music isn't reachable right now. Try again later.", table: "Fork")
+      default:
+        return message ?? String(localized: "The server did not start the download.", table: "Fork")
+      }
     }
   }
 }
@@ -201,10 +289,10 @@ struct ShareView: View {
   @ViewBuilder
   private var icon: some View {
     switch model.state {
-    case .reading, .adding:
+    case .reading, .adding, .addingAlbum:
       ProgressView()
         .controlSize(.large)
-    case .added:
+    case .added, .albumAdded:
       Image(systemName: "checkmark.circle.fill")
         .font(.system(size: 40))
         .foregroundStyle(.green)
@@ -220,6 +308,10 @@ struct ShareView: View {
     case .reading: return "Drift"
     case .adding: return String(localized: "Adding to Drift…", table: "Fork")
     case .added: return String(localized: "Added to Drift", table: "Fork")
+    case .addingAlbum: return String(localized: "Adding Album to Drift…", table: "Fork")
+    case let .albumAdded(_, queued, _):
+      return queued > 0 ? String(localized: "Album Added to Drift", table: "Fork")
+        : String(localized: "Album Already in Drift", table: "Fork")
     case .failed: return String(localized: "Not Added", table: "Fork")
     }
   }
@@ -233,6 +325,17 @@ struct ShareView: View {
       return String(localized: "\(song)Starting the download on \(server), this takes about 10 seconds.", table: "Fork")
     case .added:
       return String(localized: "The song will appear in your library in a minute.", table: "Fork")
+    case let .addingAlbum(server):
+      return String(localized: "Starting the album download on \(server).", table: "Fork")
+    case let .albumAdded(name, queued, skipped):
+      let album = name.isEmpty ? "" : "\(name)\n"
+      if queued == 0 {
+        return String(localized: "\(album)All songs are already in your library.", table: "Fork")
+      }
+      if skipped == 0 {
+        return String(localized: "\(album)\(queued) songs are downloading, they appear in your library one by one.", table: "Fork")
+      }
+      return String(localized: "\(album)\(queued) songs are downloading, \(skipped) were already there.", table: "Fork")
     case let .failed(message):
       return message
     }
@@ -240,7 +343,7 @@ struct ShareView: View {
 
   private var buttonTitle: String {
     switch model.state {
-    case .added, .failed: return String(localized: "Done", table: "Fork")
+    case .added, .albumAdded, .failed: return String(localized: "Done", table: "Fork")
     default: return String(localized: "Cancel", table: "Fork")
     }
   }

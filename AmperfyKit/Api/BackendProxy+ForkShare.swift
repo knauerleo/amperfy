@@ -36,4 +36,10 @@ extension BackendProxy {
     )
     return (SongpickerConfig.proxyURL(rewriting: streamUrl), serverApi.httpHeaders)
   }
+
+  /// F-9b: `downloadYtAlbum.view?id=ytm-album-<placeholder>&f=json` at the proxy with the
+  /// account's credentials, for album links (`music.youtube.com/browse/MPREb_…`).
+  public func forkYouTubeAlbumDownloadTemplate(placeholder: String) async throws -> URL {
+    try await forkYouTubeRequestURL(action: "downloadYtAlbum", id: "ytm-album-\(placeholder)")
+  }
 }
