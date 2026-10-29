@@ -457,6 +457,75 @@ Beispiel-Spec im Kopf des Skripts.
      `playCount`, `isFavorite` und `lastPlayedDate`, die schon lokal vorliegen.
 5. Design-Überarbeitung Richtung moderner Streaming-Client, in 5 Phasen laut `DESIGN-AUDIT.md`. Phase 1 ✅, Phase 2 ✅, Phase 3 ✅, Phase 4 ✅, Phase 5 ✅, Phase 6 ✅ (Maßnahmen 10 und 14 abgeschlossen)
 
+### Crossfade (TASKS F-17): Umsetzungsplan
+
+Stand 2026-10-29: nicht eingebaut. Mit einzeiligen Hooks geht es nicht sauber, deshalb erst dieser Plan.
+
+**Wie die Wiedergabe heute läuft**
+
+- `BackendAudioPlayer` (AmperfyKit) hält genau einen `AudioStreamingPlayer` (Unterklasse von `AudioStreaming.AudioPlayer`,
+  eigene `AVAudioEngine`) in der privaten Variable `player`, dazu EQ (`AVAudioUnitEQ`), ReplayGain-Mixer und den
+  `AudioAnalyzer` (Visualizer, am EQ installiert).
+- Gapless: `checkForPreloadNextPlayerItem()` holt 10 s vor Ende über `nextPlayablePreloadCB` den nächsten Song und hängt ihn
+  mit `player.queue(url:)` an **dieselbe** Engine. Das Ende meldet `audioPlayerDidFinishPlaying` (nur wenn
+  `currentPlayUrl` passt) → `itemFinishedPlaying()` → `AudioPlayer.didItemFinishedPlaying()` → `playNext()` →
+  `requestToPlay` erkennt den vorgeladenen Song in `handleRequest` und übernimmt nur noch Zustand
+  (`currentPlayUrl`, `playType`, Bitrate, ReplayGain).
+- An diesem Ablauf hängen Warteschlange, `countPlayed`/Statistik, Scrobbling (`ScrobbleSyncer`), Now-Playing-Info,
+  CarPlay, Lyrics-Zeit, Play-Queue-Sync (F-10) und der Sleep Timer „nach diesem Song“.
+- Lautstärke: `AudioPlayer.volume` ist `mainMixerNode.outputVolume` der Engine. Pro Player einzeln regelbar.
+
+**Warum nicht mit Hooks**
+
+Crossfade braucht zwei gleichzeitig hörbare Songs, also zwei Engines. `player`, die Preload-Variablen,
+`handleRequest`, die Delegate-Methoden und das Node-Setup sind `private` in `BackendAudioPlayer`. Eine Fork-Extension in
+einer eigenen Datei kommt an nichts davon heran. Der Wechsel des aktiven Players müsste in `handleRequest`,
+`audioPlayerDidFinishPlaying`, `didStartPlaying`, `clearPlayer`, `pause`/`continuePlay`/`seek`, `elapsedTime`/`duration`
+und `initAudioStreamingPlayerAndNodes` eingreifen, also Funktionsrümpfe in Upstream ersetzen. Ein reines
+Aus- und Einblenden in einem Player wäre kein Crossfade (Lücke in der Mitte) und bricht Gapless für Alben.
+
+**Ansatz**
+
+1. Neue Datei `AmperfyKit/Player/CrossfadeCoordinator.swift`: besitzt einen zweiten `AudioStreamingPlayer` mit eigenem
+   EQ- und ReplayGain-Node (Setup aus `initAudioStreamingPlayerAndNodes` als gemeinsame Funktion herausziehen) und fährt
+   die Rampe: alle 50 ms `outgoing.volume = v·(1−t)`, `incoming.volume = v·t` (gleichmäßige Leistung:
+   `cos`/`sin` statt linear), `v` = Nutzerlautstärke. Muster wie `SleepTimerFader` (UI-12).
+2. `BackendAudioPlayer` umbauen (größter Teil, Upstream-Datei):
+   - `player` wird „aktiver Kanal“ von zwei Kanälen (`channels[2]`, `activeIndex`), alle Zugriffe laufen über ihn.
+   - In `checkForPreloadNextPlayerItem()`: bei Crossfade an und `remaining <= fadeDauer` den nächsten Song nicht in die
+     Queue hängen, sondern auf dem freien Kanal mit Lautstärke 0 starten (`play(url:)`, Stream-URL über
+     `insertStreamPlayable`-Logik, gecachte Datei direkt).
+   - Sobald der neue Kanal `didStartPlaying` meldet: Rampe starten, Kanäle tauschen, `responder.didItemFinishedPlaying()`
+     **sofort** auslösen, damit Warteschlange, Now-Playing, Scrobbling und `countPlayed` auf den neuen Song wechseln.
+     `handleRequest` muss diesen Fall als „schon vorbereitet“ erkennen (wie heute den vorgeladenen Song).
+   - Delegate-Aufrufe des auslaufenden Kanals ignorieren (`player === activePlayer` prüfen), nach der Rampe `stop()`.
+   - `pause`/`continuePlay`/`stop`/`seek`/Rate/EQ/ReplayGain während der Rampe: auf beide Kanäle wirken bzw. Rampe
+     abbrechen und den alten Kanal sofort stoppen (Seek, Skip, Stop).
+   - `audioAnalyzer` folgt dem aktiven Kanal (am neuen EQ installieren).
+3. Kein Crossfade (normales Gapless bleibt) bei: Radios, Podcasts, YouTube-Platzhaltern, Repeat One,
+   „Pause after this Song“, wenn beide Songs aus demselben Album aufeinander folgen (Album-Gapless,
+   wie Apple Music), Songs kürzer als 2× Fadedauer, unbekannter Dauer (Streams ohne `duration`).
+4. Einstellung in einer neuen Fork-Datei: `UserDefaults`-Schlüssel `forkCrossfadeSeconds` (0 = aus, Standard aus,
+   Slider 1–12 s) in Einstellungen › Player, SwiftUI-Zeile „Crossfade“ / „Überblenden“ in `Amperfy/Fork.xcstrings`.
+   Kein Core-Data-Feld.
+5. Audio-Session: zwei Engines auf derselben `AVAudioSession` gehen, `AudioSessionHandler` braucht keine Änderung.
+   Interruption (Anruf) muss beide Engines pausieren.
+
+**Betroffene Dateien**: `BackendAudioPlayer.swift` (Kanalverwaltung, ca. 10 Methoden), `AudioPlayer.swift`
+(Prüfung „darf überblenden“: Repeat, Pause-nach-Song), `CrossfadeCoordinator.swift` (neu), Einstellungsseite (neu),
+`Fork.xcstrings`. Optional `NowPlayingInfoCenterHandler` nicht nötig, wenn der Songwechsel über
+`didItemFinishedPlaying` läuft.
+
+**Risiken**: Doppelte bzw. fehlende Song-Ende-Meldung (Scrobbling doppelt oder nie, Queue springt zwei Songs),
+Streams, die beim Start buffern (Rampe muss bis `didStartPlaying` warten, sonst Lücke), doppelter Netz- und
+Speicherbedarf während der Überblendung, Visualizer zeigt nur einen Kanal, Konflikte bei jedem Upstream-Merge in
+`BackendAudioPlayer.swift` (Upstream ändert die Datei regelmäßig), Mac Catalyst und CarPlay mittesten.
+
+**Aufwand**: etwa 2–3 Tage inklusive Tests auf dem iPhone (Album gapless, Playlist mit Crossfade, Skip während
+der Rampe, Pause/Seek während der Rampe, Sperrbildschirm, CarPlay, Scrobbles in Navidrome prüfen).
+Alternative mit weniger Eingriff: Upstream-PR, der `BackendAudioPlayer` für zwei Kanäle öffnet, dann bleibt der Fork-Teil
+eine neue Datei.
+
 ## Arbeitsweise
 
 - Kleine Commits auf `youtube`, jeweils nach GitHub pushen.
