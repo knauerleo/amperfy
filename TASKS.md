@@ -79,3 +79,4 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [x] ~~**UI-22b Playlists auf Home öffnen die Playlist**~~ (2026-10-29) - FORK.md Abschnitt 10, Tap auf dem iPhone noch nicht geprüft
 - [x] ~~**UI-19 Mini-Player als schwebende Karte statt Glas**~~ (2026-10-29) - FORK.md Abschnitt 10, per Screenshot abgenommen; Tab-Bar verkleinert sich auf dem iPhone nicht mehr, die Karte schwebt fest darüber (2026-10-29)
 - [x] ~~**F-20 Albumseite nach Tracknummer sortiert**~~ (2026-10-29) - FORK.md Abschnitt 10, auf dem iPhone noch nicht geprüft
+- [x] ~~**F-6b Crash beim Platzhalter-Tausch**~~ (2026-10-29) - FORK.md Abschnitt 10, Ursache aus dem Crash-Log, Ablauf auf dem iPhone nicht nachgestellt

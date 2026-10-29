@@ -69,9 +69,14 @@ extension LibraryStorage {
     }
     saveContext()
 
+    // only playlists that exist on the server: a queue that lost its player link (rollback after
+    // a failed save) has no ID and a temporary object ID, uploading it crashed in createPlaylistRemote
     return playlists.filter { playlist in
       let managedObject = playlist.managedObject
-      return managedObject.playersUserQueuePlaylist == nil &&
+      return !playlist.id.isEmpty &&
+        !managedObject.objectID.isTemporaryID &&
+        !managedObject.isDeleted &&
+        managedObject.playersUserQueuePlaylist == nil &&
         managedObject.playersContextPlaylist == nil &&
         managedObject.playersShuffledContextPlaylist == nil &&
         managedObject.playersPodcastPlaylist == nil &&
