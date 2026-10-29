@@ -4,6 +4,8 @@
 //
 //  Fork (TASKS F-5): "Similar on YouTube Music" below the songs of an album, from the similar
 //  artists of the album artist (see YouTubeMusicSuggestions). Only online and with YouTube Music on.
+//  Fork (TASKS F-19): above it the songs of the album that are only on YouTube Music
+//  (`YouTubeAlbumGapsView`). Both load independently, the footer shows what is there.
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -23,10 +25,24 @@ import AmperfyKit
 import UIKit
 
 extension AlbumDetailVC {
+  private static let footerStackTag = 0x4619
+
   func forkLoadYouTubeShelf() {
     let artistName = album.artist?.name ?? album.subtitle ?? ""
     let artistId = album.artist?.id
     let meta = appDelegate.getMeta(account.info)
+    Task { @MainActor in
+      let gaps = await YouTubeMusicAlbumGapFinder.gaps(
+        for: self.album,
+        account: self.account,
+        storage: self.appDelegate.storage,
+        backendApi: meta.backendApi,
+        librarySyncer: meta.librarySyncer
+      )
+      guard let gaps, !gaps.missing.isEmpty, self.isViewLoaded else { return }
+      let view = YouTubeAlbumGapsView(gaps: gaps, albumArtist: artistName, account: self.account)
+      self.forkAddFooterPart(view, isFirst: true)
+    }
     Task { @MainActor in
       let songs = await YouTubeMusicSuggestions.similarSongs(
         artistName: artistName,
@@ -37,24 +53,50 @@ extension AlbumDetailVC {
         librarySyncer: meta.librarySyncer
       )
       guard !songs.isEmpty, self.isViewLoaded else { return }
-      self.forkShowYouTubeShelf(songs: songs)
+      let shelf = YouTubeMusicShelfView(
+        songs: songs,
+        contextName: "\(self.album.name): \(YouTubeMusicShelfView.title)"
+      )
+      let inset = UIView()
+      shelf.translatesAutoresizingMaskIntoConstraints = false
+      inset.addSubview(shelf)
+      NSLayoutConstraint.activate([
+        shelf.topAnchor.constraint(equalTo: inset.topAnchor),
+        shelf.bottomAnchor.constraint(equalTo: inset.bottomAnchor),
+        shelf.leadingAnchor.constraint(equalTo: inset.leadingAnchor, constant: DS.Space.m),
+        shelf.trailingAnchor.constraint(equalTo: inset.trailingAnchor, constant: -DS.Space.m),
+      ])
+      self.forkAddFooterPart(inset, isFirst: false)
     }
   }
 
-  private func forkShowYouTubeShelf(songs: [Song]) {
-    let shelf = YouTubeMusicShelfView(
-      songs: songs,
-      contextName: "\(album.name): \(YouTubeMusicShelfView.title)"
-    )
-    shelf.translatesAutoresizingMaskIntoConstraints = false
-    let footer = UIView()
-    footer.addSubview(shelf)
-    NSLayoutConstraint.activate([
-      shelf.topAnchor.constraint(equalTo: footer.topAnchor, constant: DS.Space.l),
-      shelf.bottomAnchor.constraint(equalTo: footer.bottomAnchor, constant: -DS.Space.l),
-      shelf.leadingAnchor.constraint(equalTo: footer.leadingAnchor, constant: DS.Space.m),
-      shelf.trailingAnchor.constraint(equalTo: footer.trailingAnchor, constant: -DS.Space.m),
-    ])
+  /// Footer with the missing songs (first) and the shelf, whichever has loaded.
+  private func forkAddFooterPart(_ part: UIView, isFirst: Bool) {
+    let stack: UIStackView
+    if let existing = tableView.tableFooterView?.viewWithTag(Self.footerStackTag) as? UIStackView {
+      stack = existing
+    } else {
+      stack = UIStackView()
+      stack.axis = .vertical
+      stack.spacing = DS.Space.l
+      stack.tag = Self.footerStackTag
+      stack.translatesAutoresizingMaskIntoConstraints = false
+      let footer = UIView()
+      footer.addSubview(stack)
+      NSLayoutConstraint.activate([
+        stack.topAnchor.constraint(equalTo: footer.topAnchor, constant: DS.Space.l),
+        stack.bottomAnchor.constraint(equalTo: footer.bottomAnchor, constant: -DS.Space.l),
+        stack.leadingAnchor.constraint(equalTo: footer.leadingAnchor),
+        stack.trailingAnchor.constraint(equalTo: footer.trailingAnchor),
+      ])
+      tableView.tableFooterView = footer
+    }
+    if isFirst {
+      stack.insertArrangedSubview(part, at: 0)
+    } else {
+      stack.addArrangedSubview(part)
+    }
+    guard let footer = tableView.tableFooterView else { return }
     let width = tableView.bounds.width
     let height = footer.systemLayoutSizeFitting(
       CGSize(width: width, height: UIView.layoutFittingCompressedSize.height),
@@ -62,6 +104,7 @@ extension AlbumDetailVC {
       verticalFittingPriority: .fittingSizeLevel
     ).height
     footer.frame = CGRect(x: 0, y: 0, width: width, height: height)
+    // reassigning makes the table take the new height
     tableView.tableFooterView = footer
   }
 }

@@ -5,7 +5,6 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 
 ## Active
 
-- [ ] **F-19 Fehlende Album-Songs von YouTube** - Albumseite einer Bibliotheks-Album: Songs, die auf YouTube Music zum Album gehören, aber lokal fehlen, mit Wolke anzeigen, „Album laden“ wie in der Suche (F-8)
 
 ## Waiting On
 
@@ -71,3 +70,4 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [x] ~~**F-18 Songdauer beim Abspielen immer bekannt**~~ (2026-10-29) - FORK.md Abschnitt 10, YouTube- und lokaler Song auf dem iPhone noch nicht geprüft
 - [x] ~~**UI-21 Player luftiger**~~ (2026-10-29) - FORK.md Abschnitt 10, Abnahme per Screenshot offen
 - [x] ~~**UI-22 Album auf Home öffnet das Album**~~ (2026-10-29) - FORK.md Abschnitt 10
+- [x] ~~**F-19 Fehlende Album-Songs von YouTube**~~ (2026-10-29) - FORK.md Abschnitt 10, auf dem iPhone noch nicht geprüft

@@ -3696,6 +3696,86 @@
           }
         }
       }
+    },
+    "Missing from Your Library": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fehlt in deiner Sammlung"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Missing from Your Library"
+          }
+        }
+      }
+    },
+    "%@ on YouTube Music": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ auf YouTube Music"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ on YouTube Music"
+          }
+        }
+      }
+    },
+    "From YouTube Music": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Von YouTube Music"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "From YouTube Music"
+          }
+        }
+      }
+    },
+    "Download Missing": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fehlende laden"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Download Missing"
+          }
+        }
+      }
+    },
+    "Plays the missing songs from here": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spielt die fehlenden Songs ab hier"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Plays the missing songs from here"
+          }
+        }
+      }
     }
   },
   "version": "1.0"
