@@ -51,5 +51,6 @@ class PlaylistTableCell: BasicTableCell {
     infoLabel.textAlignment = (traitCollection.horizontalSizeClass == .regular) ? .right : .left
     accessoryType = .disclosureIndicator
     backgroundColor = .systemBackground
+    applyForkStyle() // Fork: streaming-style playlist rows
   }
 }

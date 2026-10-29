@@ -90,3 +90,32 @@ extension PodcastEpisodeTableCell {
     backgroundColor = ForkSurface.isEnabled ? .clear : .systemBackground
   }
 }
+
+extension PlaylistTableCell {
+  private static let forkArtworkSize: CGFloat = 56
+
+  /// Playlist rows like song rows: 56 pt collage, radius 4, no chevron (UI-3).
+  func applyForkStyle() {
+    nameLabel.font = DS.Font.songTitle
+    infoLabel.font = DS.Font.cellSubtitle
+    nameLabel.adjustsFontForContentSizeCategory = true
+    infoLabel.adjustsFontForContentSizeCategory = true
+    infoLabel.textColor = .secondaryLabel
+    #if !targetEnvironment(macCatalyst)
+      // fixed label heights from the XIB would clip larger Dynamic Type sizes
+      for label in [nameLabel, infoLabel] {
+        label?.constraints
+          .filter { $0.firstAttribute == .height && $0.secondItem == nil }
+          .forEach { $0.isActive = false }
+      }
+      for constraint in entityImage.constraints
+        where constraint.firstAttribute == .width && constraint.secondItem == nil {
+        constraint.constant = Self.forkArtworkSize
+      }
+      entityImage.layer.cornerRadius = DS.Radius.small
+      entityImage.clipsToBounds = true
+      accessoryType = .none
+      backgroundColor = .clear
+    #endif
+  }
+}
