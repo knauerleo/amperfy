@@ -35,6 +35,7 @@ class LyricsView: UITableView, UITableViewDataSource, UITableViewDelegate {
   private let autoScrollSuppressionInterval: TimeInterval = 5.0
 
   public var onLyricSelected: ((LyricsLine) -> ())?
+  var forkCardStyle = false // Fork: card style in the player (UI-6)
 
   override init(frame: CGRect, style: UITableView.Style) {
     super.init(frame: frame, style: style)
@@ -180,6 +181,7 @@ class LyricsView: UITableView, UITableViewDataSource, UITableViewDelegate {
 
     for lyric in lyrics.line {
       let model = LyricTableCellModel(lyric: lyric)
+      if forkCardStyle { model.forkApplyCardStyle() } // Fork: card style (UI-6)
       lyricModels.append(model)
     }
     reloadData()

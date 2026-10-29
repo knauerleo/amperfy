@@ -44,7 +44,7 @@ final class LyricsCardView: UIControl {
     layer.cornerRadius = DS.Radius.large
     layer.cornerCurve = .continuous
     clipsToBounds = true
-    backgroundColor = UIColor(white: 0.2, alpha: 1)
+    backgroundColor = Self.defaultSurfaceColor
 
     headerLabel.text = "Lyrics"
     headerLabel.font = DS.Font.caption
@@ -120,11 +120,19 @@ final class LyricsCardView: UIControl {
 
   /// Darkened cover color, so the white text stays readable in light and dark mode.
   func tint(with colors: [UIColor]) {
-    guard let base = colors.first else { return }
+    guard let color = Self.surfaceColor(for: colors) else { return }
+    backgroundColor = color
+  }
+
+  static let defaultSurfaceColor = UIColor(white: 0.2, alpha: 1)
+
+  /// Surface of the card and of the full lyrics view (UI-6).
+  static func surfaceColor(for colors: [UIColor]) -> UIColor? {
+    guard let base = colors.first else { return nil }
     var hue: CGFloat = 0, saturation: CGFloat = 0, brightness: CGFloat = 0, alpha: CGFloat = 0
     guard base.getHue(&hue, saturation: &saturation, brightness: &brightness, alpha: &alpha)
-    else { return }
-    backgroundColor = UIColor(
+    else { return nil }
+    return UIColor(
       hue: hue,
       saturation: min(1, saturation * 1.1),
       brightness: min(brightness, 0.75) * 0.6,

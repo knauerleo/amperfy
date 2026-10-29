@@ -64,6 +64,8 @@ enum DS {
     static var playerTitle: UIFont { scaled(20, .bold, .title3, maximum: 26) }
     static var playerSubtitle: UIFont { scaled(17, .regular, .body, maximum: 22) }
     static var playerAlbum: UIFont { scaled(15, .regular, .subheadline, maximum: 19) }
+    /// Full lyrics view in the player (UI-6).
+    static var lyricsLine: UIFont { scaled(24, .bold, .title2, maximum: 34) }
     static var playerTime: UIFont {
       UIFontMetrics(forTextStyle: .caption1).scaledFont(
         for: .monospacedDigitSystemFont(ofSize: 12, weight: .medium),

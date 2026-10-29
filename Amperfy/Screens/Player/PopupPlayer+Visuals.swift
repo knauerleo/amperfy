@@ -167,7 +167,7 @@ extension PopupPlayerVC {
     gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
     gradientLayer.endPoint = CGPoint(x: 0.5, y: 1.0)
     backgroundImage.layer.insertSublayer(gradientLayer, at: 0)
-    forkLyricsCard?.tint(with: artworkGradientColors) // Fork: lyrics card in the cover color
+    forkApplyArtworkColors() // Fork: lyrics card and full lyrics in the cover color
   }
 
   @objc

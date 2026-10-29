@@ -183,6 +183,7 @@ class LargeCurrentlyPlayingPlayerView: UIView, UIGestureRecognizerDelegate {
     lyricsTap.delegate = self
     lyricsView!.addGestureRecognizer(lyricsTap)
     upperContainerView.addSubview(lyricsView!)
+    forkPrepareLyrics(lyricsView!) // Fork: full lyrics in card style (UI-6)
 
     visualizerHostingView = SwiftUIContentView()
     visualizerHostingView!.hostingController?.view.frame = upperContainerView.bounds

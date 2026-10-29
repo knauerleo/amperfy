@@ -39,8 +39,8 @@ class LyricTableCellModel {
     }
   }
 
-  private var attributedString: NSAttributedString?
-  private var highlightedAttributedString: NSAttributedString?
+  var attributedString: NSAttributedString? // Fork: restyled in LyricsView+Fork.swift (UI-6)
+  var highlightedAttributedString: NSAttributedString? // Fork: restyled in LyricsView+Fork.swift (UI-6)
 
   internal weak var cell: LyricTableCell?
 

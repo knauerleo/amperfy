@@ -189,6 +189,7 @@
 		50AE79BA2C1F69A00085CBB3 /* OpenSubsonicExtensions_example_1.xml in Resources */ = {isa = PBXBuildFile; fileRef = 50AE79B92C1F69A00085CBB3 /* OpenSubsonicExtensions_example_1.xml */; };
 		50AE79BC2C1F6ADF0085CBB3 /* SsOpenSubsonicExtensionsParserTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AE79BB2C1F6ADE0085CBB3 /* SsOpenSubsonicExtensionsParserTest.swift */; };
 		50AE79C22C20709C0085CBB3 /* LyricsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AE79C12C20709C0085CBB3 /* LyricsView.swift */; };
+		C72E8760C98AA983A414FF35 /* LyricsView+Fork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD11088B1308D243CA5F2CD /* LyricsView+Fork.swift */; };
 		50AE79C32C2070F40085CBB3 /* LyricTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AE79BF2C206EF10085CBB3 /* LyricTableCell.swift */; };
 		50AFA1492632E83100F198DD /* GenericDetailTableHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AFA1472632E83100F198DD /* GenericDetailTableHeader.swift */; };
 		919162FFACC445396DCC149E /* ArtistHighlightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68E69B299DC4D9122A64D868 /* ArtistHighlightsView.swift */; };
@@ -1008,6 +1009,7 @@
 		50AE79BD2C1F704B0085CBB3 /* Amperfy v38.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Amperfy v38.xcdatamodel"; sourceTree = "<group>"; };
 		50AE79BF2C206EF10085CBB3 /* LyricTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricTableCell.swift; sourceTree = "<group>"; };
 		50AE79C12C20709C0085CBB3 /* LyricsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LyricsView.swift; sourceTree = "<group>"; };
+		1FD11088B1308D243CA5F2CD /* LyricsView+Fork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LyricsView+Fork.swift"; sourceTree = "<group>"; };
 		50AFA1472632E83100F198DD /* GenericDetailTableHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericDetailTableHeader.swift; sourceTree = "<group>"; };
 		68E69B299DC4D9122A64D868 /* ArtistHighlightsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArtistHighlightsView.swift"; sourceTree = "<group>"; };
 		020A1FB5284FF5F394C3C10C /* ImmersiveDetailHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ImmersiveDetailHeaderView.swift"; sourceTree = "<group>"; };
@@ -1803,6 +1805,7 @@
 			children = (
 				50AE79BF2C206EF10085CBB3 /* LyricTableCell.swift */,
 				50AE79C12C20709C0085CBB3 /* LyricsView.swift */,
+				1FD11088B1308D243CA5F2CD /* LyricsView+Fork.swift */,
 			);
 			path = Lyrics;
 			sourceTree = "<group>";
@@ -2740,6 +2743,7 @@
 				50C9D7152850759B007F18D0 /* AnimatedGradientLayer.swift in Sources */,
 				5023D9B22BDAA48200310144 /* UpdateVC.swift in Sources */,
 				50AE79C22C20709C0085CBB3 /* LyricsView.swift in Sources */,
+				C72E8760C98AA983A414FF35 /* LyricsView+Fork.swift in Sources */,
 				50CFB59228D483AD00A47D44 /* AddSwipeActionView.swift in Sources */,
 				50C1714E2D1070A500C0C53A /* PlaylistAddGenresVC.swift in Sources */,
 				507BA5C32F01B9A400B4EA8B /* SetShuffleIntent.swift in Sources */,

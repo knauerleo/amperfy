@@ -18,8 +18,6 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 
 - [ ] **UI-5 „Zu Playlist hinzufügen“ als schlankes Sheet**
   - Heute `PlaylistSelectorVC` + 14 VCs unter `PlaylistAdd/` im Originalstil. Neues Sheet: „Neue Playlist“ oben, zuletzt genutzte Playlists mit Cover, Rest alphabetisch
-- [ ] **UI-6 Volle Lyrics-Ansicht im Stil der Lyrics-Karte**
-  - `LyricTableCell` (feste Schrift): große fette Zeilen auf der Cover-Farbe, aktuelle Zeile hell, Tap auf eine Zeile = Sprung zur Stelle
 - [ ] **UI-7 Login, Sync, Update im Drift-Stil**
   - `LoginVC` (3× `systemFont(ofSize:)`), `SyncVC`, `UpdateVC`, `LibrarySyncPopupVC`: Fläche `DS.Color.background`, Wellen-Glyph, Fortschritt in Label-Farbe
 - [ ] **UI-8 „Shuffle all“/„Play“-Zeile in Songs, Artists, Genres**
@@ -85,3 +83,4 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [x] ~~**UI-4 Player-Schriften auf `DS.Font`**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**F-3 Künstlerseite mit `getArtistInfo2`**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**F-4 „Popular“ mit `getTopSongs`**~~ (2026-10-29) - FORK.md Abschnitt 10
+- [x] ~~**UI-6 Volle Lyrics-Ansicht im Stil der Lyrics-Karte**~~ (2026-10-29) - FORK.md Abschnitt 10

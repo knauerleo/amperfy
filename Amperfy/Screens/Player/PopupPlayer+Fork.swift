@@ -191,12 +191,19 @@ extension PopupPlayerVC {
 
   /// Hook: after the large view switched between cover, lyrics and visualizer.
   func forkRefreshLyricsCard() {
+    largeCurrentlyPlayingView?.forkRefreshLyricsBackdrop(colors: artworkGradientColors)
     guard let card = forkLyricsCard else { return }
     let isShown = isLyricsCardAllowed && card.hasLyrics &&
       !appDelegate.storage.settings.user.isPlayerLyricsDisplayed
     card.tint(with: artworkGradientColors)
     guard card.isHidden == isShown else { return }
     card.isHidden = !isShown
+  }
+
+  /// Hook in `applyGradientBackground`: surfaces that follow the cover color.
+  func forkApplyArtworkColors() {
+    forkLyricsCard?.tint(with: artworkGradientColors)
+    largeCurrentlyPlayingView?.forkLyricsBackdrop?.tint(with: artworkGradientColors)
   }
 
   /// Hook: playback time for synced lyrics.
