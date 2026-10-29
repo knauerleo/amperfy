@@ -88,6 +88,8 @@ enum AppStoryboard: String {
   }
 
   func segueToPlaylistSelector(account: Account, itemsToAdd: [Song]) -> UIViewController {
+    // Fork: slim "Add to Playlist" sheet on iPhone and iPad (UI-5), the Mac keeps the selector
+    if ForkSurface.isEnabled { return AddToPlaylistSheetVC(account: account, itemsToAdd: itemsToAdd) }
     let playlistSelectorVC = PlaylistSelectorVC(account: account, itemsToAdd: itemsToAdd)
     return playlistSelectorVC
   }
