@@ -28,7 +28,7 @@ final class DownloadJobCell: UICollectionViewListCell {
   private let badge = SourceBadgeView()
   private lazy var retryButton: UIButton = {
     var config = UIButton.Configuration.tinted()
-    config.title = "Retry"
+    config.title = String(localized: "Retry", table: "Fork")
     config.buttonSize = .small
     config.cornerStyle = .capsule
     config.baseForegroundColor = .label
@@ -104,7 +104,7 @@ final class DownloadJobCell: UICollectionViewListCell {
     accessibilityValue = Self.detailText(for: entry, includeArtist: false)
     accessibilityTraits = entry.status.isLoading ? [.updatesFrequently] : []
     if entry.isRetryable {
-      accessibilityCustomActions = [UIAccessibilityCustomAction(name: "Retry") { [weak self] _ in
+      accessibilityCustomActions = [UIAccessibilityCustomAction(name: String(localized: "Retry", table: "Fork")) { [weak self] _ in
         self?.onRetry?()
         return true
       }]
@@ -130,13 +130,13 @@ final class DownloadJobCell: UICollectionViewListCell {
     -> String {
     let state: String
     switch entry.status {
-    case .waiting: state = "Waiting…"
-    case .downloading: state = "Downloading…"
-    case .saving: state = "Saving…"
-    case .inLibrary: state = "In Library"
+    case .waiting: state = String(localized: "Waiting…", table: "Fork")
+    case .downloading: state = String(localized: "Downloading…", table: "Fork")
+    case .saving: state = String(localized: "Saving…", table: "Fork")
+    case .inLibrary: state = String(localized: "In Library", table: "Fork")
     case .failed:
-      state = entry.error.map { "Failed: \($0)" } ?? "Failed"
-    case .online: state = "Only on YouTube Music"
+      state = entry.error.map { String(localized: "Failed: \($0)", table: "Fork") } ?? String(localized: "Failed", table: "Fork")
+    case .online: state = String(localized: "Only on YouTube Music", table: "Fork")
     }
     var parts = [String]()
     if includeArtist, let artist = entry.artist, !artist.isEmpty { parts.append(artist) }

@@ -39,17 +39,17 @@ struct HomeMix: Hashable, @unchecked Sendable {
 
   var title: String {
     switch kind {
-    case .daily: return "Daily Mix"
-    case .onRepeat: return "On Repeat"
-    case .rediscover: return "Rediscover"
+    case .daily: return String(localized: "Daily Mix", table: "Fork")
+    case .onRepeat: return String(localized: "On Repeat", table: "Fork")
+    case .rediscover: return String(localized: "Rediscover", table: "Fork")
     }
   }
 
   var subtitle: String {
     switch kind {
-    case .daily: return "Favorites and similar songs"
-    case .onRepeat: return "Your most played, last 14 days"
-    case .rediscover: return "Favorites you haven't heard in a while"
+    case .daily: return String(localized: "Favorites and similar songs", table: "Fork")
+    case .onRepeat: return String(localized: "Your most played, last 14 days", table: "Fork")
+    case .rediscover: return String(localized: "Favorites you haven't heard in a while", table: "Fork")
     }
   }
 

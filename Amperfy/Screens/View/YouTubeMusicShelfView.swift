@@ -26,7 +26,7 @@ import UIKit
 // MARK: - YouTubeMusicShelfView
 
 final class YouTubeMusicShelfView: UIView {
-  static let title = "Similar on YouTube Music"
+  static let title = String(localized: "Similar on YouTube Music", table: "Fork")
   private static let tileWidth: CGFloat = 140
 
   private let songs: [Song]
@@ -116,11 +116,11 @@ final class YouTubeMusicShelfView: UIView {
     let hit = YouTubeMusicHitStore.shared.hit(forVideoId: videoId)
     return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [weak self] _ in
       guard let self else { return nil }
-      let play = UIAction(title: "Play", image: .play) { [weak self] _ in
+      let play = UIAction(title: String(localized: "Play", table: "Fork"), image: .play) { [weak self] _ in
         self?.play(at: index)
       }
       let playNext = UIAction(
-        title: "Play Next",
+        title: String(localized: "Play Next", table: "Fork"),
         image: UIImage(systemName: "text.line.first.and.arrowtriangle.forward")
       ) { [weak self] _ in
         guard let self, isUsable(song) else { return }
@@ -128,7 +128,7 @@ final class YouTubeMusicShelfView: UIView {
         DS.haptic(.success)
       }
       let addToQueue = UIAction(
-        title: "Add to Queue",
+        title: String(localized: "Add to Queue", table: "Fork"),
         image: UIImage(systemName: "text.line.last.and.arrowtriangle.forward")
       ) { [weak self] _ in
         guard let self, isUsable(song) else { return }
@@ -142,7 +142,7 @@ final class YouTubeMusicShelfView: UIView {
         let status = YouTubeMusicJobMonitor.shared.status(for: hit)
         let canAdd = status == .online || status == .failed
         let addToLibrary = UIAction(
-          title: status == .inLibrary ? "In Library" : "Add to Library",
+          title: status == .inLibrary ? String(localized: "In Library", table: "Fork") : String(localized: "Add to Library", table: "Fork"),
           image: UIImage(systemName: status == .inLibrary ? "checkmark.circle" : "arrow.down.circle"),
           attributes: canAdd ? [] : .disabled
         ) { [weak self] _ in

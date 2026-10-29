@@ -114,7 +114,7 @@ final class NowPlayingCellDecorator: UIView {
     artworkEqualizer.isPlaying = isPlaying && !isTrackNumberStyle
     numberEqualizer.isPlaying = isPlaying && isTrackNumberStyle
     // the equalizer is only visual, VoiceOver hears the state on the row (UI-10)
-    cell?.accessibilityValue = isCurrent ? (isPlaying ? "Now Playing" : "Paused") : nil
+    cell?.accessibilityValue = isCurrent ? (isPlaying ? String(localized: "Now Playing", table: "Fork") : String(localized: "Paused", table: "Fork")) : nil
   }
 }
 

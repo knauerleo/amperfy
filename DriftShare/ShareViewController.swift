@@ -86,11 +86,11 @@ final class ShareModel {
     sharedText = items.compactMap { $0.attributedContentText?.string }
       .first { !$0.isEmpty && YouTubeShareLink.videoId(fromText: $0) == nil }
     guard let videoId = await Self.videoId(in: items) else {
-      state = .failed("No YouTube or YouTube Music link found.")
+      state = .failed(String(localized: "No YouTube or YouTube Music link found.", table: "Fork"))
       return
     }
     guard let config = DriftShareConfig.load(), let url = config.streamURL(videoId: videoId) else {
-      state = .failed("Open Drift once with your server account, then try again.")
+      state = .failed(String(localized: "Open Drift once with your server account, then try again.", table: "Fork"))
       return
     }
     state = .adding(server: config.serverName)
@@ -152,8 +152,8 @@ enum ShareError: LocalizedError {
 
   var errorDescription: String? {
     switch self {
-    case .invalidResponse: return "The server did not start the download."
-    case let .status(code): return "The server answered with status \(code)."
+    case .invalidResponse: return String(localized: "The server did not start the download.", table: "Fork")
+    case let .status(code): return String(localized: "The server answered with status \(code).", table: "Fork")
     }
   }
 }
@@ -218,9 +218,9 @@ struct ShareView: View {
   private var title: String {
     switch model.state {
     case .reading: return "Drift"
-    case .adding: return "Adding to Drift…"
-    case .added: return "Added to Drift"
-    case .failed: return "Not Added"
+    case .adding: return String(localized: "Adding to Drift…", table: "Fork")
+    case .added: return String(localized: "Added to Drift", table: "Fork")
+    case .failed: return String(localized: "Not Added", table: "Fork")
     }
   }
 
@@ -230,9 +230,9 @@ struct ShareView: View {
       return nil
     case let .adding(server):
       let song = model.sharedText.map { "\($0)\n" } ?? ""
-      return "\(song)Starting the download on \(server), this takes about 10 seconds."
+      return String(localized: "\(song)Starting the download on \(server), this takes about 10 seconds.", table: "Fork")
     case .added:
-      return "The song will appear in your library in a minute."
+      return String(localized: "The song will appear in your library in a minute.", table: "Fork")
     case let .failed(message):
       return message
     }
@@ -240,8 +240,8 @@ struct ShareView: View {
 
   private var buttonTitle: String {
     switch model.state {
-    case .added, .failed: return "Done"
-    default: return "Cancel"
+    case .added, .failed: return String(localized: "Done", table: "Fork")
+    default: return String(localized: "Cancel", table: "Fork")
     }
   }
 }

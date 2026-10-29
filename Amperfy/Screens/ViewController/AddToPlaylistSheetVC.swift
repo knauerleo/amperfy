@@ -55,7 +55,7 @@ class AddToPlaylistSheetVC: UITableViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     appDelegate.userStatistics.visited(.playlistSelector)
-    title = itemsToAdd.count > 1 ? "Add \(itemsToAdd.count) Songs" : "Add to Playlist"
+    title = itemsToAdd.count > 1 ? String(localized: "Add \(itemsToAdd.count) Songs", table: "Fork") : String(localized: "Add to Playlist", table: "Fork")
     navigationItem.rightBarButtonItem = UIBarButtonItem(
       systemItem: .close,
       primaryAction: UIAction { [weak self] _ in self?.close() }
@@ -63,7 +63,7 @@ class AddToPlaylistSheetVC: UITableViewController {
 
     searchController.obscuresBackgroundDuringPresentation = false
     searchController.searchResultsUpdater = self
-    searchController.searchBar.placeholder = "Search Playlists"
+    searchController.searchBar.placeholder = String(localized: "Search Playlists", table: "Fork")
     navigationItem.searchController = searchController
     navigationItem.hidesSearchBarWhenScrolling = true
 
@@ -149,8 +149,8 @@ class AddToPlaylistSheetVC: UITableViewController {
 
   override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
     switch Section(rawValue: section) {
-    case .recent: recent.isEmpty ? nil : "Recent"
-    case .all: recent.isEmpty || others.isEmpty ? nil : "All Playlists"
+    case .recent: recent.isEmpty ? nil : String(localized: "Recent", table: "Fork")
+    case .all: recent.isEmpty || others.isEmpty ? nil : String(localized: "All Playlists", table: "Fork")
     default: nil
     }
   }
@@ -209,16 +209,16 @@ class AddToPlaylistSheetVC: UITableViewController {
     }
     let alert = UIAlertController(
       title: nil,
-      message: "Some Songs are already in this Playlist.",
+      message: String(localized: "Some Songs are already in this Playlist.", table: "Fork"),
       preferredStyle: .alert
     )
-    alert.addAction(UIAlertAction(title: "Add Duplicates", style: .default) { _ in
+    alert.addAction(UIAlertAction(title: String(localized: "Add Duplicates", table: "Fork"), style: .default) { _ in
       self.add(songs: self.itemsToAdd, to: playlist)
     })
-    alert.addAction(UIAlertAction(title: "Skip Duplicates", style: .default) { _ in
+    alert.addAction(UIAlertAction(title: String(localized: "Skip Duplicates", table: "Fork"), style: .default) { _ in
       self.add(songs: Array(itemsNotContained).filterSongs(), to: playlist)
     })
-    alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+    alert.addAction(UIAlertAction(title: String(localized: "Cancel", table: "Fork"), style: .cancel))
     present(alert, animated: true)
   }
 
@@ -242,13 +242,13 @@ class AddToPlaylistSheetVC: UITableViewController {
   }
 
   private func askForNewPlaylistName() {
-    let alert = UIAlertController(title: "New Playlist", message: nil, preferredStyle: .alert)
+    let alert = UIAlertController(title: String(localized: "New Playlist", table: "Fork"), message: nil, preferredStyle: .alert)
     alert.addTextField { textField in
-      textField.placeholder = "Name"
+      textField.placeholder = String(localized: "Name", table: "Fork")
       textField.autocapitalizationType = .sentences
     }
-    alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-    alert.addAction(UIAlertAction(title: "Create", style: .default) { [weak self, weak alert] _ in
+    alert.addAction(UIAlertAction(title: String(localized: "Cancel", table: "Fork"), style: .cancel))
+    alert.addAction(UIAlertAction(title: String(localized: "Create", table: "Fork"), style: .default) { [weak self, weak alert] _ in
       let name = alert?.textFields?.first?.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
       guard !name.isEmpty, let self else { return }
       // Same steps as `NewPlaylistTableHeader`. The upload of the songs creates it on the server.
@@ -293,7 +293,7 @@ private class NewPlaylistRowCell: UITableViewCell {
     icon.preferredSymbolConfiguration = UIImage.SymbolConfiguration(pointSize: 22, weight: .semibold)
     icon.contentMode = .center
     let label = UILabel()
-    label.text = "New Playlist"
+    label.text = String(localized: "New Playlist", table: "Fork")
     label.font = DS.Font.songTitle
     label.adjustsFontForContentSizeCategory = true
     label.textColor = .label
@@ -319,7 +319,7 @@ private class NewPlaylistRowCell: UITableViewCell {
       label.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
       label.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
     ])
-    accessibilityLabel = "New Playlist"
+    accessibilityLabel = String(localized: "New Playlist", table: "Fork")
     accessibilityTraits = .button
   }
 

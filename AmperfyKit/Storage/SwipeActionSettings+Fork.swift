@@ -62,16 +62,16 @@ extension UserSettings {
 /// Replaces technical menu titles of the original app, so the upstream code keeps its literals.
 public enum ForkMenuText {
   static let titles: [String: String] = [
-    "Instant Mix": "Song Radio",
-    "Show Album": "Go to Album",
-    "Show Artist": "Go to Artist",
-    "Show Podcast": "Go to Podcast",
-    "Favorite": "Add to Favorites",
-    "Unmark favorite": "Remove from Favorites",
-    "Delete Cache": "Remove Download",
-    "Clear User Queue": "Clear Queue",
-    "Add Context Queue to Playlist": "Add Current List to Playlist",
-    "Scroll to currently playing": "Scroll to Now Playing",
+    "Instant Mix": String(localized: "Song Radio", table: "Fork"),
+    "Show Album": String(localized: "Go to Album", table: "Fork"),
+    "Show Artist": String(localized: "Go to Artist", table: "Fork"),
+    "Show Podcast": String(localized: "Go to Podcast", table: "Fork"),
+    "Favorite": String(localized: "Add to Favorites", table: "Fork"),
+    "Unmark favorite": String(localized: "Remove from Favorites", table: "Fork"),
+    "Delete Cache": String(localized: "Remove Download", table: "Fork"),
+    "Clear User Queue": String(localized: "Clear Queue", table: "Fork"),
+    "Add Context Queue to Playlist": String(localized: "Add Current List to Playlist", table: "Fork"),
+    "Scroll to currently playing": String(localized: "Scroll to Now Playing", table: "Fork"),
   ]
 
   public static func title(_ title: String) -> String {

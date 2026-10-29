@@ -128,7 +128,7 @@ final class ListPlayHeaderView: UIView, ListPlayHeader {
     shuffleConfig.baseForegroundColor = .secondaryLabel
     shuffleConfig.contentInsets = NSDirectionalEdgeInsets(top: 6, leading: 4, bottom: 6, trailing: 4)
     shuffleButton.configuration = shuffleConfig
-    shuffleButton.accessibilityLabel = "Shuffle All"
+    shuffleButton.accessibilityLabel = String(localized: "Shuffle All", table: "Fork")
     shuffleButton.addTarget(self, action: #selector(shufflePressed), for: .touchUpInside)
 
     var playConfig = UIButton.Configuration.filled()
@@ -139,7 +139,7 @@ final class ListPlayHeaderView: UIView, ListPlayHeader {
     playConfig.baseForegroundColor = .systemBackground
     playConfig.cornerStyle = .capsule
     playButton.configuration = playConfig
-    playButton.accessibilityLabel = "Play All"
+    playButton.accessibilityLabel = String(localized: "Play All", table: "Fork")
     playButton.addTarget(self, action: #selector(playPressed), for: .touchUpInside)
     playButton.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([

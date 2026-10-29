@@ -35,9 +35,9 @@ final class ListeningStatsVC: UITableViewController {
     var title: String? {
       switch self {
       case .summary: return nil
-      case .topArtists: return "Top Artists"
-      case .topSongs: return "Top Songs"
-      case .topAlbums: return "Top Albums"
+      case .topArtists: return String(localized: "Top Artists", table: "Fork")
+      case .topSongs: return String(localized: "Top Songs", table: "Fork")
+      case .topAlbums: return String(localized: "Top Albums", table: "Fork")
       }
     }
   }
@@ -59,7 +59,7 @@ final class ListeningStatsVC: UITableViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    title = "Your Stats"
+    title = String(localized: "Your Stats", table: "Fork")
     navigationItem.largeTitleDisplayMode = .never
     tableView.backgroundColor = ForkSurface.background
     tableView.register(UITableViewCell.self, forCellReuseIdentifier: Self.cellID)
@@ -91,7 +91,7 @@ final class ListeningStatsVC: UITableViewController {
 
   private static func title(of period: ListeningStats.Period) -> String {
     switch period {
-    case .allTime: return "All Time"
+    case .allTime: return String(localized: "All Time", table: "Fork")
     case let .year(year): return String(year)
     }
   }
@@ -117,8 +117,8 @@ final class ListeningStatsVC: UITableViewController {
     }
     var config = UIContentUnavailableConfiguration.empty()
     config.image = UIImage(systemName: "chart.bar.xaxis")
-    config.text = "No Plays Yet"
-    config.secondaryText = "Songs you listen to in Drift show up here."
+    config.text = String(localized: "No Plays Yet", table: "Fork")
+    config.secondaryText = String(localized: "Songs you listen to in Drift show up here.", table: "Fork")
     contentUnavailableConfiguration = config
   }
 
@@ -133,16 +133,16 @@ final class ListeningStatsVC: UITableViewController {
   }
 
   private static func plays(_ count: Int) -> String {
-    count == 1 ? "1 play" : "\(count) plays"
+    count == 1 ? String(localized: "1 play", table: "Fork") : String(localized: "\(count) plays", table: "Fork")
   }
 
   private func summaryRows(_ stats: ListeningStats) -> [(String, String)] {
     [
-      ("Listening Time", Self.listeningTime(stats.listeningSeconds)),
-      ("Plays", "\(stats.plays)"),
-      ("Songs", "\(stats.songCount)"),
-      ("Artists", "\(stats.artistCount)"),
-      ("Albums", "\(stats.albumCount)"),
+      (String(localized: "Listening Time", table: "Fork"), Self.listeningTime(stats.listeningSeconds)),
+      (String(localized: "Plays", table: "Fork"), "\(stats.plays)"),
+      (String(localized: "Songs", table: "Fork"), "\(stats.songCount)"),
+      (String(localized: "Artists", table: "Fork"), "\(stats.artistCount)"),
+      (String(localized: "Albums", table: "Fork"), "\(stats.albumCount)"),
     ]
   }
 
@@ -180,14 +180,14 @@ final class ListeningStatsVC: UITableViewController {
     var notes = [String]()
     if case .year = stats.period {
       notes.append(stats.isApproximate
-        ? "From the play history on this device. Songs without a history entry count with their total plays."
-        : "From the play history on this device.")
+        ? String(localized: "From the play history on this device. Songs without a history entry count with their total plays.", table: "Fork")
+        : String(localized: "From the play history on this device.", table: "Fork"))
     } else {
-      notes.append("Plays counted on this device.")
+      notes.append(String(localized: "Plays counted on this device.", table: "Fork"))
     }
     if let start = stats.historyStartDate {
       let date = start.formatted(date: .abbreviated, time: .omitted)
-      notes.append("Drift has counted \(stats.appPlayedSongsCount) plays since \(date).")
+      notes.append(String(localized: "Drift has counted \(stats.appPlayedSongsCount) plays since \(date).", table: "Fork"))
     }
     return notes.joined(separator: " ")
   }
@@ -280,7 +280,7 @@ final class ListeningStatsVC: UITableViewController {
       }
       DS.haptic(.light)
       appDelegate.player.play(context: PlayContext(
-        name: "Top Songs · \(Self.title(of: stats.period))",
+        name: String(localized: "Top Songs · \(Self.title(of: stats.period))", table: "Fork"),
         index: index,
         playables: playables
       ))

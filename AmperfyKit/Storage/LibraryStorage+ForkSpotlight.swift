@@ -56,9 +56,9 @@ extension LibraryStorage {
     for albumMO in (try? context.fetch(albumRequest)) ?? [] {
       let album = Album(managedObject: albumMO)
       guard !YouTubeMusic.isPlaceholderId(album.id), !album.name.isEmpty else { continue }
-      var detail = ["Album"]
+      var detail = [String(localized: "Album", table: "Fork")]
       if album.year > 0 { detail.append(String(album.year)) }
-      if album.songCount > 0 { detail.append(Self.countText(album.songCount, "Song")) }
+      if album.songCount > 0 { detail.append(Self.songsText(album.songCount)) }
       entries.append(ForkSpotlightEntry(
         kind: .album,
         id: album.id,
@@ -78,8 +78,8 @@ extension LibraryStorage {
       let artist = Artist(managedObject: artistMO)
       guard !YouTubeMusic.isPlaceholderId(artist.id), !artist.id.isEmpty, !artist.name.isEmpty
       else { continue }
-      var detail = ["Artist"]
-      if artist.albumCount > 0 { detail.append(Self.countText(artist.albumCount, "Album")) }
+      var detail = [String(localized: "Artist", table: "Fork")]
+      if artist.albumCount > 0 { detail.append(Self.albumsText(artist.albumCount)) }
       entries.append(ForkSpotlightEntry(
         kind: .artist,
         id: artist.id,
@@ -92,8 +92,8 @@ extension LibraryStorage {
 
     for playlist in getPlaylists(for: account) {
       guard !playlist.id.isEmpty, !playlist.name.isEmpty else { continue }
-      var detail = ["Playlist"]
-      if playlist.songCount > 0 { detail.append(Self.countText(playlist.songCount, "Song")) }
+      var detail = [String(localized: "Playlist", table: "Fork")]
+      if playlist.songCount > 0 { detail.append(Self.songsText(playlist.songCount)) }
       entries.append(ForkSpotlightEntry(
         kind: .playlist,
         id: playlist.id,
@@ -106,7 +106,11 @@ extension LibraryStorage {
     return entries
   }
 
-  private static func countText(_ count: Int, _ noun: String) -> String {
-    "\(count) \(noun)\(count == 1 ? "" : "s")"
+  private static func songsText(_ count: Int) -> String {
+    count == 1 ? String(localized: "1 Song", table: "Fork") : String(localized: "\(count) Songs", table: "Fork")
+  }
+
+  private static func albumsText(_ count: Int) -> String {
+    count == 1 ? String(localized: "1 Album", table: "Fork") : String(localized: "\(count) Albums", table: "Fork")
   }
 }

@@ -29,7 +29,7 @@ struct NeutralAccentSettingsSection: View {
     SettingsSection(
       content: {
         SettingsCheckBoxRow(
-          title: "Neutral Accent",
+          title: String(localized: "Neutral Accent", table: "Fork"),
           isOn: Binding<Bool>(
             get: { isNeutralAccent },
             set: { newValue in
@@ -40,7 +40,7 @@ struct NeutralAccentSettingsSection: View {
         )
       },
       footer:
-      "Use white (Dark) or black (Light) for buttons and highlights instead of the theme color. Colors from the artwork stay."
+      String(localized: "Use white (Dark) or black (Light) for buttons and highlights instead of the theme color. Colors from the artwork stay.", table: "Fork")
     )
     .onAppear {
       isNeutralAccent = appDelegate.storage.settings.user.isNeutralAccent

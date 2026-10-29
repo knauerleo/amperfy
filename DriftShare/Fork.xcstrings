@@ -1,0 +1,182 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "%@Starting the download on %@, this takes about 10 seconds.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@Starte den Download auf %2$@, das dauert etwa 10 Sekunden."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@Starting the download on %@, this takes about 10 seconds."
+          }
+        }
+      }
+    },
+    "Added to Drift": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zu Drift hinzugefügt"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Added to Drift"
+          }
+        }
+      }
+    },
+    "Adding to Drift…": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wird zu Drift hinzugefügt…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adding to Drift…"
+          }
+        }
+      }
+    },
+    "Cancel": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abbrechen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        }
+      }
+    },
+    "Done": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fertig"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done"
+          }
+        }
+      }
+    },
+    "No YouTube or YouTube Music link found.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kein Link von YouTube oder YouTube Music gefunden."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No YouTube or YouTube Music link found."
+          }
+        }
+      }
+    },
+    "Not Added": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nicht hinzugefügt"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not Added"
+          }
+        }
+      }
+    },
+    "Open Drift once with your server account, then try again.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Öffne Drift einmal mit deinem Server-Account und versuche es dann erneut."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open Drift once with your server account, then try again."
+          }
+        }
+      }
+    },
+    "The server answered with status %lld.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Server hat mit Status %lld geantwortet."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The server answered with status %lld."
+          }
+        }
+      }
+    },
+    "The server did not start the download.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Server hat den Download nicht gestartet."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The server did not start the download."
+          }
+        }
+      }
+    },
+    "The song will appear in your library in a minute.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Der Song erscheint in einer Minute in deiner Bibliothek."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The song will appear in your library in a minute."
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

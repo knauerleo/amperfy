@@ -704,7 +704,7 @@ class SearchVC: BasicTableViewController {
 
   lazy var searchingConfig: UIContentUnavailableConfiguration = {
     var config = UIContentUnavailableConfiguration.loading()
-    config.text = "Searching…"
+    config.text = String(localized: "Searching…", table: "Fork")
     return config
   }()
 

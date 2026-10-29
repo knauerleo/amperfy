@@ -162,7 +162,7 @@ final class ImmersiveDetailHeaderView: UIView {
     configureIconButton(radioButton, image: .radio, action: #selector(radioPressed))
     radioButton.isHidden = true
     configureIconButton(shuffleButton, image: .shuffle, action: #selector(shufflePressed))
-    shuffleButton.accessibilityLabel = "Shuffle"
+    shuffleButton.accessibilityLabel = String(localized: "Shuffle", table: "Fork")
 
     var playConfig = UIButton.Configuration.filled()
     playConfig.image = UIImage.play.withConfiguration(
@@ -172,7 +172,7 @@ final class ImmersiveDetailHeaderView: UIView {
     playConfig.baseForegroundColor = .systemBackground
     playConfig.cornerStyle = .capsule
     playButton.configuration = playConfig
-    playButton.accessibilityLabel = "Play"
+    playButton.accessibilityLabel = String(localized: "Play", table: "Fork")
     playButton.addTarget(self, action: #selector(playPressed), for: .touchUpInside)
     playButton.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([

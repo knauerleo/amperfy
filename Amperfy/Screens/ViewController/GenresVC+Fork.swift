@@ -30,7 +30,7 @@ extension GenresVC {
       player: appDelegate.player,
       infoCB: { [weak self] in
         let count = self?.singleFetchedResultsController?.fetchedObjects?.count ?? 0
-        return "\(count) Genre\(count == 1 ? "" : "s")"
+        return count == 1 ? String(localized: "1 Genre", table: "Fork") : String(localized: "\(count) Genres", table: "Fork")
       },
       contextProvider: { [weak self] isShuffled in
         await self?.forkPlayContext(isShuffled: isShuffled)
@@ -53,7 +53,7 @@ extension GenresVC {
     let albums = isShuffled ? ListPlayContextBuilder.randomAlbums(of: groups) : ListPlayContextBuilder
       .albumsInOrder(of: groups)
     return await ListPlayContextBuilder.context(
-      name: sceneTitle ?? "Genres",
+      name: sceneTitle ?? String(localized: "Genres", table: "Fork"),
       albums: albums,
       account: account
     )

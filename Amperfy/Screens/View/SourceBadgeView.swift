@@ -103,19 +103,19 @@ final class SourceBadgeView: UIView {
     switch status {
     case .online:
       imageView.image = UIImage(systemName: "icloud")
-      accessibilityLabel = "Only on YouTube Music"
+      accessibilityLabel = String(localized: "Only on YouTube Music", table: "Fork")
     case .inLibrary:
       imageView.image = .check
-      accessibilityLabel = "In your library"
+      accessibilityLabel = String(localized: "In your library", table: "Fork")
     case .failed:
       imageView.image = .exclamation
-      accessibilityLabel = "Download failed"
+      accessibilityLabel = String(localized: "Download failed", table: "Fork")
     case .waiting:
-      accessibilityLabel = "Waiting for download"
+      accessibilityLabel = String(localized: "Waiting for download", table: "Fork")
     case .downloading:
-      accessibilityLabel = "Downloading"
+      accessibilityLabel = String(localized: "Downloading", table: "Fork")
     case .saving:
-      accessibilityLabel = "Saving"
+      accessibilityLabel = String(localized: "Saving", table: "Fork")
     }
     // the API reports no percentage, so the ring shows the step
     switch status {

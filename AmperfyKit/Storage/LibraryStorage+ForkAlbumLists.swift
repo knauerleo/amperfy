@@ -32,10 +32,12 @@ public struct AlbumDecade: Hashable, Sendable {
 
   public var endYear: Int { startYear + 9 }
   /// "1990s"
-  public var title: String { "\(startYear)s" }
+  public var title: String { String(localized: "\(startYear)s", table: "Fork") }
   /// "90s" (2000s and later keep four digits)
   public var shortTitle: String {
-    startYear < 2000 ? "\(startYear % 100)s" : "\(startYear)s"
+    startYear < 2000
+      ? String(localized: "\(startYear % 100)s", table: "Fork")
+      : String(localized: "\(startYear)s", table: "Fork")
   }
 }
 

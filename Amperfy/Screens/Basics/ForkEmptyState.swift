@@ -4,8 +4,8 @@
 //
 //  Fork: empty states with an action for the remaining library lists (UI-17), like the empty
 //  state of Home: favorites ("Sync Favorites"), playlists ("New Playlist"), downloads
-//  ("Download Favorite Songs") and podcasts ("Refresh"). The texts stay English like the rest
-//  of the app. Buttons that need the server only show up in online mode.
+//  ("Download Favorite Songs") and podcasts ("Refresh"). Texts come from the table "Fork"
+//  (German in `Fork.xcstrings`, UI-15). Buttons that need the server only show up in online mode.
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -36,17 +36,17 @@ enum ForkEmptyState {
 
     var title: String {
       switch self {
-      case .songs: "No Favorite Songs"
-      case .albums: "No Favorite Albums"
-      case .artists: "No Favorite Artists"
+      case .songs: String(localized: "No Favorite Songs", table: "Fork")
+      case .albums: String(localized: "No Favorite Albums", table: "Fork")
+      case .artists: String(localized: "No Favorite Artists", table: "Fork")
       }
     }
 
     var hint: String {
       switch self {
-      case .songs: "Tap ♥ on a song and it shows up here."
-      case .albums: "Tap ♥ on an album and it shows up here."
-      case .artists: "Tap ♥ on an artist and it shows up here."
+      case .songs: String(localized: "Tap ♥ on a song and it shows up here.", table: "Fork")
+      case .albums: String(localized: "Tap ♥ on an album and it shows up here.", table: "Fork")
+      case .artists: String(localized: "Tap ♥ on an artist and it shows up here.", table: "Fork")
       }
     }
   }
@@ -65,7 +65,7 @@ enum ForkEmptyState {
     config.secondaryText = kind.hint
     guard isOnline else { return config }
     config.button = .filled()
-    config.button.title = "Sync Favorites"
+    config.button.title = String(localized: "Sync Favorites", table: "Fork")
     config.buttonProperties.primaryAction = UIAction { [weak viewController] _ in
       guard let viewController else { return }
       runWithSpinner(in: viewController, onFinished: onFinished) {
@@ -86,14 +86,14 @@ enum ForkEmptyState {
     -> UIContentUnavailableConfiguration {
     var config = UIContentUnavailableConfiguration.empty()
     config.image = .playlist
-    config.text = "No Playlists"
+    config.text = String(localized: "No Playlists", table: "Fork")
     guard isOnline else {
-      config.secondaryText = "Playlists from your server show up here. New playlists need online mode."
+      config.secondaryText = String(localized: "Playlists from your server show up here. New playlists need online mode.", table: "Fork")
       return config
     }
-    config.secondaryText = "Create a playlist, then add songs from any list or from the player."
+    config.secondaryText = String(localized: "Create a playlist, then add songs from any list or from the player.", table: "Fork")
     config.button = .filled()
-    config.button.title = "New Playlist"
+    config.button.title = String(localized: "New Playlist", table: "Fork")
     config.buttonProperties.primaryAction = UIAction { [weak viewController] _ in
       guard let viewController else { return }
       presentNewPlaylistAlert(account: account, in: viewController)
@@ -102,13 +102,13 @@ enum ForkEmptyState {
   }
 
   private static func presentNewPlaylistAlert(account: Account, in viewController: UIViewController) {
-    let alert = UIAlertController(title: "New Playlist", message: nil, preferredStyle: .alert)
+    let alert = UIAlertController(title: String(localized: "New Playlist", table: "Fork"), message: nil, preferredStyle: .alert)
     alert.addTextField { textField in
-      textField.placeholder = "Name"
+      textField.placeholder = String(localized: "Name", table: "Fork")
       textField.autocapitalizationType = .sentences
     }
-    alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-    alert.addAction(UIAlertAction(title: "Create", style: .default) { [weak viewController, weak alert] _ in
+    alert.addAction(UIAlertAction(title: String(localized: "Cancel", table: "Fork"), style: .cancel))
+    alert.addAction(UIAlertAction(title: String(localized: "Create", table: "Fork"), style: .default) { [weak viewController, weak alert] _ in
       let name = alert?.textFields?.first?.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
       guard !name.isEmpty, let viewController else { return }
       createPlaylist(name: name, account: account, in: viewController)
@@ -144,14 +144,14 @@ enum ForkEmptyState {
     -> UIContentUnavailableConfiguration {
     var config = UIContentUnavailableConfiguration.empty()
     config.image = .download
-    config.text = "No Downloads"
-    config.secondaryText = "Download albums, playlists or songs to listen without a connection."
+    config.text = String(localized: "No Downloads", table: "Fork")
+    config.secondaryText = String(localized: "Download albums, playlists or songs to listen without a connection.", table: "Fork")
     guard isOnline else { return config }
     let favorites = appDelegate.storage.main.library.getFavoriteSongs(for: account)
       .filter { !$0.isCached }
     guard !favorites.isEmpty else { return config }
     config.button = .filled()
-    config.button.title = "Download Favorite Songs"
+    config.button.title = String(localized: "Download Favorite Songs", table: "Fork")
     config.buttonProperties.primaryAction = UIAction { [weak viewController] _ in
       guard let viewController else { return }
       downloadFavorites(account: account, in: viewController)
@@ -172,12 +172,12 @@ enum ForkEmptyState {
       return
     }
     let alert = UIAlertController(
-      title: "Many Songs",
-      message: "Are you sure to add \(songs.count) favorite songs to the download queue?",
+      title: String(localized: "Many Songs", table: "Fork"),
+      message: String(localized: "Are you sure to add \(songs.count) favorite songs to the download queue?", table: "Fork"),
       preferredStyle: .alert
     )
-    alert.addAction(UIAlertAction(title: "OK", style: .default) { _ in download() })
-    alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+    alert.addAction(UIAlertAction(title: String(localized: "OK", table: "Fork"), style: .default) { _ in download() })
+    alert.addAction(UIAlertAction(title: String(localized: "Cancel", table: "Fork"), style: .cancel))
     viewController.present(alert, animated: true)
   }
 
@@ -192,10 +192,10 @@ enum ForkEmptyState {
   )
     -> UIContentUnavailableConfiguration {
     var config = base
-    config.secondaryText = "Podcasts you subscribe to on your server show up here."
+    config.secondaryText = String(localized: "Podcasts you subscribe to on your server show up here.", table: "Fork")
     guard isOnline else { return config }
     config.button = .filled()
-    config.button.title = "Refresh"
+    config.button.title = String(localized: "Refresh", table: "Fork")
     config.buttonProperties.primaryAction = UIAction { [weak viewController] _ in
       guard let viewController else { return }
       runWithSpinner(in: viewController, onFinished: onFinished) {

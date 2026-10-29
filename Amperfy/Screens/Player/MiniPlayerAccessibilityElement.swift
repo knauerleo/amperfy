@@ -47,17 +47,17 @@ final class MiniPlayerAccessibilityElement: UIAccessibilityElement {
     self.actions = actions
     super.init(accessibilityContainer: container)
     accessibilityTraits = [.button, .updatesFrequently]
-    accessibilityHint = "Opens the player"
+    accessibilityHint = String(localized: "Opens the player", table: "Fork")
     accessibilityCustomActions = [
-      UIAccessibilityCustomAction(name: "Skip Forward") { _ in
+      UIAccessibilityCustomAction(name: String(localized: "Skip Forward", table: "Fork")) { _ in
         actions.next()
         return true
       },
-      UIAccessibilityCustomAction(name: "Skip Back") { _ in
+      UIAccessibilityCustomAction(name: String(localized: "Skip Back", table: "Fork")) { _ in
         actions.previous()
         return true
       },
-      UIAccessibilityCustomAction(name: "Open Player") { _ in
+      UIAccessibilityCustomAction(name: String(localized: "Open Player", table: "Fork")) { _ in
         actions.open()
         return true
       },
@@ -65,7 +65,7 @@ final class MiniPlayerAccessibilityElement: UIAccessibilityElement {
   }
 
   override var accessibilityLabel: String? {
-    get { "Now Playing" }
+    get { String(localized: "Now Playing", table: "Fork") }
     set {}
   }
 

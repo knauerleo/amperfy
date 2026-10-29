@@ -178,7 +178,7 @@ extension PopupPlayerVC {
   private func addCloseGrabber() {
     let button = UIButton(type: .custom)
     button.translatesAutoresizingMaskIntoConstraints = false
-    button.accessibilityLabel = "Close Player"
+    button.accessibilityLabel = String(localized: "Close Player", table: "Fork")
     button.addAction(UIAction { [weak self] _ in self?.closePopupPlayer() }, for: .touchUpInside)
     let capsule = UIView()
     capsule.translatesAutoresizingMaskIntoConstraints = false

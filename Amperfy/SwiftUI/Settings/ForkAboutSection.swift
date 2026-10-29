@@ -27,7 +27,7 @@ struct ForkAboutSection: View {
       content: {
         VStack(alignment: .leading, spacing: 6) {
           Text(
-            "Based on \(ForkBrand.upstreamName) by \(ForkBrand.upstreamAuthor), licensed under GPLv3"
+            String(localized: "Based on \(ForkBrand.upstreamName) by \(ForkBrand.upstreamAuthor), licensed under GPLv3", table: "Fork")
           )
           .font(.footnote)
           .foregroundStyle(.secondary)
@@ -36,7 +36,7 @@ struct ForkAboutSection: View {
         }
         .padding(.vertical, 2)
       },
-      header: "About \(ForkBrand.name)"
+      header: String(localized: "About \(ForkBrand.name)", table: "Fork")
     )
   }
 }

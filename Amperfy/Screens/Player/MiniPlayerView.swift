@@ -1021,7 +1021,7 @@ extension MiniPlayerView {
         }
       )
     )
-    nextButton.accessibilityLabel = "Next"
+    nextButton.accessibilityLabel = String(localized: "Next", table: "Fork")
     accessibilityElements = [summary, playButton, nextButton]
   }
 

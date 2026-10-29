@@ -179,7 +179,7 @@ extension SyncVC {
       info: progressInfo,
       spinner: activitySpinner
     )
-    ForkOnboardingStyle.stylePill(skipButton, prominent: false, title: "Skip")
+    ForkOnboardingStyle.stylePill(skipButton, prominent: false, title: String(localized: "Skip", table: "Fork"))
   }
 }
 

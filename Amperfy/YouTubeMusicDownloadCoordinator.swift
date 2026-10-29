@@ -109,7 +109,7 @@ final class YouTubeMusicDownloadCoordinator: NSObject {
       let song = await sync.syncFinishedDownload(hit: hit, job: job)
       notify(
         identifier: "youtube-\(hit.videoId)",
-        title: "Added to Library",
+        title: String(localized: "Added to Library", table: "Fork"),
         body: "\(song?.title ?? job.title ?? hit.title) · \(song?.creatorName ?? job.artist ?? hit.artist)",
         accountIdent: account.ident,
         albumId: song?.album?.id
@@ -125,7 +125,7 @@ final class YouTubeMusicDownloadCoordinator: NSObject {
     if let error = job.error, !error.isEmpty { body += "\n\(error)" }
     notify(
       identifier: "youtube-\(videoId)",
-      title: "Download Failed",
+      title: String(localized: "Download Failed", table: "Fork"),
       body: body,
       accountIdent: nil,
       albumId: nil

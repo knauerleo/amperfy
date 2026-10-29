@@ -16,8 +16,9 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 
 ### Oberfläche
 
-- [ ] **UI-15 Deutsche Texte per String Catalog**
-  - Zuerst nur Fork-Texte und `ForkMenuText.relabel`, Upstream-Literale bleiben
+- [ ] **UI-15b Upstream-Texte auf Deutsch** - Rest von UI-15
+  - Fork-Texte stehen in `Amperfy/Fork.xcstrings` (Tabelle `Fork`). Offen: Upstream-Literale (UIKit-Menüs, Alerts, `SwipeActionType`-Namen, SwiftUI-Einstellungen, XIBs), dafür eine `Localizable.xcstrings` bzw. XIB-Strings
+  - Ebenfalls offen: vom Fork nur umbenannte Upstream-Texte (`HomeSection` „Recently Played“/„Recently Added“, Menüeinträge in `EntityPreviewVC`, Swipe-Namen, „Tap to reopen Drift“) und die `EventLogger`-Themen
 - [ ] **UI-16 Entscheidung iPad/Mac**
   - Fork-Design gilt nur auf dem iPhone. Entweder in `FORK.md` festhalten oder Home, Suche und Detailseiten auf dem iPad mitnehmen
 
@@ -62,3 +63,4 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [x] ~~**F-15 Spotlight-Indexierung**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**F-9 Teilen-Erweiterung „Teilen → Drift“**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**UI-10 Barrierefreiheit der Fork-Views**~~ (2026-10-29) - FORK.md Abschnitt 10
+- [x] ~~**UI-15 Deutsche Texte per String Catalog**~~ (2026-10-29) - FORK.md Abschnitt 10, nur Fork-Texte, Rest in UI-15b

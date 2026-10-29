@@ -112,10 +112,10 @@ final class DecadeAlbumsVC: UICollectionViewController {
     if albums.isEmpty {
       var config = UIContentUnavailableConfiguration.empty()
       config.image = UIImage(systemName: "calendar")
-      config.text = "No Albums"
+      config.text = String(localized: "No Albums", table: "Fork")
       config.secondaryText = isOfflineMode
-        ? "Offline mode only shows downloaded albums."
-        : "No albums from the \(decade.title) in your library."
+        ? String(localized: "Offline mode only shows downloaded albums.", table: "Fork")
+        : String(localized: "No albums from the \(decade.title) in your library.", table: "Fork")
       contentUnavailableConfiguration = config
     } else {
       contentUnavailableConfiguration = nil

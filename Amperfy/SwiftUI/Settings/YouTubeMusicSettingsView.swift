@@ -50,23 +50,23 @@ struct YouTubeMusicSettingsView: View {
         content: {
           SettingsCheckBoxRow(title: "YouTube Music", isOn: $isEnabled)
         },
-        footer: "Shows YouTube Music results in Search and the download overview in Library."
+        footer: String(localized: "Shows YouTube Music results in Search and the download overview in Library.", table: "Fork")
       )
 
       SettingsSection(
         content: {
-          SettingsButtonRow(title: "Test Connection", action: testConnection)
+          SettingsButtonRow(title: String(localized: "Test Connection", table: "Fork"), action: testConnection)
             .disabled(connection == .testing)
         },
         footer: connectionFooter,
-        header: "Server"
+        header: String(localized: "Server", table: "Fork")
       )
 
       SettingsSection(
         content: {
-          SettingsCheckBoxRow(title: "Custom Proxy URL", isOn: $isCustomProxy)
+          SettingsCheckBoxRow(title: String(localized: "Custom Proxy URL", table: "Fork"), isOn: $isCustomProxy)
           if isCustomProxy {
-            SettingsRow(title: "Proxy URL", orientation: .vertical) {
+            SettingsRow(title: String(localized: "Proxy URL", table: "Fork"), orientation: .vertical) {
               TextField("https://music.example.com", text: $proxyURLInput)
                 .keyboardType(.URL)
                 .textInputAutocapitalization(.never)
@@ -79,7 +79,7 @@ struct YouTubeMusicSettingsView: View {
           }
         },
         footer: proxyFooter,
-        header: "Playback Proxy"
+        header: String(localized: "Playback Proxy", table: "Fork")
       )
     }
     .navigationTitle("YouTube Music")
@@ -101,21 +101,23 @@ struct YouTubeMusicSettingsView: View {
   private var connectionFooter: String {
     switch connection {
     case .idle:
-      return "Search, playback and downloads go through the server of your account. It needs the YouTube Music proxy in front of Navidrome."
+      return String(localized: "Search, playback and downloads go through the server of your account. It needs the YouTube Music proxy in front of Navidrome.", table: "Fork")
     case .testing:
-      return "Connecting…"
+      return String(localized: "Connecting…", table: "Fork")
     case let .ok(jobCount):
-      return "Connected. The proxy lists \(jobCount) download\(jobCount == 1 ? "" : "s") of this account."
+      return jobCount == 1
+        ? String(localized: "Connected. The proxy lists 1 download of this account.", table: "Fork")
+        : String(localized: "Connected. The proxy lists \(jobCount) downloads of this account.", table: "Fork")
     case let .failed(message):
-      return "Not available: \(message)"
+      return String(localized: "Not available: \(message)", table: "Fork")
     }
   }
 
   private var proxyFooter: String {
     if let proxyURLError { return proxyURLError }
     return isCustomProxy
-      ? "Songs from YouTube Music play through this address, followed by /rest/stream.view."
-      : "Songs from YouTube Music play through the server of your account. If it points to Navidrome directly (port \(SongpickerConfig.navidromePort)), port \(SongpickerConfig.proxyPort) of the same host is used."
+      ? String(localized: "Songs from YouTube Music play through this address, followed by /rest/stream.view.", table: "Fork")
+      : String(localized: "Songs from YouTube Music play through the server of your account. If it points to Navidrome directly (port \(SongpickerConfig.navidromePort)), port \(SongpickerConfig.proxyPort) of the same host is used.", table: "Fork")
   }
 
   private func load() {
@@ -142,7 +144,7 @@ struct YouTubeMusicSettingsView: View {
       return
     }
     guard let url = SongpickerConfig.normalizedURL(from: text) else {
-      proxyURLError = "Please enter an address like https://music.example.com."
+      proxyURLError = String(localized: "Please enter an address like https://music.example.com.", table: "Fork")
       return
     }
     proxyURLError = nil

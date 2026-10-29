@@ -104,7 +104,7 @@ extension HomeVC {
       let cell = dequeue(LargeAlbumCell.self, LargeAlbumCell.reuseID, indexPath)
       cell.display(
         title: decade.title,
-        subtitle: decade.albumCount == 1 ? "1 Album" : "\(decade.albumCount) Albums",
+        subtitle: decade.albumCount == 1 ? String(localized: "1 Album", table: "Fork") : String(localized: "\(decade.albumCount) Albums", table: "Fork"),
         generatedArtwork: GradientArtworkView.decade(decade)
       )
       return cell
@@ -118,7 +118,7 @@ extension HomeVC {
       return cell
     case (.favoriteSongs, _):
       let cell = dequeue(TileCollectionCell.self, TileCollectionCell.reuseID, indexPath)
-      cell.display(title: "Favorite Songs", generatedArtwork: GradientArtworkView.favoriteSongs())
+      cell.display(title: String(localized: "Favorite Songs", table: "Fork"), generatedArtwork: GradientArtworkView.favoriteSongs())
       return cell
     case (.skeleton, .tileGrid):
       let cell = dequeue(TileCollectionCell.self, TileCollectionCell.reuseID, indexPath)
@@ -236,20 +236,20 @@ extension HomeVC {
     }
     var config = UIContentUnavailableConfiguration.empty()
     config.image = UIImage(systemName: "music.note.house")
-    config.text = "Nothing here yet"
+    config.text = String(localized: "Nothing here yet", table: "Fork")
     if sharedHome.orderedVisibleSections.isEmpty {
-      config.secondaryText = "All Home sections are hidden."
+      config.secondaryText = String(localized: "All Home sections are hidden.", table: "Fork")
       config.button = .filled()
-      config.button.title = "Edit Home"
+      config.button.title = String(localized: "Edit Home", table: "Fork")
       config.buttonProperties.primaryAction = UIAction { [weak self] _ in
         self?.presentSectionEditor()
       }
     } else if sharedHome.isOfflineMode {
-      config.secondaryText = "Offline mode only shows downloaded music. Download albums or playlists to see them here."
+      config.secondaryText = String(localized: "Offline mode only shows downloaded music. Download albums or playlists to see them here.", table: "Fork")
     } else {
-      config.secondaryText = "Sync your library to see what you played recently, new albums and more."
+      config.secondaryText = String(localized: "Sync your library to see what you played recently, new albums and more.", table: "Fork")
       config.button = .filled()
-      config.button.title = "Sync Library"
+      config.button.title = String(localized: "Sync Library", table: "Fork")
       config.buttonProperties.primaryAction = UIAction { [weak self] _ in
         DS.haptic(.light)
         self?.sharedHome.syncLibraryForHome()

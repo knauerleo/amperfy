@@ -43,7 +43,7 @@ final class SleepTimerChipView: UIButton {
       return [appDelegate.createSleepTimerMenu(refreshCB: { [weak self] in self?.refresh() })]
     }
     heightAnchor.constraint(equalToConstant: Self.height).isActive = true
-    accessibilityHint = "Change or turn off the sleep timer"
+    accessibilityHint = String(localized: "Change or turn off the sleep timer", table: "Fork")
   }
 
   required init?(coder: NSCoder) {
@@ -82,7 +82,7 @@ final class SleepTimerChipView: UIButton {
       title.font = DS.Font.cellSubtitle
       config.attributedTitle = title
       configuration = config
-      accessibilityLabel = "Sleep Timer: \(text)"
+      accessibilityLabel = String(localized: "Sleep Timer: \(text)", table: "Fork")
     }
     shownText = text
     let isShown = text != nil
@@ -93,9 +93,11 @@ final class SleepTimerChipView: UIButton {
 
   private var currentText: String? {
     if let timer = appDelegate.sleepTimer, timer.isValid {
-      return "Pauses at \(timer.fireDate.asShortHrMinString)"
+      return String(localized: "Pauses at \(timer.fireDate.asShortHrMinString)", table: "Fork")
     } else if appDelegate.player.isShouldPauseAfterFinishedPlaying {
-      return "Pauses after this \(appDelegate.player.playerMode.playableName)"
+      return appDelegate.player.playerMode == .music
+        ? String(localized: "Pauses after this Song", table: "Fork")
+        : String(localized: "Pauses after this Episode", table: "Fork")
     }
     return nil
   }

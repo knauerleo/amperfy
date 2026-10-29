@@ -75,10 +75,10 @@ public enum HomeSection: Int, Sendable, CaseIterable, Codable {
     case .randomSongs: return "Random Songs"
     case .recentlyPlayed: return "Recently Played"
     case .recentlyAdded: return "Recently Added"
-    case .mostPlayedAlbums: return "Most Played"
-    case .topRatedAlbums: return "Top Rated"
-    case .decades: return "Decades"
-    case .mixes: return "Made for You"
+    case .mostPlayedAlbums: return String(localized: "Most Played", table: "Fork")
+    case .topRatedAlbums: return String(localized: "Top Rated", table: "Fork")
+    case .decades: return String(localized: "Decades", table: "Fork")
+    case .mixes: return String(localized: "Made for You", table: "Fork")
     }
   }
 

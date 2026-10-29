@@ -33,7 +33,7 @@ extension ArtistsVC {
       player: appDelegate.player,
       infoCB: { [weak self] in
         let count = self?.singleFetchedResultsController?.fetchedObjects?.count ?? 0
-        return "\(count) Artist\(count == 1 ? "" : "s")"
+        return count == 1 ? String(localized: "1 Artist", table: "Fork") : String(localized: "\(count) Artists", table: "Fork")
       },
       contextProvider: { [weak self] isShuffled in
         await self?.forkPlayContext(isShuffled: isShuffled)
@@ -58,7 +58,7 @@ extension ArtistsVC {
     let albums = isShuffled ? ListPlayContextBuilder.randomAlbums(of: groups) : ListPlayContextBuilder
       .albumsInOrder(of: groups)
     return await ListPlayContextBuilder.context(
-      name: sceneTitle ?? "Artists",
+      name: sceneTitle ?? String(localized: "Artists", table: "Fork"),
       albums: albums,
       account: account
     )

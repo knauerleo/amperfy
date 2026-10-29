@@ -35,10 +35,10 @@ enum LibraryFilter: CaseIterable, Hashable {
 
   var title: String {
     switch self {
-    case .playlists: "Playlists"
-    case .albums: "Albums"
-    case .artists: "Artists"
-    case .downloads: "Downloads"
+    case .playlists: String(localized: "Playlists", table: "Fork")
+    case .albums: String(localized: "Albums", table: "Fork")
+    case .artists: String(localized: "Artists", table: "Fork")
+    case .downloads: String(localized: "Downloads", table: "Fork")
     }
   }
 
@@ -120,7 +120,7 @@ final class ForkLibraryVC: UICollectionViewController {
     fatalError("init(coder:) has not been implemented")
   }
 
-  override var sceneTitle: String? { "Library" }
+  override var sceneTitle: String? { String(localized: "Library", table: "Fork") }
 
   private var monitor: YouTubeMusicJobMonitor { .shared }
   private var onlyCached: Bool { appDelegate.storage.settings.user.isOfflineMode }
@@ -130,7 +130,7 @@ final class ForkLibraryVC: UICollectionViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     monitor.configure(backendApi: appDelegate.getMeta(account.info).backendApi)
-    title = "Library"
+    title = String(localized: "Library", table: "Fork")
     navigationController?.navigationBar.prefersLargeTitles = true
     collectionView.backgroundColor = ForkSurface.background
     collectionView.collectionViewLayout = createLayout()
@@ -175,13 +175,13 @@ final class ForkLibraryVC: UICollectionViewController {
       image: UIImage(systemName: "list.bullet"),
       primaryAction: UIAction { [weak self] _ in self?.showAllCategories() }
     )
-    allCategories.accessibilityLabel = "All Categories"
+    allCategories.accessibilityLabel = String(localized: "All Categories", table: "Fork")
     // F-13: listening statistics and year in review
     let stats = UIBarButtonItem(
       image: UIImage(systemName: "chart.bar.xaxis"),
       primaryAction: UIAction { [weak self] _ in self?.showListeningStats() }
     )
-    stats.accessibilityLabel = "Your Stats"
+    stats.accessibilityLabel = String(localized: "Your Stats", table: "Fork")
     navigationItem.rightBarButtonItems = [allCategories, stats]
   }
 
@@ -320,7 +320,7 @@ final class ForkLibraryVC: UICollectionViewController {
       cell, _, item in
       switch item {
       case .favoriteSongs:
-        cell.display(title: "Favorite Songs", generatedArtwork: GradientArtworkView.favoriteSongs())
+        cell.display(title: String(localized: "Favorite Songs", table: "Fork"), generatedArtwork: GradientArtworkView.favoriteSongs())
       case let .entity(entry):
         cell.display(container: entry.container)
       case let .category(type):
@@ -362,13 +362,13 @@ final class ForkLibraryVC: UICollectionViewController {
       }
       switch item {
       case let .showAll(filter):
-        content.text = "All \(filter.title)"
-        content.secondaryText = "Sort, filter and search"
+        content.text = String(localized: "All \(filter.title)", table: "Fork")
+        content.secondaryText = String(localized: "Sort, filter and search", table: "Fork")
         content.secondaryTextProperties.color = .secondaryLabel
         content.image = UIImage(systemName: "line.3.horizontal.decrease")
         cell.accessories = [.disclosureIndicator()]
       case .deviceDownloads:
-        content.text = "Downloaded on This Device"
+        content.text = String(localized: "Downloaded on This Device", table: "Fork")
         content.image = UIImage(systemName: "arrow.down.circle")
         cell.accessories = [.disclosureIndicator()]
       case let .message(text):
@@ -424,7 +424,7 @@ final class ForkLibraryVC: UICollectionViewController {
       elementKind: UICollectionView.elementKindSectionHeader
     ) { [weak self] header, _, indexPath in
       switch self?.dataSource.sectionIdentifier(for: indexPath.section) {
-      case .browse: header.title = "Browse"
+      case .browse: header.title = String(localized: "Browse", table: "Fork")
       case .jobs: header.title = "YouTube Music"
       default: header.title = nil
       }
@@ -494,7 +494,7 @@ final class ForkLibraryVC: UICollectionViewController {
       }
       if entries.isEmpty {
         snapshot.appendSections([.jobsInfo])
-        snapshot.appendItems([.message("Nothing here yet.")], toSection: .jobsInfo)
+        snapshot.appendItems([.message(String(localized: "Nothing here yet.", table: "Fork"))], toSection: .jobsInfo)
       } else {
         snapshot.appendSections([.grid])
         snapshot.appendItems(entries.map { .entity($0) }, toSection: .grid)
@@ -518,7 +518,7 @@ final class ForkLibraryVC: UICollectionViewController {
     var message: String?
     if !SongpickerConfig.isEnabled {
       jobEntries = [:]
-      message = "YouTube Music is turned off. You can turn it on in Settings › YouTube Music."
+      message = String(localized: "YouTube Music is turned off. You can turn it on in Settings › YouTube Music.", table: "Fork")
     } else {
       let entries = monitor.jobList
       jobEntries = Dictionary(uniqueKeysWithValues: entries.map { ($0.videoId, $0) })
@@ -526,11 +526,11 @@ final class ForkLibraryVC: UICollectionViewController {
         snapshot.appendSections([.jobs])
         snapshot.appendItems(entries.map { .job($0.videoId) }, toSection: .jobs)
       } else if let error = monitor.lastError {
-        message = "Downloads are not available (\(error))."
+        message = String(localized: "Downloads are not available (\(error)).", table: "Fork")
       } else if !monitor.hasLoadedJobs {
-        message = "Loading downloads…"
+        message = String(localized: "Loading downloads…", table: "Fork")
       } else {
-        message = "No YouTube Music downloads yet. Songs you play or add from the YouTube Music results in Search show up here."
+        message = String(localized: "No YouTube Music downloads yet. Songs you play or add from the YouTube Music results in Search show up here.", table: "Fork")
       }
     }
     if let message {

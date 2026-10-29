@@ -224,7 +224,7 @@ public struct SongpickerJob: Sendable, Equatable {
     else { throw SongpickerError.invalidResponse }
     if response["status"] as? String != "ok" {
       let error = response["error"] as? [String: Any]
-      throw SongpickerError.server((error?["message"] as? String) ?? "The proxy reported an error")
+      throw SongpickerError.server((error?["message"] as? String) ?? String(localized: "The proxy reported an error", table: "Fork"))
     }
     // no `ytJobs` at all: the account does not talk to the proxy
     guard let ytJobs = response["ytJobs"] as? [String: Any] else {
@@ -249,8 +249,8 @@ public enum SongpickerError: LocalizedError {
 
   public var errorDescription: String? {
     switch self {
-    case .invalidResponse: return "The proxy sent an invalid response"
-    case .noProxy: return "The server of this account does not offer YouTube Music"
+    case .invalidResponse: return String(localized: "The proxy sent an invalid response", table: "Fork")
+    case .noProxy: return String(localized: "The server of this account does not offer YouTube Music", table: "Fork")
     case let .server(message): return message
     }
   }

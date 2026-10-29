@@ -127,7 +127,7 @@ final class SearchTopHitCell: UITableViewCell {
       artwork.show(image: nil)
     }
     titleLabel.text = hit.title
-    subtitleLabel.text = "Song · \(hit.artist)"
+    subtitleLabel.text = String(localized: "Song · \(hit.artist)", table: "Fork")
     sourceLabel.isHidden = false
     badge.isHidden = false
     badge.status = status
@@ -142,7 +142,7 @@ final class SearchTopHitCell: UITableViewCell {
   private func updateAccessibility() {
     let source = sourceLabel.isHidden ? nil : "YouTube Music"
     let state = badge.isHidden ? nil : badge.accessibilityLabel
-    accessibilityLabel = ["Top Result", titleLabel.text, subtitleLabel.text, source, state]
+    accessibilityLabel = [String(localized: "Top Result", table: "Fork"), titleLabel.text, subtitleLabel.text, source, state]
       .compactMap { $0 }
       .joined(separator: ", ")
   }

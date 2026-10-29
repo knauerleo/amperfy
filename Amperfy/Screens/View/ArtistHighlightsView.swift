@@ -171,7 +171,7 @@ final class ArtistHighlightsView: UIView {
     if !popularSongs.isEmpty {
       let section = UIStackView()
       section.axis = .vertical
-      section.addArrangedSubview(sectionTitle("Popular"))
+      section.addArrangedSubview(sectionTitle(String(localized: "Popular", table: "Fork")))
       section.setCustomSpacing(DS.Space.xs, after: section.arrangedSubviews[0])
       for (index, song) in popularSongs.enumerated() {
         section.addArrangedSubview(PopularSongRow(
@@ -187,7 +187,7 @@ final class ArtistHighlightsView: UIView {
       let section = UIStackView()
       section.axis = .vertical
       section.spacing = DS.Space.s
-      section.addArrangedSubview(sectionTitle("Discography"))
+      section.addArrangedSubview(sectionTitle(String(localized: "Discography", table: "Fork")))
       section.addArrangedSubview(createDiscographyShelf())
       stack.addArrangedSubview(section)
     }
@@ -195,7 +195,7 @@ final class ArtistHighlightsView: UIView {
       let section = UIStackView()
       section.axis = .vertical
       section.spacing = DS.Space.s
-      section.addArrangedSubview(sectionTitle("Fans Also Like"))
+      section.addArrangedSubview(sectionTitle(String(localized: "Fans Also Like", table: "Fork")))
       section.addArrangedSubview(createSimilarArtistsShelf())
       stack.addArrangedSubview(section)
     }
@@ -209,7 +209,7 @@ final class ArtistHighlightsView: UIView {
       let section = UIStackView()
       section.axis = .vertical
       section.spacing = DS.Space.xs
-      section.addArrangedSubview(sectionTitle("About"))
+      section.addArrangedSubview(sectionTitle(String(localized: "About", table: "Fork")))
       section.addArrangedSubview(createBiographyLabel(text: biography))
       stack.addArrangedSubview(section)
     }
@@ -224,7 +224,7 @@ final class ArtistHighlightsView: UIView {
     label.numberOfLines = isBioExpanded ? 0 : Self.collapsedBioLines
     label.isUserInteractionEnabled = true
     label.accessibilityTraits = .button
-    label.accessibilityHint = isBioExpanded ? "Collapses the biography" : "Shows the whole biography"
+    label.accessibilityHint = isBioExpanded ? String(localized: "Collapses the biography", table: "Fork") : String(localized: "Shows the whole biography", table: "Fork")
     label.addGestureRecognizer(UITapGestureRecognizer(
       target: self,
       action: #selector(biographyTapped)
@@ -314,7 +314,7 @@ final class ArtistHighlightsView: UIView {
   fileprivate func playPopular(at index: Int) {
     DS.haptic(.light)
     appDelegate.player.play(context: PlayContext(
-      name: "\(artist.name): Popular",
+      name: String(localized: "\(artist.name): Popular", table: "Fork"),
       index: index,
       playables: popularSongs
     ))
@@ -368,14 +368,14 @@ final class ArtistHighlightsView: UIView {
           .requestSimilarSongs(song: seed, count: 99)
         guard !similar.isEmpty else {
           self.appDelegate.eventLogger.info(
-            topic: "Artist Radio",
-            message: "No similar songs found",
+            topic: String(localized: "Artist Radio", table: "Fork"),
+            message: String(localized: "No similar songs found", table: "Fork"),
             displayPopup: true
           )
           return
         }
         self.appDelegate.player.play(context: PlayContext(
-          name: "\(self.artist.name) Radio",
+          name: String(localized: "\(self.artist.name) Radio", table: "Fork"),
           playables: [seed] + similar
         ))
       } catch {
@@ -413,7 +413,7 @@ private final class PopularSongRow: UIView, UIContextMenuInteractionDelegate {
     let countLabel = UILabel()
     // songs from Last.fm without own plays show their album instead of "0 plays"
     countLabel.text = song.playCount > 0 ?
-      "\(song.playCount.formatted()) play\(song.playCount == 1 ? "" : "s")" :
+      (song.playCount == 1 ? String(localized: "1 play", table: "Fork") : String(localized: "\(song.playCount.formatted()) plays", table: "Fork")) :
       (song.asSong?.album?.name ?? "")
     countLabel.font = DS.Font.rowSubtitle
     countLabel.textColor = .secondaryLabel

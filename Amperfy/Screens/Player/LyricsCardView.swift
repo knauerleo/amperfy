@@ -46,7 +46,7 @@ final class LyricsCardView: UIControl {
     clipsToBounds = true
     backgroundColor = Self.defaultSurfaceColor
 
-    headerLabel.text = "Lyrics"
+    headerLabel.text = String(localized: "Lyrics", table: "Fork")
     headerLabel.font = DS.Font.caption
     headerLabel.textColor = UIColor.white.withAlphaComponent(0.7)
     currentLabel.font = DS.Font.rowTitle.withBoldWeight()
@@ -76,7 +76,7 @@ final class LyricsCardView: UIControl {
     ])
     isAccessibilityElement = true
     accessibilityTraits = .button
-    accessibilityHint = "Shows all lyrics"
+    accessibilityHint = String(localized: "Shows all lyrics", table: "Fork")
   }
 
   required init?(coder: NSCoder) {
@@ -143,7 +143,7 @@ final class LyricsCardView: UIControl {
   private func setLines(current: String, next: String?) {
     currentLabel.text = current
     nextLabel.text = next ?? " "
-    accessibilityLabel = "Lyrics: \(current)"
+    accessibilityLabel = String(localized: "Lyrics: \(current)", table: "Fork")
   }
 }
 

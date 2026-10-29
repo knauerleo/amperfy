@@ -216,26 +216,26 @@ final class PlayQueueSyncCoordinator: NSObject {
     else { return }
 
     var lines = ["“\(currentSong.title)” · \(currentSong.creatorName)"]
-    var detail = "at \(Self.timeString(queue.position))"
-    if queue.songs.count > 1 { detail += " · \(queue.songs.count) songs" }
+    var detail = String(localized: "at \(Self.timeString(queue.position))", table: "Fork")
+    if queue.songs.count > 1 { detail += String(localized: " · \(queue.songs.count) songs", table: "Fork") }
     lines.append(detail)
     let ago = RelativeDateTimeFormatter().localizedString(for: min(changed, Date()), relativeTo: Date())
     if let client = queue.changedBy, !client.isEmpty, client != "Amperfy" {
-      lines.append("Saved \(ago) in \(client)")
+      lines.append(String(localized: "Saved \(ago) in \(client)", table: "Fork"))
     } else {
-      lines.append("Saved \(ago) on another device")
+      lines.append(String(localized: "Saved \(ago) on another device", table: "Fork"))
     }
 
     let alert = UIAlertController(
-      title: "Continue Listening?",
+      title: String(localized: "Continue Listening?", table: "Fork"),
       message: lines.joined(separator: "\n"),
       preferredStyle: .alert
     )
     let answeredKey = defaultsKey("answered", accountInfo)
-    alert.addAction(UIAlertAction(title: "Not Now", style: .cancel) { _ in
+    alert.addAction(UIAlertAction(title: String(localized: "Not Now", table: "Fork"), style: .cancel) { _ in
       UserDefaults.standard.set(changed, forKey: answeredKey)
     })
-    let continueAction = UIAlertAction(title: "Continue", style: .default) { [weak self] _ in
+    let continueAction = UIAlertAction(title: String(localized: "Continue", table: "Fork"), style: .default) { [weak self] _ in
       UserDefaults.standard.set(changed, forKey: answeredKey)
       self?.continuePlaying(queue: queue)
     }
@@ -254,7 +254,7 @@ final class PlayQueueSyncCoordinator: NSObject {
       index = current.flatMap { song in songs.firstIndex { $0.id == song.id } } ?? 0
     }
     guard !songs.isEmpty else { return }
-    player.play(context: PlayContext(name: "Continue Listening", index: index, playables: songs))
+    player.play(context: PlayContext(name: String(localized: "Continue Listening", table: "Fork"), index: index, playables: songs))
     if queue.position > 1, songs[index].id == queue.currentSong?.id {
       // applied once the song is loaded
       player.seek(toSecond: queue.position)

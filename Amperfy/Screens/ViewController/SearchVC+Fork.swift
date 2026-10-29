@@ -46,9 +46,9 @@ enum SearchTopHit {
 
   var kindName: String {
     switch self {
-    case .artist: return "Artist"
-    case .album: return "Album"
-    case .song, .youTube: return "Song"
+    case .artist: return String(localized: "Artist", table: "Fork")
+    case .album: return String(localized: "Album", table: "Fork")
+    case .song, .youTube: return String(localized: "Song", table: "Fork")
     }
   }
 }
@@ -312,8 +312,8 @@ extension SearchVC {
 
   func forkTitle(for section: SearchSection) -> String? {
     switch section {
-    case .Genres: return "Genres"
-    case .TopHit: return "Top Result"
+    case .Genres: return String(localized: "Genres", table: "Fork")
+    case .TopHit: return String(localized: "Top Result", table: "Fork")
     case .YouTube: return "YouTube Music"
     default: return nil
     }
@@ -359,9 +359,9 @@ extension SearchVC {
         for: indexPath
       ) as! SearchTopHitCell
       switch fork.topHit {
-      case let .artist(artist): cell.display(container: artist, kind: "Artist")
-      case let .album(album): cell.display(container: album, kind: "Album")
-      case let .song(song): cell.display(container: song, kind: "Song")
+      case let .artist(artist): cell.display(container: artist, kind: String(localized: "Artist", table: "Fork"))
+      case let .album(album): cell.display(container: album, kind: String(localized: "Album", table: "Fork"))
+      case let .song(song): cell.display(container: song, kind: String(localized: "Song", table: "Fork"))
       case let .youTube(hit):
         cell.display(
           hit: hit,
@@ -379,9 +379,9 @@ extension SearchVC {
           for: indexPath
         ) as! SearchStatusCell
         if fork.youTubeState == .failed {
-          cell.display(text: "YouTube Music is not reachable", isLoading: false)
+          cell.display(text: String(localized: "YouTube Music is not reachable", table: "Fork"), isLoading: false)
         } else {
-          cell.display(text: "Searching YouTube Music…", isLoading: true)
+          cell.display(text: String(localized: "Searching YouTube Music…", table: "Fork"), isLoading: true)
         }
         return cell
       }
@@ -494,11 +494,11 @@ extension SearchVC {
   private func forkYouTubeActions(for hit: SongpickerHit) -> [UIMenuElement] {
     let status = monitor.status(for: hit)
     let canAdd = status == .online || status == .failed
-    let play = UIAction(title: "Play", image: .play) { [weak self] _ in
+    let play = UIAction(title: String(localized: "Play", table: "Fork"), image: .play) { [weak self] _ in
       self?.forkPlay(hit)
     }
     let playNext = UIAction(
-      title: "Play Next",
+      title: String(localized: "Play Next", table: "Fork"),
       image: UIImage(systemName: "text.line.first.and.arrowtriangle.forward")
     ) { [weak self] _ in
       guard let self, let song = fork.youTubeSongs[hit.videoId] else { return }
@@ -507,7 +507,7 @@ extension SearchVC {
       DS.haptic(.success)
     }
     let addToQueue = UIAction(
-      title: "Add to Queue",
+      title: String(localized: "Add to Queue", table: "Fork"),
       image: UIImage(systemName: "text.line.last.and.arrowtriangle.forward")
     ) { [weak self] _ in
       guard let self, let song = fork.youTubeSongs[hit.videoId] else { return }
@@ -516,7 +516,7 @@ extension SearchVC {
       DS.haptic(.success)
     }
     let addToLibrary = UIAction(
-      title: status == .inLibrary ? "In Library" : "Add to Library",
+      title: status == .inLibrary ? String(localized: "In Library", table: "Fork") : String(localized: "Add to Library", table: "Fork"),
       image: UIImage(systemName: status == .inLibrary ? "checkmark.circle" : "arrow.down.circle"),
       attributes: canAdd ? [] : .disabled
     ) { [weak self] _ in
