@@ -33,6 +33,8 @@ enum HomeCellItem: Hashable, @unchecked Sendable {
   case skeleton(section: HomeSection, index: Int)
   /// F-11: tile of the Decades section, opens DecadeAlbumsVC.
   case decade(AlbumDecade)
+  /// F-12: tile of Made for You, plays the mix.
+  case mix(HomeMix)
 
   var containable: PlayableContainable? {
     if case let .entity(homeItem) = self { return homeItem.playableContainable }
@@ -45,6 +47,7 @@ extension HomeSection {
     switch self {
     case .recentlyPlayed: return .tileGrid(columns: 2)
     case .recentlyAdded: return .large
+    case .mixes: return .large
     case .randomArtists: return .circle
     default: return .standard
     }
@@ -103,6 +106,14 @@ extension HomeVC {
         title: decade.title,
         subtitle: decade.albumCount == 1 ? "1 Album" : "\(decade.albumCount) Albums",
         generatedArtwork: GradientArtworkView.decade(decade)
+      )
+      return cell
+    case let (.mix(mix), _):
+      let cell = dequeue(LargeAlbumCell.self, LargeAlbumCell.reuseID, indexPath)
+      cell.display(
+        title: mix.title,
+        subtitle: mix.subtitle,
+        generatedArtwork: GradientArtworkView.mix(mix)
       )
       return cell
     case (.favoriteSongs, _):
@@ -171,6 +182,9 @@ extension HomeVC {
       var items = entities.map { HomeCellItem.entity($0) }
       if section == .decades {
         items = sharedHome.forkDecades.map { HomeCellItem.decade($0) }
+        hasContent = hasContent || !items.isEmpty
+      } else if section == .mixes {
+        items = sharedHome.forkMixes.map { HomeCellItem.mix($0) }
         hasContent = hasContent || !items.isEmpty
       }
       if items.isEmpty, sharedHome.isLoading(section) {
@@ -260,6 +274,9 @@ extension HomeVC {
       )
       navigationController?.navigationBar.prefersLargeTitles = false
       return true
+    case let .mix(mix):
+      playMix(mix)
+      return true
     case .favoriteSongs:
       navigationController?.pushViewController(
         AppStoryboard.Main.segueToFavoriteSongs(account: account),
@@ -275,6 +292,18 @@ extension HomeVC {
       guard container is Album || container is Playlist else { return false }
       playFromTile(container)
       return true
+    }
+  }
+
+  private func playMix(_ mix: HomeMix) {
+    DS.haptic(.light)
+    Task { @MainActor in
+      let playables = await sharedHome.songsToPlay(mix)
+      guard !playables.isEmpty else {
+        DS.haptic(.error)
+        return
+      }
+      appDelegate.player.play(context: PlayContext(name: mix.title, playables: playables))
     }
   }
 

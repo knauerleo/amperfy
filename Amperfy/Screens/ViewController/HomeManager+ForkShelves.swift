@@ -42,9 +42,12 @@ extension HomeManager {
     if orderedVisibleSections.contains(.decades) {
       updateDecades()
     }
+    updateMixes() // F-12
   }
 
   func forkShelvesUpdateFromRemote() {
+    // Home appears: plays since the last visit change On Repeat and Rediscover (F-12)
+    updateMixes()
     guard storage.settings.user.isOnlineMode else { return }
     for (section, type) in Self.albumListSections where orderedVisibleSections.contains(section) {
       let key = remoteKey(section)

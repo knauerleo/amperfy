@@ -34,25 +34,28 @@ extension HomeSection {
   }
 
   /// Sections added by later fork tasks, keyed by the settings version that introduced them.
-  /// They are shown once, in front of the random sections.
-  static let forkAddedSections: [(version: Int, sections: [HomeSection])] = [
-    (2, [.mostPlayedAlbums, .topRatedAlbums, .decades]), // F-11
+  /// They are shown once, after `after` if given and present, else in front of the random sections.
+  static let forkAddedSections: [(version: Int, sections: [HomeSection], after: HomeSection?)] = [
+    (2, [.mostPlayedAlbums, .topRatedAlbums, .decades], nil), // F-11
+    (3, [.mixes], .recentlyAdded), // F-12
   ]
 
   static func forkInsertingBeforeRandom(
     _ added: [HomeSection],
+    after anchor: HomeSection? = nil,
     into sections: [HomeSection]
   )
     -> [HomeSection] {
     var result = sections.filter { !added.contains($0) }
-    let index = result.firstIndex(where: \.isRandomSection) ?? result.endIndex
+    let index = anchor.flatMap { result.firstIndex(of: $0) }.map { $0 + 1 }
+      ?? result.firstIndex(where: \.isRandomSection) ?? result.endIndex
     result.insert(contentsOf: added, at: index)
     return result
   }
 }
 
 extension AccountSetting {
-  static let forkHomeSectionsVersion = 2
+  static let forkHomeSectionsVersion = 3
 
   public var needsForkHomeSectionsMigration: Bool {
     (_forkHomeSectionsVersion ?? 0) < Self.forkHomeSectionsVersion
@@ -72,8 +75,16 @@ extension AccountSetting {
       homeSectionOrder = HomeSection.forkArranged(order)
     }
     for step in HomeSection.forkAddedSections where storedVersion < step.version {
-      homeSections = HomeSection.forkInsertingBeforeRandom(step.sections, into: homeSections)
-      homeSectionOrder = HomeSection.forkInsertingBeforeRandom(step.sections, into: homeSectionOrder)
+      homeSections = HomeSection.forkInsertingBeforeRandom(
+        step.sections,
+        after: step.after,
+        into: homeSections
+      )
+      homeSectionOrder = HomeSection.forkInsertingBeforeRandom(
+        step.sections,
+        after: step.after,
+        into: homeSectionOrder
+      )
     }
     _forkHomeSectionsVersion = Self.forkHomeSectionsVersion
   }

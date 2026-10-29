@@ -43,11 +43,14 @@ public enum HomeSection: Int, Sendable, CaseIterable, Codable {
   case topRatedAlbums
   // Fork (F-11): one tile per decade, opens the albums of getAlbumList2 type=byYear
   case decades
+  // Fork (F-12): mixes from local data (Rediscover, On Repeat, Daily Mix)
+  case mixes
 
   // Fork: what the user played comes first, random sections go to the end
   static let defaultValue: [HomeSection] = [
     .recentlyPlayed,
     .recentlyAdded,
+    .mixes,
     .recentlyPlayedAlbums,
     .lastTimePlayedPlaylists,
     .newestAlbums,
@@ -75,6 +78,7 @@ public enum HomeSection: Int, Sendable, CaseIterable, Codable {
     case .mostPlayedAlbums: return "Most Played"
     case .topRatedAlbums: return "Top Rated"
     case .decades: return "Decades"
+    case .mixes: return "Made for You"
     }
   }
 
@@ -99,6 +103,7 @@ public enum HomeSection: Int, Sendable, CaseIterable, Codable {
     case .mostPlayedAlbums: return false
     case .topRatedAlbums: return false
     case .decades: return false
+    case .mixes: return false
     }
   }
 }

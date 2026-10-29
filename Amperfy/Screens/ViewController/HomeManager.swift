@@ -71,6 +71,7 @@ class HomeManager: NSObject {
   var loadingSections = Set<HomeSection>()
   var forkObserver: HomeForkObserver?
   var forkDecades = [AlbumDecade]() // Fork (F-11): tiles of the Decades section, see HomeManager+ForkShelves
+  var forkMixes = [HomeMix]() // Fork (F-12): tiles of Made for You, see HomeManager+ForkMixes
 
   let account: Account
   let storage: PersistentStorage

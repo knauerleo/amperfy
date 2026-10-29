@@ -185,6 +185,7 @@
 		50AB3B4D2F032D6200556CE4 /* HomeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AB3B4C2F032D6200556CE4 /* HomeManager.swift */; };
 		66161320A7648B43CE0718FB /* HomeManager+Fork.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0B310929ACB07F6274C31A7 /* HomeManager+Fork.swift */; };
 		7A26246623D366E45DB31FEC /* HomeManager+ForkShelves.swift in Sources */ = {isa = PBXBuildFile; fileRef = D42EF4A474DC7C1876C4E782 /* HomeManager+ForkShelves.swift */; };
+		2A7C32C6828F21CB5EF4F295 /* HomeManager+ForkMixes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC3C5B8BA31CE7269E1A86D /* HomeManager+ForkMixes.swift */; };
 		50AC4E5328D909730091FF33 /* EventLogSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AC4E5128D909720091FF33 /* EventLogSettingsView.swift */; };
 		50AC4E5428D909730091FF33 /* EventLogCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AC4E5228D909730091FF33 /* EventLogCellView.swift */; };
 		50AC4E5628D99A410091FF33 /* ButtonStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AC4E5528D99A410091FF33 /* ButtonStyles.swift */; };
@@ -401,6 +402,7 @@
 		50C9D670284FAA4D007F18D0 /* LibraryStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BA930521D5715D00E5901D /* LibraryStorage.swift */; };
 		F9B8E090F2D0A66DE3BE1942 /* LibraryStorage+ForkHome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CBB663C5523D06770B559AE /* LibraryStorage+ForkHome.swift */; };
 		E42EA01DD6301D9103A73379 /* LibraryStorage+ForkAlbumLists.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F132409820C0DA1C8F198C /* LibraryStorage+ForkAlbumLists.swift */; };
+		5A202E2C3142E5847B1268DD /* LibraryStorage+ForkMixes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B719CEE5CFB76F1B7F582DE1 /* LibraryStorage+ForkMixes.swift */; };
 		93496E273E175C8F9921C884 /* LibraryStorage+ForkLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA6E357950B7A39E04A767D /* LibraryStorage+ForkLibrary.swift */; };
 		08120C7A1C58B09BA06DF1FA /* LibraryStorage+YouTubeMusic.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABDC99627E3CE2E1DF23163 /* LibraryStorage+YouTubeMusic.swift */; };
 		70A21AA802975B654743A9DE /* LibraryStorage+YouTubeMusicSwap.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45DAA42B1B34D236711510F /* LibraryStorage+YouTubeMusicSwap.swift */; };
@@ -1000,6 +1002,7 @@
 		50AB3B4C2F032D6200556CE4 /* HomeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeManager.swift; sourceTree = "<group>"; };
 		C0B310929ACB07F6274C31A7 /* HomeManager+Fork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeManager+Fork.swift"; sourceTree = "<group>"; };
 		D42EF4A474DC7C1876C4E782 /* HomeManager+ForkShelves.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeManager+ForkShelves.swift"; sourceTree = "<group>"; };
+		0AC3C5B8BA31CE7269E1A86D /* HomeManager+ForkMixes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HomeManager+ForkMixes.swift"; sourceTree = "<group>"; };
 		50AB92BB26660FD800DCE45C /* artists_example_1.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = artists_example_1.xml; sourceTree = "<group>"; };
 		50AB92BD26660FE000DCE45C /* SsArtistParserTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SsArtistParserTest.swift; sourceTree = "<group>"; };
 		50AB92BF2666126300DCE45C /* album_example_1.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = album_example_1.xml; sourceTree = "<group>"; };
@@ -1096,6 +1099,7 @@
 		50BA930521D5715D00E5901D /* LibraryStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryStorage.swift; sourceTree = "<group>"; };
 		4CBB663C5523D06770B559AE /* LibraryStorage+ForkHome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryStorage+ForkHome.swift"; sourceTree = "<group>"; };
 		E8F132409820C0DA1C8F198C /* LibraryStorage+ForkAlbumLists.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryStorage+ForkAlbumLists.swift"; sourceTree = "<group>"; };
+		B719CEE5CFB76F1B7F582DE1 /* LibraryStorage+ForkMixes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryStorage+ForkMixes.swift"; sourceTree = "<group>"; };
 		BBA6E357950B7A39E04A767D /* LibraryStorage+ForkLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryStorage+ForkLibrary.swift"; sourceTree = "<group>"; };
 		CABDC99627E3CE2E1DF23163 /* LibraryStorage+YouTubeMusic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryStorage+YouTubeMusic.swift"; sourceTree = "<group>"; };
 		D45DAA42B1B34D236711510F /* LibraryStorage+YouTubeMusicSwap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryStorage+YouTubeMusicSwap.swift"; sourceTree = "<group>"; };
@@ -1917,6 +1921,7 @@
 				50BA930521D5715D00E5901D /* LibraryStorage.swift */,
 				4CBB663C5523D06770B559AE /* LibraryStorage+ForkHome.swift */,
 				E8F132409820C0DA1C8F198C /* LibraryStorage+ForkAlbumLists.swift */,
+				B719CEE5CFB76F1B7F582DE1 /* LibraryStorage+ForkMixes.swift */,
 				BBA6E357950B7A39E04A767D /* LibraryStorage+ForkLibrary.swift */,
 				CABDC99627E3CE2E1DF23163 /* LibraryStorage+YouTubeMusic.swift */,
 				D45DAA42B1B34D236711510F /* LibraryStorage+YouTubeMusicSwap.swift */,
@@ -2050,6 +2055,7 @@
 				50AB3B4C2F032D6200556CE4 /* HomeManager.swift */,
 				C0B310929ACB07F6274C31A7 /* HomeManager+Fork.swift */,
 				D42EF4A474DC7C1876C4E782 /* HomeManager+ForkShelves.swift */,
+				0AC3C5B8BA31CE7269E1A86D /* HomeManager+ForkMixes.swift */,
 				50E59A4A2ED747F000F2B65C /* HomeEditorVC.swift */,
 				50E77DB828D21A9300BDF882 /* SettingsHostVC.swift */,
 				50E1D39B2B8BED4C0001A572 /* SideBarVC.swift */,
@@ -2841,6 +2847,7 @@
 				50AB3B4D2F032D6200556CE4 /* HomeManager.swift in Sources */,
 				66161320A7648B43CE0718FB /* HomeManager+Fork.swift in Sources */,
 				7A26246623D366E45DB31FEC /* HomeManager+ForkShelves.swift in Sources */,
+				2A7C32C6828F21CB5EF4F295 /* HomeManager+ForkMixes.swift in Sources */,
 				504262B12BF5FBDE00B5EF38 /* Intents.intentdefinition in Sources */,
 				504262B42BF5FC3D00B5EF38 /* NSUserActivity+IntentData.swift in Sources */,
 				50C16C1021E5463E00F086F0 /* ArtistsVC.swift in Sources */,
@@ -2986,6 +2993,7 @@
 				50C9D670284FAA4D007F18D0 /* LibraryStorage.swift in Sources */,
 				F9B8E090F2D0A66DE3BE1942 /* LibraryStorage+ForkHome.swift in Sources */,
 				E42EA01DD6301D9103A73379 /* LibraryStorage+ForkAlbumLists.swift in Sources */,
+				5A202E2C3142E5847B1268DD /* LibraryStorage+ForkMixes.swift in Sources */,
 				93496E273E175C8F9921C884 /* LibraryStorage+ForkLibrary.swift in Sources */,
 				08120C7A1C58B09BA06DF1FA /* LibraryStorage+YouTubeMusic.swift in Sources */,
 				70A21AA802975B654743A9DE /* LibraryStorage+YouTubeMusicSwap.swift in Sources */,
