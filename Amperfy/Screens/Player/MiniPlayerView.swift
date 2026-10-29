@@ -579,6 +579,7 @@ class MiniPlayerView: UIView {
       )
     }
     playButtonTrailingConstraint?.isActive = true
+    forkRefreshInlineLayout(isInline: isInline) // Fork: only cover, title, play when inline (UI-14)
   }
 
   public func configureForMac() {
@@ -709,6 +710,7 @@ class MiniPlayerView: UIView {
   }
 
   private var playButtonTrailingConstraint: NSLayoutConstraint?
+  fileprivate var forkTitleEdgeConstraints = [NSLayoutConstraint]() // Fork: compact inline layout (UI-14)
 
   @objc
   private func miniPlayerGotTouched(_ recognizer: UITapGestureRecognizer) {
@@ -1031,6 +1033,37 @@ extension MiniPlayerView {
           $0.alpha = 1
         }
       }
+    }
+  }
+
+  // MARK: Compact inline layout (UI-14)
+
+  private static let inlineTitleCenterID = "forkInlineTitleCenter"
+
+  /// Next to the minimized tab bar the accessory is small: only cover, title and play,
+  /// the title centered next to the cover. Artist and progress come back when it expands.
+  fileprivate func forkRefreshInlineLayout(isInline: Bool) {
+    // only the iOS layout (configureForiOS) puts the labels directly into the mini player
+    guard titleLabel.superview === self, artworkImage.superview === self else { return }
+    if forkTitleEdgeConstraints.isEmpty {
+      forkTitleEdgeConstraints = constraints.filter {
+        ($0.firstItem as? UIView) === titleLabel &&
+          ($0.firstAttribute == .top || $0.firstAttribute == .bottom)
+      }
+    }
+    let center = constraints.first { $0.identifier == Self.inlineTitleCenterID } ?? {
+      let constraint = titleLabel.centerYAnchor.constraint(equalTo: artworkImage.centerYAnchor)
+      constraint.identifier = Self.inlineTitleCenterID
+      return constraint
+    }()
+    subtitleLabel.isHidden = isInline
+    timeSlider.isHidden = isInline
+    if isInline {
+      NSLayoutConstraint.deactivate(forkTitleEdgeConstraints)
+      center.isActive = true
+    } else {
+      center.isActive = false
+      NSLayoutConstraint.activate(forkTitleEdgeConstraints)
     }
   }
 }
