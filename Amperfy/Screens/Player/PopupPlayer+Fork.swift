@@ -57,8 +57,9 @@ enum ForkPlayerTransition {
       else { return nil }
       return target.convert(target.bounds, to: player.view)
     }
-    options.interactiveDismissShouldBegin = { [weak player] _ in
-      player?.forkAllowsInteractiveDismiss ?? true
+    // UI-27: only a swipe down closes, a swipe up scrolls to the lyrics card
+    options.interactiveDismissShouldBegin = { [weak player] context in
+      context.velocity.dy > 0 && (player?.forkAllowsInteractiveDismiss ?? true)
     }
     player.preferredTransition = .zoom(options: options) { [weak sourceView] _ in
       sourceView?.window == nil ? nil : sourceView

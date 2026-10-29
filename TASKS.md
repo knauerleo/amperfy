@@ -16,6 +16,11 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [ ] **UI-27b Optionszeile unter den Controls entfernen** - Warteschlange als kleines Symbol rechts unter den Controls, AirPlay, Sleep-Timer, Modus, Lautstärke und Optionen ins „…“ oben, freier Platz für die Lyrics-Karte
 - [ ] **UI-26 Player nach UI-21 abnehmen** - Screenshot nötig, dann Feinschliff. 2026-10-29: Kopfzeile 20 statt 8 pt unter der Safe Area (FORK.md Abschnitt 10)
 
+### Features
+
+- [ ] **F-19c „Fehlt in deiner Sammlung“ aus `getAlbum&drift=full`** - statt `search3` (zeigte z. B. Gzuz im BMTH-Album). Albumseite lädt die volle Antwort frisch beim Öffnen, nur `ytm-`-Einträge in die Sektion, nichts in Core Data; „Fehlende laden“ über `downloadAlbumMissing`. Vertrag: FORK.md „Roadmap“ › „Server-Vertrag vom 2026-10-29“
+- [ ] **F-21 Suche nach Songtext** - eigener Such-Scope „Songtext“, Anfrage nur beim Drücken auf Suchen, ab 3 Wörtern, Treffer mit Fundzeile (`lyricSnippet`). Route `searchLyrics`, Vertrag wie F-19c
+
 ## Backlog (ganz hinten)
 
 - [ ] **F-17 Crossfade** - Entscheidung 2026-10-29: ganz nach hinten, erst wenn alles andere erledigt ist

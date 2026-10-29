@@ -57,6 +57,7 @@ final class PlayerPageScrollView: UIScrollView {
     showsHorizontalScrollIndicator = false
     contentInsetAdjustmentBehavior = .never
     alwaysBounceVertical = true
+    bounces = false
     isScrollEnabled = false
     decelerationRate = .fast
 
@@ -125,10 +126,12 @@ final class PlayerPageScrollView: UIScrollView {
   }
 
   /// Horizontal swipes on the cover skip tracks, they must not start a scroll.
+  /// UI-27: at the top a swipe down closes the player, the page must not take it for a bounce.
   override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
     if gestureRecognizer === panGestureRecognizer {
       let velocity = panGestureRecognizer.velocity(in: self)
       if abs(velocity.x) > abs(velocity.y) { return false }
+      if isAtTop, velocity.y > 0 { return false }
     }
     return super.gestureRecognizerShouldBegin(gestureRecognizer)
   }

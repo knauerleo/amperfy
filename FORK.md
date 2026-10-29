@@ -484,6 +484,7 @@ Fehler (Code 70 usw.) kommen mit dem Text des Proxys an.
 | UI-24 | `AlbumsCollectionVC+ForkHeader.swift` (neu), `ListPlayHeaderView.swift`, `AlbumsCollectionVC.swift`, `AlbumsCommonVCInteractions.swift`, `CommonCollectionSectionHeader.swift`, `Fork.xcstrings`, `project.pbxproj` | Alben-Liste wie im Mockup (nur iPhone, nur „Alle Alben“; über die Bibliothek geöffnete gefilterte Listen bleiben wie bisher). Im ersten Abschnittskopf statt des Upstream-Kopfs: Chips (34 pt, rund, aktiv in der Akzentfarbe) „Zuletzt hinzugefügt“, „Favoriten“, „Geladen“ und darunter die UI-25-Zeile (`ListPlayHeaderView.makeView`). Chips mit vorhandener Logik: „Zuletzt hinzugefügt“ = `displayFilter .newest`, „Favoriten“ = `.favorites` (schließen sich aus, nochmal tippen = alle), dann `applyFilter()`, `updateSearchResults`, `updateFromRemote()`; „Geladen“ = Such-Scope „Cached“, mit beiden kombinierbar. Titel bleibt „Alben“, Anzahl („1234 Alben“) als `largeSubtitle`. Oben rechts Sortieren (bestehendes Sortiermenü, fehlt bei „Zuletzt hinzugefügt“/„Zuletzt gespielt“ wie bisher) und Filtern (Alle, Zuletzt hinzugefügt, Zuletzt gespielt, Favoriten, Geladen, darunter Stil und Download aus dem alten „…“). Hooks je 1 Zeile: Kopf einsetzen (`forkInstallListHeader`), Kopfhöhe (`forkListHeaderHeight`), `forkRefreshListHeader()` in `snapshotDidChange`, `forkRemoveListHeader()` in `prepareForReuse`, Bar-Knöpfe in `updateRightBarButtonItems`; dazu `common` von `fileprivate` auf intern. Das Raster aus UI-2 bleibt (Entscheidung 2026-10-29) |
 | UI-19b | `TabBarVC+ForkMiniPlayer.swift`, `UtilitiesExtensions.swift` | Auf der Albumseite lagen die letzten Zeilen und das YouTube-Shelf nach dem Loslassen unter der Karte: der Abstand am Navigation-Controller des Tabs kam dort nicht an (Scroll-Indikator reichte bis zur Tab-Bar). Neu misst jede Seite selbst: `forkApplyMiniPlayerInset(to:)` ergänzt ihren `additionalSafeAreaInsets.bottom` so weit, dass ihre Safe Area bis 8 pt über die Oberkante der Karte reicht (nur was fehlt, also nichts doppelt, wo der Tab-Abstand schon greift). Aufruf für die oberste Seite jedes Tabs nach jedem Karten-Layout und für jede Seite, die upstream `extendSafeAreaToAccountForMiniPlayer()` aufruft (Album, Songs, Suche, Indizes, Podcast, Downloads), Hook 1 Zeile dort |
 | UI-27a | `LyricsFullScreenVC.swift` (neu), `PopupPlayer+Fork.swift`, `PlayerPageScrollView.swift`, `LyricsCardView.swift`, `PlayerControlView.swift`, `Fork.xcstrings`, `project.pbxproj` | Die Lyrics-Karte war auf dem iPhone nie zu sehen. Befund: (1) Beim ersten Abspielen eines Songs fragt die Karte in `didStartPlayingFromBeginning` nach dem Songtext, bevor `sync(song:)` ihn geladen und `lyricsRelFilePath` gesetzt hat; danach kam nur `forkRefreshLyricsCard` an, das nichts nachlud. Die Lyrics über dem Cover luden beim Öffnen frisch, deshalb gingen die. (2) Die Karte stand eine volle Bildschirmhöhe tiefer (`card.top == firstPage.bottom`), nichts schaute an. (3) Ein gespeichertes `isPlayerLyricsDisplayed` blendete sie aus. Neu: `forkRefreshLyricsCard` lädt nach, wenn der Song einen Lyrics-Pfad hat und die Karte noch einen anderen Song zeigt (läuft nach dem Sync über `refresh` → `display(element:)`). Karte 16 pt (`DS.Space.m`) unter den Controls, ihr oberer Rand schaut unten an. Der Player öffnet mit `isPlayerLyricsDisplayed = false`. Tap auf die Karte öffnet `LyricsFullScreenVC`: Vollbild in der Cover-Farbe, Schließen-Pfeil, Titel und Künstler, die Zeilen aus UI-6 (aktuelle weiß, übrige gedimmt, Tap springt), unten Play/Pause als weißer Kreis. Beim nächsten Song reicht der Player den Songtext weiter, sobald die Karte ihn hat, sonst „Kein Songtext für diesen Song“. „Show Lyrics“ im Optionsmenü öffnet das Vollbild (nur wenn es Lyrics gibt), „Hide Lyrics“ fällt weg. Hook: 1 Zeile in `createPlayerOptionsMenu`. Die Lyrics über dem Cover (UI-6) bleiben nur noch auf iPad und Mac |
+| UI-27a | `PlayerPageScrollView.swift`, `PopupPlayer+Fork.swift` | Nachtrag 2026-10-29: Mit sichtbarer Karte ist die Seite scrollbar, dann schluckte die Scroll-View das Herunterwischen und die Schließen-Geste des Zoom-Übergangs den Wischer nach oben (weder Scrollen noch Schließen ging). Jetzt: Ganz oben beginnt ein Wischer nach unten kein Scrollen (`gestureRecognizerShouldBegin`), kein Bounce; Schließen beginnt nur bei Wischen nach unten (`interactiveDismissShouldBegin` prüft `context.velocity.dy > 0`) |
 
 ### Hilfsskript
 
@@ -513,6 +514,28 @@ Beispiel-Spec im Kopf des Skripts.
      nach unten. In der App nur ein kleiner Bonus im Top-Treffer-Ranking (`forkScore` in `SearchVC+Fork.swift`) aus
      `playCount`, `isFavorite` und `lastPlayedDate`, die schon lokal vorliegen.
 5. Design-Überarbeitung Richtung moderner Streaming-Client, in 5 Phasen laut `DESIGN-AUDIT.md`. Phase 1 ✅, Phase 2 ✅, Phase 3 ✅, Phase 4 ✅, Phase 5 ✅, Phase 6 ✅ (Maßnahmen 10 und 14 abgeschlossen)
+
+### Server-Vertrag vom 2026-10-29 (TASKS F-19c, F-21), live über :4534
+
+Mit der Pi-Session abgestimmt. Drift-Seite noch nicht gebaut.
+
+- **`getAlbum.view?id=<NavidromeAlbumId>&drift=full`** (nur auf Wunsch): alle Tracks des passenden YouTube-Music-Albums.
+  Ohne `drift=full` kommt die reine Navidrome-Antwort, `getArtist`/`getAlbumList2` zählen nur Navidrome.
+  Song-Einträge: echte Navidrome-IDs; `ndv-<songId>-<albumId>` (liegt in einem anderen Album, echte ID = Mittelteil);
+  `ytm-<videoId>` mit „ ☁︎“ und `downloaded:false`, bei laufendem Job `ytState`. Für „Fehlt“ zählen nur die `ytm-`-Einträge,
+  `track` = Position auf YouTube Music. Album zusätzlich `ytAlbumId` (`ytm-album-<browseId>`), fehlt ohne passendes Album.
+  `songCount`/`duration` zählen alle drei Arten, **nicht** in Core Data übernehmen; die Antwort nicht in die Bibliothek parsen.
+  Zuordnung 7 Tage gecacht und vorgewärmt, erstes Öffnen bis 8 s, danach 10–50 ms.
+- **`downloadAlbumMissing.view?id=<NavidromeAlbumId>&f=json`**: ein Job pro fehlendem Track (in `getYtJobs`, 2 gleichzeitig),
+  Dateien landen im Ordner des YouTube-Albums. Antwort wie `downloadYtAlbum`: `ytAlbumDownload` mit `albumId`, `name`,
+  `artist`, `ytAlbumId`, `queued` (kann 0 sein), `skipped`, `song` (volle Liste, `ytm-` mit `ytState`).
+  Fehler: 10 `missing_id`, 70 `album_not_found`, 70 `album_not_on_ytm`.
+- **`searchLyrics.view?query=<Text>&count=10&f=json`** (`count` 1–20): mindestens 3 Wörter (sonst 10 `query_too_short`),
+  10 `missing_query`, 70 `lyrics_unavailable`. Quellen: lokaler Volltextindex der Lyrics-Sync-Dateien (zuerst), dann
+  Genius (höchstens 1 Anfrage/s). Treffer schon aufgelöst: Bibliothek (echte ID, voller `getSong`-Eintrag) oder
+  YouTube Music (`ytm-`, ☁︎, wie die `search3`-YouTube-Treffer). Antwort im `search3`-Format (`searchResult3.song`), pro Song
+  zusätzlich `lyricSnippet` (Originalzeile, kann leer sein) und `lyricSource` (`library`/`genius`). Cache 7 Tage, neu 0,7–2,5 s.
+- `ndv-`-IDs übersetzt der Proxy bei `stream`, `star`, Playlists und `getSong` weiter zurück.
 
 ### Crossfade (TASKS F-17): Umsetzungsplan
 
