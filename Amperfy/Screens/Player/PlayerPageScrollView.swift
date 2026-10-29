@@ -26,8 +26,8 @@ import UIKit
 final class PlayerPageScrollView: UIScrollView {
   /// Distance of the cover from the header.
   private static let coverTopMargin: CGFloat = 12
-  /// UI-21: the header kept clear of the Dynamic Island.
-  private static let headerTopMargin: CGFloat = 8
+  /// UI-21, UI-26: the header kept clear of the Dynamic Island (8 pt was still too close).
+  private static let headerTopMargin: CGFloat = 20
 
   let header: PlayerNowPlayingHeaderView
   let card = LyricsCardView()
