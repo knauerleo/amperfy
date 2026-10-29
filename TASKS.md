@@ -22,8 +22,8 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 
 ### Features
 
-- [ ] **F-8 Ganzes Album / Künstler von YouTube laden**
-  - Braucht einen Endpunkt im Songpicker (`album_id`, `kind`). In der App: Menüeintrag am YouTube-Treffer „Ganzes Album laden“
+- [ ] **F-9b Album-Links in der Teilen-Erweiterung** - Idee aus F-8, nicht gebaut
+  - `music.youtube.com/browse/MPREb_…` ginge direkt über `downloadYtAlbum.view?id=ytm-album-MPREb_…` (eine Anfrage, Antwort sofort, kein Warten aufs erste Byte). Die Extension kennt nur die Stream-URL-Vorlage (`forkYouTubeStreamTemplate`), bräuchte also eine zweite Vorlage für `downloadYtAlbum` in der Keychain-Gruppe. `list=`-Links (Playlists, `OLAK5uy_…`) bleiben Fehler, dafür gibt es keinen Endpunkt
 - [ ] **F-17 Crossfade**
   - Engine `AudioStreaming` (AVAudioEngine) lädt den nächsten Song schon vor. Größter Eingriff in AmperfyKit, zuletzt
   - Analysiert (2026-10-29): nicht mit einzeiligen Hooks machbar, `BackendAudioPlayer` braucht zwei Kanäle. Umsetzungsplan in FORK.md, „Roadmap“ › „Crossfade (TASKS F-17): Umsetzungsplan“
@@ -64,3 +64,4 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [x] ~~**UI-16 Entscheidung iPad/Mac**~~ (2026-10-29) - Fork-Design nur auf dem iPhone, iPad und Mac bleiben im Upstream-Stil, FORK.md Abschnitt 10 und „Arbeitsweise“
 - [x] ~~**F-14 Widgets und Kontrollzentrum**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**UI-18 Identität + Listen**~~ (2026-10-29) - nur iPhone, FORK.md Abschnitt 10 und Abschnitt 2 „Design-Tokens“, Mini-Player-Karte offen in UI-19
+- [x] ~~**F-8 Ganzes Album / Künstler von YouTube laden**~~ (2026-10-29) - FORK.md Abschnitt 9 und 10, nur App-Seite, Server-Teil live
