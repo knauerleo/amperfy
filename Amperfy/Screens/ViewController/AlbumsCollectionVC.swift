@@ -86,7 +86,7 @@ class AlbumsCollectionDiffableDataSource: BasicUICollectionViewDiffableDataSourc
       sectionHeader.display(title: nil)
     }
 
-    if indexPath.section == 0 {
+    if indexPath.section == 0, !vc.forkInstallListHeader(in: sectionHeader) { // Fork: UI-24
       sectionHeader.displayPlayHeader(configuration: vc.common.createPlayShuffleInfoConfig())
     }
     return sectionHeader
@@ -167,7 +167,7 @@ class AlbumsCollectionVC: SingleSnapshotFetchedResultsCollectionViewController<A
     common.sceneTitle
   }
 
-  fileprivate var common: AlbumsCommonVCInteractions
+  var common: AlbumsCommonVCInteractions // Fork: UI-24 read by AlbumsCollectionVC+ForkHeader
 
   private var previousSize: CGSize = .zero
   private var cachedItemSize: CGSize?
@@ -277,6 +277,7 @@ class AlbumsCollectionVC: SingleSnapshotFetchedResultsCollectionViewController<A
     }
     snapshotDidChange = {
       self.common.updateContentUnavailable()
+      self.forkRefreshListHeader() // Fork: UI-24
     }
   }
 
@@ -439,7 +440,7 @@ extension AlbumsCollectionVC: UICollectionViewDelegateFlowLayout {
     referenceSizeForHeaderInSection section: Int
   )
     -> CGSize {
-    let headerTopHeight = section == 0 ? LibraryElementDetailTableHeaderView.frameHeight : 0.0
+    let headerTopHeight = section == 0 ? (forkListHeaderHeight ?? LibraryElementDetailTableHeaderView.frameHeight) : 0.0 // Fork: UI-24
     switch common.sortType {
     case .artist, .name, .rating, .year:
       return CGSize(

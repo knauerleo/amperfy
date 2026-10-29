@@ -90,6 +90,7 @@
 		5052497D2D10CBED0005EEB0 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 5052497C2D10CBED0005EEB0 /* Collections */; };
 		505362D12C23682500846C53 /* AlbumsCollectionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505362D02C23682500846C53 /* AlbumsCollectionVC.swift */; };
 		EF9BA333B81B7C8E3FCEE179 /* AlbumsCollectionVC+Fork.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33925A1C808F7F45D4A53D1 /* AlbumsCollectionVC+Fork.swift */; };
+		9D3D798A6466DF0E75D60C3B /* AlbumsCollectionVC+ForkHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5085E67AB732E4544946BDAE /* AlbumsCollectionVC+ForkHeader.swift */; };
 		EDFB4DB600E5C1CB85CA97AE /* AlbumDetailVC+Fork.swift in Sources */ = {isa = PBXBuildFile; fileRef = A34FAC7528D2377945527F53 /* AlbumDetailVC+Fork.swift */; };
 		505362D32C2425C200846C53 /* AlbumsCommonVCInteractions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505362D22C2425C200846C53 /* AlbumsCommonVCInteractions.swift */; };
 		5055AA5726835A9000096B8D /* PodcastEpisodeTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5055AA5626835A9000096B8D /* PodcastEpisodeTableCell.swift */; };
@@ -897,6 +898,7 @@
 		504D26262D4168DE003FDEB3 /* Amperfy v41.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Amperfy v41.xcdatamodel"; sourceTree = "<group>"; };
 		505362D02C23682500846C53 /* AlbumsCollectionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumsCollectionVC.swift; sourceTree = "<group>"; };
 		D33925A1C808F7F45D4A53D1 /* AlbumsCollectionVC+Fork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlbumsCollectionVC+Fork.swift"; sourceTree = "<group>"; };
+		5085E67AB732E4544946BDAE /* AlbumsCollectionVC+ForkHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlbumsCollectionVC+ForkHeader.swift"; sourceTree = "<group>"; };
 		A34FAC7528D2377945527F53 /* AlbumDetailVC+Fork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AlbumDetailVC+Fork.swift"; sourceTree = "<group>"; };
 		505362D22C2425C200846C53 /* AlbumsCommonVCInteractions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumsCommonVCInteractions.swift; sourceTree = "<group>"; };
 		5055AA5526835A9000096B8D /* PodcastEpisodeTableCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PodcastEpisodeTableCell.xib; sourceTree = "<group>"; };
@@ -2168,6 +2170,7 @@
 				50C16C1721E704CE00F086F0 /* AlbumsVC.swift */,
 				505362D02C23682500846C53 /* AlbumsCollectionVC.swift */,
 				D33925A1C808F7F45D4A53D1 /* AlbumsCollectionVC+Fork.swift */,
+				5085E67AB732E4544946BDAE /* AlbumsCollectionVC+ForkHeader.swift */,
 				A34FAC7528D2377945527F53 /* AlbumDetailVC+Fork.swift */,
 				50C16C1B21E7051700F086F0 /* AlbumDetailVC.swift */,
 				50BA92F921CC37F800E5901D /* SongsVC.swift */,
@@ -3148,6 +3151,7 @@
 				ED3B0ED1A8315CDD49E4497B /* PopupPlayer+ForkStreaming.swift in Sources */,
 				505362D12C23682500846C53 /* AlbumsCollectionVC.swift in Sources */,
 				EF9BA333B81B7C8E3FCEE179 /* AlbumsCollectionVC+Fork.swift in Sources */,
+				9D3D798A6466DF0E75D60C3B /* AlbumsCollectionVC+ForkHeader.swift in Sources */,
 				EDFB4DB600E5C1CB85CA97AE /* AlbumDetailVC+Fork.swift in Sources */,
 				50C16C1821E704CE00F086F0 /* AlbumsVC.swift in Sources */,
 				500DA64B2F087221005578C7 /* CarPlayHomeTabExtension.swift in Sources */,

@@ -111,6 +111,20 @@ final class ListPlayHeaderView: UIView, ListPlayHeader {
     return header
   }
 
+  /// UI-24: the row on its own, e.g. inside the section header of the album grid. The count goes
+  /// under the large title of `titleOwner` like in the lists.
+  static func makeView(
+    configuration: PlayShuffleInfoConfiguration,
+    titleOwner: UIViewController,
+    width: CGFloat
+  )
+    -> ListPlayHeaderView {
+    let header = ListPlayHeaderView(configuration: configuration, width: width)
+    header.titleOwner = titleOwner
+    header.refresh()
+    return header
+  }
+
   private init(configuration: PlayShuffleInfoConfiguration, width: CGFloat) {
     config = configuration
     super.init(frame: CGRect(x: 0, y: 0, width: width, height: Self.frameHeight))

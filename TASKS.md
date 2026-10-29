@@ -13,11 +13,6 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 
 - [ ] **UI-15c Restliche Upstream-Texte auf Deutsch** - Rest von UI-15b
   - Offen: Alerts in Upstream-VCs (Texte direkt in `UIAlertController`), XIB-Texte (bräuchten `Base.lproj`, XIBs bleiben unangetastet), Texte mit Einsetzungen („Rating: \(rating)“), Titel von Untermenüs („More Queue Options“ ist ein `UIMenu`, dessen Titel nur lesbar ist), `EventLogger`-Themen, Upstream-Texte außerhalb der Engstellen von UI-15b. Neue Texte in `Amperfy/Localizable.xcstrings` eintragen, sie greifen dann über `ForkMenuText.upstream`
-- [ ] **UI-24 Alben-Liste wie im Mockup** - Board „Alben-Liste“
-  - Großer Titel „Alben“ mit der Anzahl rechts auf derselben Grundlinie, oben rechts Sortieren/Filtern
-  - Filter-Chips (34 pt, rund): „Zuletzt hinzugefügt“ (aktiv in Mint), „Favoriten“, „Geladen“
-  - Abspielen/Zufall-Zeile auch bei Alben (heute nur Songs, Künstler, Genres)
-  - Entschieden 2026-10-29: Das Raster aus UI-2 bleibt, keine Liste wie im Mockup
 - [ ] **UI-26 Player nach UI-21 abnehmen** - Screenshot nötig, dann Feinschliff. 2026-10-29: Kopfzeile 20 statt 8 pt unter der Safe Area (FORK.md Abschnitt 10)
 
 ## Backlog (ganz hinten)
@@ -76,3 +71,4 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [x] ~~**UI-23 Albumseite wie im Mockup**~~ (2026-10-29) - FORK.md Abschnitt 10, Zurück/„…“ bleiben die Glasknöpfe von iOS 26, auf dem iPhone noch nicht angesehen
 - [x] ~~**UI-25 Abspielen/Zufall-Zeile wie im Mockup**~~ (2026-10-29) - FORK.md Abschnitt 10, Anzahl unter dem großen Titel statt daneben (entschieden 2026-10-29), auf dem iPhone noch nicht angesehen
 - [x] ~~**F-19b Fehlende Songs auch bei Editionen auf YouTube Music**~~ (2026-10-29) - FORK.md Abschnitt 10, Meteora auf dem iPhone noch nicht geprüft
+- [x] ~~**UI-24 Alben-Liste wie im Mockup**~~ (2026-10-29) - FORK.md Abschnitt 10, Raster bleibt, Anzahl unter dem Titel, auf dem iPhone noch nicht angesehen

@@ -51,6 +51,7 @@ class CommonCollectionSectionHeader: UICollectionReusableView {
   }
 
   override func prepareForReuse() {
+    forkRemoveListHeader() // Fork: UI-24
     detailHeader?.removeFromSuperview()
     detailHeader?.isHidden = true
     detailHeader = nil
