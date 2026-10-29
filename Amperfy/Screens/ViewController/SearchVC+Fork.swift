@@ -111,19 +111,9 @@ extension SearchVC {
     appDelegate.storage.main.library.deleteUnusedYouTubeMusicSongs(for: account)
     forkLoadGenres()
 
-    let meta = appDelegate.getMeta(account.info)
-    monitor.configure(backendApi: meta.backendApi)
-    let sync = YouTubeMusicLibrarySync(
-      account: account,
-      storage: appDelegate.storage,
-      backendApi: meta.backendApi,
-      librarySyncer: meta.librarySyncer
-    )
-    monitor.onDownloadFinished = { hit, job in
-      Task { @MainActor in
-        _ = await sync.syncFinishedDownload(hit: hit, job: job)
-      }
-    }
+    monitor.configure(backendApi: appDelegate.getMeta(account.info).backendApi)
+    // F-7: finished downloads are synced by YouTubeMusicDownloadCoordinator
+    YouTubeMusicDownloadCoordinator.shared.start()
     NotificationCenter.default.addObserver(
       fork,
       selector: #selector(SearchForkState.youTubeStatusChanged(notification:)),

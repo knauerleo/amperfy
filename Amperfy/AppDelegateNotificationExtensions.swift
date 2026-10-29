@@ -55,6 +55,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     didReceive response: UNNotificationResponse
   ) async {
     let userInfo = response.notification.request.content.userInfo
+    if YouTubeMusicDownloadCoordinator.handleTap(userInfo: userInfo) { return } // Fork: F-7
     guard let contentTypeRaw = userInfo[NotificationUserInfo.type] as? String,
           let contentType = NotificationContentType(rawValue: contentTypeRaw),
           let accountIdent = userInfo[NotificationUserInfo.account] as? String,

@@ -30,8 +30,6 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 
 - [ ] **F-5 „Ähnliche Songs von YouTube“** - Roadmap 4
   - Shelf auf Künstler- und Albumseite (`ShelfLayout.section(.large)`, `display(title:…, image:)`). Song-Radio läuft mit YouTube-Treffern weiter, wenn die Sammlung leer läuft
-- [ ] **F-7 Mitteilung bei fertigem Download**
-  - Lokale Notification bei `fertig`/`fehler`, Tap öffnet das Album. Optional Live Activity, solange Jobs laufen
 - [ ] **F-8 Ganzes Album / Künstler von YouTube laden**
   - Braucht einen Endpunkt im Songpicker (`album_id`, `kind`). In der App: Menüeintrag am YouTube-Treffer „Ganzes Album laden“
 - [ ] **F-9 Teilen-Erweiterung „Teilen → Drift“**
@@ -73,3 +71,4 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [x] ~~**UI-5 „Zu Playlist hinzufügen“ als schlankes Sheet**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**UI-7 Login, Sync, Update im Drift-Stil**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**F-6 YouTube-Platzhalter nach dem Sync ersetzen**~~ (2026-10-29) - FORK.md Abschnitt 10
+- [x] ~~**F-7 Mitteilung bei fertigem Download**~~ (2026-10-29) - FORK.md Abschnitt 10

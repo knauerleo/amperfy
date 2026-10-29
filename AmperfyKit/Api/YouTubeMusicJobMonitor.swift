@@ -68,6 +68,8 @@ public final class YouTubeMusicJobMonitor {
 
   /// Called once per download that finished while it was tracked (not for old jobs).
   public var onDownloadFinished: ((_ hit: SongpickerHit, _ job: SongpickerJob) -> ())?
+  /// F-7: called once per tracked download that ended with `fehler`.
+  public var onDownloadFailed: ((_ videoId: String, _ job: SongpickerJob) -> ())?
 
   private static let pollInterval: Duration = .milliseconds(1500)
   /// While the overview is visible and nothing loads.
@@ -281,6 +283,8 @@ public final class YouTubeMusicJobMonitor {
         running.remove(videoId)
         if job.state == .done, let hit = hits[videoId] {
           onDownloadFinished?(hit, job)
+        } else if job.state == .failed {
+          onDownloadFailed?(videoId, job)
         }
       } else {
         running.insert(videoId)
