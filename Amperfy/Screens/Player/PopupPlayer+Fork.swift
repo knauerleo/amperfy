@@ -85,6 +85,7 @@ extension PopupPlayerVC {
         scroller.trailingAnchor.constraint(equalTo: largePlayerPlaceholderView.trailingAnchor),
       ])
     }
+    forkInstallSleepTimerChip()
     forkReloadLyricsCard()
   }
 

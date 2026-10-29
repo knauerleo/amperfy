@@ -439,19 +439,7 @@ extension AppDelegate {
   }
 
   private func activateSleepTimer(timeInterval: TimeInterval) {
-    appDelegate.sleepTimer?.invalidate()
-    appDelegate.sleepTimer = Timer
-      .scheduledTimer(withTimeInterval: timeInterval, repeats: false) { _ in
-        Task { @MainActor in
-          self.appDelegate.player.pause()
-          self.appDelegate.eventLogger.info(
-            topic: "Sleep Timer",
-            message: "Sleep Timer paused playback."
-          )
-          self.appDelegate.sleepTimer?.invalidate()
-          self.appDelegate.sleepTimer = nil
-        }
-      }
+    forkActivateSleepTimer(timeInterval: timeInterval) // Fork: fade out in the last 10 s (UI-12)
   }
 
   var isMainOrMiniPlayerPlayerOpen: Bool {

@@ -29,8 +29,6 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
   - Labels für `DownloadJobCell`, `SearchStatusCell`, `NowPlayingBarsView`, Home/Search-Fork-Zellen. Skeletons für VoiceOver ausblenden
   - Zoom-Übergang zum Player bei „Bewegung reduzieren“ prüfen
   - Fertig, wenn: Home → Album → Abspielen → Skip ist komplett mit VoiceOver bedienbar
-- [ ] **UI-12 Sleep Timer sichtbar im Player**
-  - Chip „Pausiert um 23:40“ unter den Controls, Tap = Menü. Lautstärke in den letzten 10 s ausblenden statt harter Pause
 - [ ] **UI-13 Bewegter Cover-Verlauf im Player**
   - `AnimatedGradientLayer` existiert. Langsamer Verlauf aus `ArtworkColorCache`-Farben, aus bei „Bewegung reduzieren“
 - [ ] **UI-14 Kompakter Mini-Player im Inline-Modus**
@@ -83,3 +81,4 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [x] ~~**F-4 „Popular“ mit `getTopSongs`**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**UI-6 Volle Lyrics-Ansicht im Stil der Lyrics-Karte**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**UI-11 Lyrics-Karte unter das Cover statt neben ihm**~~ (2026-10-29) - FORK.md Abschnitt 10
+- [x] ~~**UI-12 Sleep Timer sichtbar im Player**~~ (2026-10-29) - FORK.md Abschnitt 10
