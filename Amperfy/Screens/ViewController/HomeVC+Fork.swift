@@ -260,8 +260,8 @@ extension HomeVC {
 
   // MARK: Selection
 
-  /// Returns true when the tap was handled here. Albums and playlists in the Recently Played grid
-  /// start playing right away, artists and everything else open as before.
+  /// Returns true when the tap was handled here. Mixes play right away, decades and favorites open
+  /// their fork pages, entities (albums, playlists, artists) open as before.
   func handleForkSelection(at indexPath: IndexPath) -> Bool {
     guard let item = dataSource.itemIdentifier(for: indexPath) else { return true }
     switch item {
@@ -284,15 +284,9 @@ extension HomeVC {
       )
       navigationController?.navigationBar.prefersLargeTitles = false
       return true
-    case let .entity(homeItem):
-      guard dataSource.sectionIdentifier(for: indexPath.section) == .recentlyPlayed else {
-        return false
-      }
-      let container = homeItem.playableContainable
-      // UI-22: an album opens its page like everywhere else, a playlist still plays
-      guard container is Playlist else { return false }
-      playFromTile(container)
-      return true
+    case .entity:
+      // UI-22, UI-22b: albums and playlists open their page like everywhere else
+      return false
     }
   }
 
@@ -305,36 +299,6 @@ extension HomeVC {
         return
       }
       appDelegate.player.play(context: PlayContext(name: mix.title, playables: playables))
-    }
-  }
-
-  private func playFromTile(_ container: PlayableContainable) {
-    DS.haptic(.light)
-    Task { @MainActor in
-      let isOfflineMode = appDelegate.storage.settings.user.isOfflineMode
-      let needsFetch: Bool
-      if let album = container as? Album {
-        needsFetch = !album.isSongsMetaDataSynced
-      } else {
-        needsFetch = container.playables.isEmpty
-      }
-      if needsFetch {
-        do {
-          try await container.fetch(
-            storage: appDelegate.storage,
-            librarySyncer: appDelegate.getMeta(account.info).librarySyncer,
-            playableDownloadManager: appDelegate.getMeta(account.info).playableDownloadManager
-          )
-        } catch {
-          appDelegate.eventLogger.report(topic: "Home Play", error: error)
-        }
-      }
-      let playables = container.playables.filterCached(dependigOn: isOfflineMode)
-      guard !playables.isEmpty else {
-        DS.haptic(.error)
-        return
-      }
-      appDelegate.player.play(context: PlayContext(containable: container, playables: playables))
     }
   }
 }

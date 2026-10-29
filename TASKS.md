@@ -10,7 +10,6 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
   - Mockup („Drift Identität + Listen“, Boards „Albumseite“/„Alben-Liste“): Fläche „Erhöht“ #1E1E26, Radius 14, Schatten (0,5 Deckkraft, 8 pt Versatz, 24 pt Unschärfe), 60 pt hoch, 8 pt Rand links/rechts, Cover 44 pt mit Radius 8, Titel 14 Semibold, Künstler 12 in Text 2
   - Geprüft: `UITabAccessory` hat nur `contentView`, keine API für Hintergrund, Form oder Schatten. Also eigene View über der Tab-Bar statt `bottomAccessory` (`TabBarVC`), Inhalte der Tabs bekommen unten Platz (`additionalSafeAreaInsets`), Tap öffnet den Player (Zoom-Übergang `ForkPlayerTransition` vom Cover der Karte), Wischen nach oben ebenso. Verhalten beim Verkleinern der Tab-Bar (`tabBarMinimizeBehavior`, UI-14 Inline-Modus) neu lösen, z. B. Karte bleibt und rückt nach unten. Ausgeblendet ohne laufenden Song. iPad und Mac behalten das `bottomAccessory`
   - Tab-Bar selbst bleibt Glas (eigener Hintergrund würde das Glas ersetzen)
-- [ ] **UI-22b Playlists auf Home öffnen die Playlist** - Entscheidung 2026-10-29: wie Alben (UI-22) öffnen Playlist-Kacheln in „Recently Played“ die Playlistseite statt sofort abzuspielen. `HomeVC+Fork.swift` › `handleForkSelection`, danach wird `playFromTile` dort nicht mehr gebraucht (prüfen, ob es noch woanders genutzt wird, sonst entfernen)
 
 ## Waiting On
 
@@ -85,3 +84,4 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [x] ~~**F-19 Fehlende Album-Songs von YouTube**~~ (2026-10-29) - FORK.md Abschnitt 10, auf dem iPhone noch nicht geprüft
 - [x] ~~**UI-15b Upstream-Texte auf Deutsch**~~ (2026-10-29) - FORK.md Abschnitt 10, Rest in UI-15c
 - [x] ~~**F-9b Album-Links in der Teilen-Erweiterung**~~ (2026-10-29) - FORK.md Abschnitt 10, Teilen auf dem iPhone noch nicht geprüft
+- [x] ~~**UI-22b Playlists auf Home öffnen die Playlist**~~ (2026-10-29) - FORK.md Abschnitt 10, Tap auf dem iPhone noch nicht geprüft
