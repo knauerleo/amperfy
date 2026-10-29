@@ -131,7 +131,7 @@ final class DriftWidgetBridge: NSObject {
     guard !songs.isEmpty else { return }
     let playables = Array(songs.shuffled().prefix(player.maxSongsToAddOnce))
     _ = appDelegate.intentManager.play(
-      context: PlayContext(name: "Favorite Songs", playables: playables),
+      context: PlayContext(name: String(localized: "Favorite Songs", table: "Fork"), playables: playables),
       shuffleOption: true,
       repeatOption: .off
     )
@@ -202,13 +202,13 @@ final class DriftWidgetBridge: NSObject {
       switch container {
       case is Album:
         kind = "album"
-        subtitle = container.subtitle ?? "Album"
+        subtitle = container.subtitle ?? String(localized: "Album", table: "Fork")
       case is Artist:
         kind = "artist"
-        subtitle = "Artist"
+        subtitle = String(localized: "Artist", table: "Fork")
       case is Playlist:
         kind = "playlist"
-        subtitle = "Playlist"
+        subtitle = String(localized: "Playlist", table: "Fork")
       default:
         return nil
       }

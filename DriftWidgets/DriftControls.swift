@@ -29,11 +29,11 @@ struct ShuffleFavoritesControl: ControlWidget {
   var body: some ControlWidgetConfiguration {
     StaticControlConfiguration(kind: DriftWidgetKind.controlShuffleFavorites) {
       ControlWidgetButton(action: DriftShuffleFavoritesIntent()) {
-        Label("Shuffle Favorites", systemImage: "shuffle")
+        Label(String(localized: "Shuffle Favorites", table: "Fork"), systemImage: "shuffle")
       }
     }
-    .displayName("Shuffle Favorites")
-    .description("Plays your favorite songs in Drift in random order.")
+    .displayName(LocalizedStringResource("Shuffle Favorites", table: "Fork"))
+    .description(LocalizedStringResource("Plays your favorite songs in Drift in random order.", table: "Fork"))
   }
 }
 
@@ -48,11 +48,11 @@ struct PlayPauseControl: ControlWidget {
       ControlWidgetToggle(isOn: state.isPlaying, action: DriftPlayPauseIntent()) {
         Text(state.title)
       } valueLabel: { isOn in
-        Label(isOn ? "Playing" : "Paused", systemImage: isOn ? "pause.fill" : "play.fill")
+        Label(isOn ? String(localized: "Playing", table: "Fork") : String(localized: "Paused", table: "Fork"), systemImage: isOn ? "pause.fill" : "play.fill")
       }
     }
-    .displayName("Play/Pause Drift")
-    .description("Pauses or continues playback in Drift.")
+    .displayName(LocalizedStringResource("Play/Pause Drift", table: "Fork"))
+    .description(LocalizedStringResource("Pauses or continues playback in Drift.", table: "Fork"))
   }
 }
 

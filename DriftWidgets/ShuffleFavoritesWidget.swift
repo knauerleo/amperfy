@@ -33,8 +33,8 @@ struct ShuffleFavoritesWidget: Widget {
     ) { entry in
       ShuffleFavoritesWidgetView(entry: entry)
     }
-    .configurationDisplayName("Shuffle Favorites")
-    .description("Plays your favorite songs in random order.")
+    .configurationDisplayName(String(localized: "Shuffle Favorites", table: "Fork"))
+    .description(String(localized: "Plays your favorite songs in random order.", table: "Fork"))
     .supportedFamilies([.systemSmall, .accessoryCircular])
   }
 }
@@ -66,7 +66,7 @@ struct ShuffleFavoritesWidgetView: View {
             .frame(width: 40, height: 40)
             .background(.white.opacity(0.18), in: Circle())
           Spacer(minLength: 0)
-          Text("Shuffle")
+          Text(String(localized: "Shuffle", table: "Fork"))
             .font(.title3.weight(.bold))
             .foregroundStyle(.white)
           Text(subtitle)
@@ -90,9 +90,9 @@ struct ShuffleFavoritesWidgetView: View {
   private var subtitle: String {
     let count = entry.snapshot.favoriteSongCount
     switch count {
-    case 0: return "Favorites"
-    case 1: return "Favorites · 1 song"
-    default: return "Favorites · \(count) songs"
+    case 0: return String(localized: "Favorites", table: "Fork")
+    case 1: return String(localized: "Favorites · 1 song", table: "Fork")
+    default: return String(localized: "Favorites · \(count) songs", table: "Fork")
     }
   }
 }

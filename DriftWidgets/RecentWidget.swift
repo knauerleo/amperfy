@@ -31,8 +31,8 @@ struct RecentWidget: Widget {
       RecentWidgetView(entry: entry)
         .containerBackground(DriftWidgetStyle.background, for: .widget)
     }
-    .configurationDisplayName("Recently Played")
-    .description("Play what you listened to last.")
+    .configurationDisplayName(String(localized: "Recently Played", table: "Fork"))
+    .description(String(localized: "Play what you listened to last.", table: "Fork"))
     .supportedFamilies([.systemSmall, .systemMedium, .systemLarge])
   }
 }
@@ -51,7 +51,7 @@ struct RecentWidgetView: View {
       VStack(spacing: 6) {
         Image(systemName: "clock.arrow.circlepath")
           .font(.title2)
-        Text("Play something in Drift and it shows up here.")
+        Text(String(localized: "Play something in Drift and it shows up here.", table: "Fork"))
           .font(.caption)
           .multilineTextAlignment(.center)
       }
@@ -78,7 +78,7 @@ struct RecentWidgetView: View {
     HStack(spacing: 6) {
       Image(systemName: "waveform")
         .foregroundStyle(entry.snapshot.accentColor)
-      Text("Recently Played")
+      Text(String(localized: "Recently Played", table: "Fork"))
         .foregroundStyle(.white)
     }
     .font(.subheadline.weight(.bold))

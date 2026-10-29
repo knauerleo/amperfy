@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F0C7A11E0000000000000006 /* Fork.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = F0C7A11E0000000000000005 /* Fork.xcstrings */; };
 		F0C7A11E0000000000000002 /* Fork.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = F0C7A11E0000000000000001 /* Fork.xcstrings */; };
 		F0C7A11E0000000000000004 /* Fork.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = F0C7A11E0000000000000003 /* Fork.xcstrings */; };
 		09EB5F102F93B96E00B1C71C /* ShareSongAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EB5F0D2F93B65400B1C71C /* ShareSongAction.swift */; };
@@ -715,6 +716,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		F0C7A11E0000000000000005 /* Fork.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Fork.xcstrings; sourceTree = "<group>"; };
 		F0C7A11E0000000000000001 /* Fork.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Fork.xcstrings; sourceTree = "<group>"; };
 		F0C7A11E0000000000000003 /* Fork.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Fork.xcstrings; sourceTree = "<group>"; };
 		09EB5F0D2F93B65400B1C71C /* ShareSongAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSongAction.swift; sourceTree = "<group>"; };
@@ -2531,6 +2533,7 @@
 				D3F4CAF2D259585A7B5C5100 /* ShuffleFavoritesWidget.swift */,
 				DB7288C7E0A4D88F887DEABF /* DriftControls.swift */,
 				E27D3A7E5AD3A8055037DC4C /* Info.plist */,
+				F0C7A11E0000000000000005 /* Fork.xcstrings */,
 				3FEC52778E8EC445DB2E5CF9 /* DriftWidgets.entitlements */,
 			);
 			path = DriftWidgets;
@@ -2835,6 +2838,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F0C7A11E0000000000000006 /* Fork.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

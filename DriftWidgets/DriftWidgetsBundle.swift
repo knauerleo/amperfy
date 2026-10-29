@@ -70,7 +70,13 @@ extension DriftWidgetSnapshot {
   static let placeholder = DriftWidgetSnapshot(
     accountIdent: nil,
     recent: (1 ... 6).map {
-      Item(id: "\($0)", kind: "album", title: "Album \($0)", subtitle: "Artist", artworkFile: nil)
+      Item(
+        id: "\($0)",
+        kind: "album",
+        title: String(localized: "Album \($0)", table: "Fork"),
+        subtitle: String(localized: "Artist", table: "Fork"),
+        artworkFile: nil
+      )
     },
     favoriteSongCount: 128,
     nowPlayingTitle: nil,
