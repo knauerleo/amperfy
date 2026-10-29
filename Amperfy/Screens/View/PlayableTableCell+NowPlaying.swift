@@ -30,6 +30,8 @@ import UIKit
 final class NowPlayingCellDecorator: UIView {
   private let artworkEqualizer = NowPlayingBarsView()
   private let numberEqualizer = NowPlayingBarsView()
+  /// UI-18 (iPhone): the row of the current song sits on a rounded surface.
+  private let rowHighlight = UIView()
 
   private weak var cell: PlayableTableCell?
   private weak var titleLabel: UILabel?
@@ -56,6 +58,13 @@ final class NowPlayingCellDecorator: UIView {
     translatesAutoresizingMaskIntoConstraints = false
     cell.contentView.insertSubview(self, belowSubview: cell.playOverArtworkButton)
     cell.contentView.insertSubview(numberEqualizer, belowSubview: cell.playOverNumberButton)
+    rowHighlight.isUserInteractionEnabled = false
+    rowHighlight.isHidden = true
+    rowHighlight.backgroundColor = DS.Color.surface
+    rowHighlight.layer.cornerRadius = DS.Radius.nowPlayingRow
+    rowHighlight.layer.cornerCurve = .continuous
+    rowHighlight.translatesAutoresizingMaskIntoConstraints = false
+    cell.contentView.insertSubview(rowHighlight, at: 0)
     NSLayoutConstraint.activate([
       leadingAnchor.constraint(equalTo: cell.entityImage.leadingAnchor),
       trailingAnchor.constraint(equalTo: cell.entityImage.trailingAnchor),
@@ -69,6 +78,10 @@ final class NowPlayingCellDecorator: UIView {
       numberEqualizer.centerYAnchor.constraint(equalTo: cell.trackNumberLabel.centerYAnchor),
       numberEqualizer.widthAnchor.constraint(equalToConstant: 13),
       numberEqualizer.heightAnchor.constraint(equalToConstant: 12),
+      rowHighlight.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: DS.Space.xs),
+      rowHighlight.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -DS.Space.xs),
+      rowHighlight.topAnchor.constraint(equalTo: cell.contentView.topAnchor, constant: 2),
+      rowHighlight.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor, constant: -2),
     ])
 
     for name in [Notification.Name.playerPlay, .playerPause, .playerStop] {
@@ -105,14 +118,24 @@ final class NowPlayingCellDecorator: UIView {
     let accent = appDelegate.storage.settings.accounts.getSetting(playable?.account?.info).read
       .themePreference.asColor
 
-    titleLabel?.textColor = isCurrent ? accent : .label
     isHidden = !isCurrent || isTrackNumberStyle
-    numberEqualizer.isHidden = !isCurrent || !isTrackNumberStyle
+    if DS.isPhone {
+      // UI-18: title and track number in the accent, the number stays, the row on a surface
+      titleLabel?.textColor = isCurrent ? accent : DS.Color.text
+      trackNumberLabel?.textColor = isCurrent ? accent : DS.Color.text2
+      trackNumberLabel?.alpha = 1
+      numberEqualizer.isHidden = true
+      rowHighlight.isHidden = !isCurrent
+    } else {
+      titleLabel?.textColor = isCurrent ? accent : .label
+      numberEqualizer.isHidden = !isCurrent || !isTrackNumberStyle
+      // alpha instead of isHidden: the hover code of the cell toggles isHidden
+      trackNumberLabel?.alpha = (isCurrent && isTrackNumberStyle) ? 0 : 1
+      rowHighlight.isHidden = true
+    }
     numberEqualizer.tintColor = accent
-    // alpha instead of isHidden: the hover code of the cell toggles isHidden
-    trackNumberLabel?.alpha = (isCurrent && isTrackNumberStyle) ? 0 : 1
     artworkEqualizer.isPlaying = isPlaying && !isTrackNumberStyle
-    numberEqualizer.isPlaying = isPlaying && isTrackNumberStyle
+    numberEqualizer.isPlaying = isPlaying && isTrackNumberStyle && !DS.isPhone
     // the equalizer is only visual, VoiceOver hears the state on the row (UI-10)
     cell?.accessibilityValue = isCurrent ? (isPlaying ? String(localized: "Now Playing", table: "Fork") : String(localized: "Paused", table: "Fork")) : nil
   }

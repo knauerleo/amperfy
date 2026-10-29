@@ -59,7 +59,7 @@ class PlayableTableCell: BasicTableCell {
   @IBOutlet
   weak var downloadProgress: UIProgressView! // depricated: replaced with a spinner in the accessoryView
   @IBOutlet
-  weak private var cacheIconImage: UIImageView!
+  weak var cacheIconImage: UIImageView! // Fork: read by the album page row (UI-18)
   @IBOutlet
   weak private var favoriteIconImage: UIImageView!
 

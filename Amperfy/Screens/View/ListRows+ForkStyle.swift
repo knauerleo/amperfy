@@ -151,5 +151,29 @@ extension PlayableTableCell {
   func forkFinishRefresh(playable: AbstractPlayable?, isTrackNumberStyle: Bool, isQueue: Bool) {
     guard DS.isPhone, !isQueue else { return }
     optionsButton.imageView?.tintColor = DS.Color.text2
+    artistLabel.textColor = DS.Color.text2
+    if isTrackNumberStyle, let playable {
+      forkApplyAlbumPageRow(playable: playable)
+    } else {
+      artistLabel.font = DS.Font.cellSubtitle
+    }
+  }
+
+  /// Album page: track number instead of the cover (upstream), no artist line, the duration
+  /// in the subtitle with fixed digits. Guest artists stay in front of the duration.
+  private func forkApplyAlbumPageRow(playable: AbstractPlayable) {
+    let duration = playable.duration > 0 ? playable.duration.asColonDurationString : ""
+    let isGuest = playable.asSong?.album?.artist?.name != playable.creatorName
+    let parts = [isGuest ? playable.creatorName : "", duration].filter { !$0.isEmpty }
+    artistLabel.text = parts.joined(separator: " · ")
+    artistLabel.font = DS.Font.cellDuration
+    artistLabel.isHidden = parts.isEmpty
+
+    // the duration column on the right is free now: only "…" and the download icon remain
+    let optionsWidth: CGFloat = optionsButton.isHidden ? 0 : 30
+    let isCacheIconVisible = !cacheIconImage.isHidden
+    durationLabel.isHidden = true
+    cacheTrailingCellConstaint.constant = optionsWidth
+    labelTrailingCellConstraint.constant = optionsWidth + (isCacheIconVisible ? 4 + 15 + 4 : 0)
   }
 }
