@@ -86,6 +86,8 @@ extension PopupPlayerVC {
     page.delegate = self
     page.card.addTarget(self, action: #selector(forkLyricsCardTapped), for: .touchUpInside)
     tableView.bottomAnchor.constraint(equalTo: controlPlaceholderView.topAnchor).isActive = true
+    // UI-21: the transport row got more room, before the chip takes its base height
+    controlPlaceholderHeightConstraint.constant += PlayerControlView.forkStreamingExtraHeight
 
     forkInstallSleepTimerChip()
     forkInstallAnimatedBackground()

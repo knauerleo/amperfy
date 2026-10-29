@@ -151,8 +151,17 @@ extension LargeCurrentlyPlayingPlayerView {
       )
       button?.configuration = config
     }
+    // UI-21: without the album the title block needs less height, the cover gains the rest
+    if let height = detailsContainer.constraints.first(where: {
+      $0.firstItem === detailsContainer && $0.firstAttribute == .height && $0.secondItem == nil
+    }) {
+      height.constant = Self.forkDetailsHeight
+    }
     rootView?.forkRefreshNowPlayingHeader()
   }
+
+  /// Title and artist with the XIB's 100 pt it would float in a wide gap below the cover.
+  private static let forkDetailsHeight: CGFloat = 72
 }
 
 // MARK: - ForkTransportToggleButton
@@ -178,6 +187,14 @@ final class ForkTransportToggleButton: UIButton {
 extension PlayerControlView {
   private static let playCircleSize: CGFloat = 64
   private static let playCircleTag = 0x5054
+  /// UI-21: slider to transport row (XIB 22) and transport to options (XIB 20). The play circle
+  /// is 14 pt higher than the row, with the XIB values it touched the times and the stream info.
+  private static let transportTopSpacing: CGFloat = 40
+  private static let optionsTopSpacing: CGFloat = 28
+  /// Added to the control placeholder so the rows keep their place at the bottom.
+  static var forkStreamingExtraHeight: CGFloat {
+    ForkPlayerTransition.isActive ? (transportTopSpacing - 22) + (optionsTopSpacing - 20) : 0
+  }
 
   private var forkTransportStack: UIStackView? {
     playButton.superview as? UIStackView
@@ -228,7 +245,19 @@ extension PlayerControlView {
     )
     playButton.tintColor = .systemBackground
     playButton.imageView?.tintColor = .systemBackground
+    forkSpaceOutStreamingRows(transport: stack)
     forkRefreshStreamingTransport()
+  }
+
+  /// UI-21: more room around the transport row, the XIB constraints only get new constants.
+  private func forkSpaceOutStreamingRows(transport stack: UIStackView) {
+    for constraint in constraints where constraint.firstAttribute == .top {
+      if constraint.firstItem === stack, constraint.secondItem === timeSlider {
+        constraint.constant = Self.transportTopSpacing
+      } else if constraint.firstItem === optionsStackView, constraint.secondItem === stack {
+        constraint.constant = Self.optionsTopSpacing
+      }
+    }
   }
 
   /// Hook at the end of `refreshPlayer` and on shuffle or repeat changes.

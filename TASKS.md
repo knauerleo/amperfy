@@ -5,8 +5,6 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 
 ## Active
 
-- [ ] **UI-21 Player luftiger** - Screenshot vom 2026-10-29 nach UI-20
-  - Kopfzeile „Wird gespielt von“ klebt unter der Dynamic Island, unten drängen sich Zeitleiste, „MP3 124 kbps“, Steuerreihe und Optionszeile, zwischen Cover und Titel ist viel Luft
 - [ ] **UI-22 Album auf Home öffnet das Album** - Tap auf eine Albumkachel spielt heute sofort ab
 - [ ] **F-19 Fehlende Album-Songs von YouTube** - Albumseite einer Bibliotheks-Album: Songs, die auf YouTube Music zum Album gehören, aber lokal fehlen, mit Wolke anzeigen, „Album laden“ wie in der Suche (F-8)
 
@@ -72,3 +70,4 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [x] ~~**F-8 Ganzes Album / Künstler von YouTube laden**~~ (2026-10-29) - FORK.md Abschnitt 9 und 10, nur App-Seite, Server-Teil live
 - [x] ~~**UI-20 Drei Tabs, Player als scrollende Seite, Name „Drift“ im System**~~ (2026-10-29) - FORK.md Abschnitt 10, Mini-Player-Karte weiter offen in UI-19
 - [x] ~~**F-18 Songdauer beim Abspielen immer bekannt**~~ (2026-10-29) - FORK.md Abschnitt 10, YouTube- und lokaler Song auf dem iPhone noch nicht geprüft
+- [x] ~~**UI-21 Player luftiger**~~ (2026-10-29) - FORK.md Abschnitt 10, Abnahme per Screenshot offen

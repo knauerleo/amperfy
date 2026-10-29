@@ -25,7 +25,9 @@ import UIKit
 
 final class PlayerPageScrollView: UIScrollView {
   /// Distance of the cover from the header.
-  private static let coverTopMargin: CGFloat = 8
+  private static let coverTopMargin: CGFloat = 12
+  /// UI-21: the header kept clear of the Dynamic Island.
+  private static let headerTopMargin: CGFloat = 8
 
   let header: PlayerNowPlayingHeaderView
   let card = LyricsCardView()
@@ -114,7 +116,7 @@ final class PlayerPageScrollView: UIScrollView {
 
   override func layoutSubviews() {
     if let insetSource {
-      topConstraint?.constant = insetSource.safeAreaInsets.top
+      topConstraint?.constant = insetSource.safeAreaInsets.top + Self.headerTopMargin
       bottomConstraint?.constant = -insetSource.layoutMargins.bottom
       cardBottomConstraint?.constant = -(insetSource.safeAreaInsets.bottom + DS.Space.m)
     }
