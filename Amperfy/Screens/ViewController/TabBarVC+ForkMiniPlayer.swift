@@ -50,9 +50,36 @@ extension TabBarVC {
     forkLayoutFloatingMiniPlayer(animated: false)
   }
 
+  /// The inset on the tab's navigation controller does not reach every pushed page (the album
+  /// page kept its last rows under the card), so a page also ends above the card on its own:
+  /// its safe area is topped up to the card's top edge plus the gap. Returns false without card.
+  func forkApplyMiniPlayerInset(to viewController: UIViewController) -> Bool {
+    guard let card = forkFloatingMiniPlayer, viewController.isViewLoaded else { return false }
+    let page = viewController.view!
+    var extra: CGFloat = 0
+    if card.hasSong, page.window != nil {
+      let cardTop = page.convert(card.frame, from: view).minY
+      let needed = page.bounds.maxY - cardTop + FloatingMiniPlayerView.bottomGap
+      let base = page.safeAreaInsets.bottom - viewController.additionalSafeAreaInsets.bottom
+      extra = max(0, needed - base)
+    }
+    if viewController.additionalSafeAreaInsets.bottom != extra {
+      viewController.additionalSafeAreaInsets.bottom = extra
+    }
+    return true
+  }
+
   /// Card 8 pt above the tab bar. Without a song the card hides.
   func forkLayoutFloatingMiniPlayer(animated: Bool) {
     guard let card = forkFloatingMiniPlayer else { return }
+    // after the card has its new frame (UIView.animate sets it right away)
+    defer {
+      for child in viewControllers ?? [] {
+        if let top = (child as? UINavigationController)?.topViewController {
+          _ = forkApplyMiniPlayerInset(to: top)
+        }
+      }
+    }
     let height = FloatingMiniPlayerView.height
     let margin = FloatingMiniPlayerView.sideMargin
     let tabBarVisible = !tabBar.isHidden && tabBar.alpha > 0.01 && tabBar.frame.minY < view.bounds.maxY
