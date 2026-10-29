@@ -5,9 +5,6 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 
 ## Active
 
-- [ ] **F-2 Server-URL automatisch umschalten** - mit F-1 meist überflüssig (nur noch die Domain), nur falls LAN-Adresse weiter genutzt wird
-  - Bei Netzwechsel (`NetworkMonitor`) die erste erreichbare URL aus `activeBackendServerUrl` + `alternativeServerURLs` per `ping` wählen
-
 ## Waiting On
 
 - [ ] **F-16 CarPlay wieder einschalten** - Antrag bei Apple (developer.apple.com/contact/carplay, „CarPlay Audio App“), danach Entitlement in `Amperfy/Amperfy.entitlements` zurück
@@ -19,8 +16,6 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [ ] **UI-15b Upstream-Texte auf Deutsch** - Rest von UI-15
   - Fork-Texte stehen in `Amperfy/Fork.xcstrings` (Tabelle `Fork`). Offen: Upstream-Literale (UIKit-Menüs, Alerts, `SwipeActionType`-Namen, SwiftUI-Einstellungen, XIBs), dafür eine `Localizable.xcstrings` bzw. XIB-Strings
   - Ebenfalls offen: vom Fork nur umbenannte Upstream-Texte (`HomeSection` „Recently Played“/„Recently Added“, Menüeinträge in `EntityPreviewVC`, Swipe-Namen, „Tap to reopen Drift“) und die `EventLogger`-Themen
-- [ ] **UI-16 Entscheidung iPad/Mac**
-  - Fork-Design gilt nur auf dem iPhone. Entweder in `FORK.md` festhalten oder Home, Suche und Detailseiten auf dem iPad mitnehmen
 
 ### Features
 
@@ -29,6 +24,7 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [ ] **F-14 Widgets und Kontrollzentrum**
   - Neues Widget-Target. Interaktive Widgets „Zuletzt gehört“, „Favoriten mischen“, Taste im Kontrollzentrum. App Intents gibt es schon (`AmperfyAppShortcuts`)
   - Blockiert (2026-10-29): Die App Group lässt sich nicht registrieren, solange im Developer-Account die neue Program License Agreement nicht akzeptiert ist („PLA Update available“). Danach erneut bauen
+  - Code auf Branch `f14-widgets` (WIP, nie kompiliert, Target noch nicht im Projekt)
 - [ ] **F-17 Crossfade**
   - Engine `AudioStreaming` (AVAudioEngine) lädt den nächsten Song schon vor. Größter Eingriff in AmperfyKit, zuletzt
   - Analysiert (2026-10-29): nicht mit einzeiligen Hooks machbar, `BackendAudioPlayer` braucht zwei Kanäle. Umsetzungsplan in FORK.md, „Roadmap“ › „Crossfade (TASKS F-17): Umsetzungsplan“
@@ -65,3 +61,5 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [x] ~~**F-9 Teilen-Erweiterung „Teilen → Drift“**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**UI-10 Barrierefreiheit der Fork-Views**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**UI-15 Deutsche Texte per String Catalog**~~ (2026-10-29) - FORK.md Abschnitt 10, nur Fork-Texte, Rest in UI-15b
+- [x] ~~**F-2 Server-URL automatisch umschalten**~~ (2026-10-29) - überflüssig – seit F-1 nur noch die Domain
+- [x] ~~**UI-16 Entscheidung iPad/Mac**~~ (2026-10-29) - Fork-Design nur auf dem iPhone, iPad und Mac bleiben im Upstream-Stil, FORK.md Abschnitt 10 und „Arbeitsweise“
