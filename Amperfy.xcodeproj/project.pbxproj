@@ -367,6 +367,7 @@
 		50C9D64B284FAA02007F18D0 /* SubsonicServerApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5086F87E22399D1900546F5A /* SubsonicServerApi.swift */; };
 		B7A0D987587FF47CD0E122FC /* SubsonicArtistInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 897037E435A119392BFB0C3C /* SubsonicArtistInfo.swift */; };
 		2A98DF9E98E8D72A0BD04F1E /* SubsonicAlbumList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B3A42956EF3987AF214AFBD /* SubsonicAlbumList.swift */; };
+		1F271C9A3C0F656939A40BDB /* SubsonicPlayQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D28DF61C10FA344055487F /* SubsonicPlayQueue.swift */; };
 		50C9D64C284FAA02007F18D0 /* SubsonicLibrarySyncer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5086F88022399F3700546F5A /* SubsonicLibrarySyncer.swift */; };
 		50C9D64D284FAA02007F18D0 /* SubsonicArtworkDownloadDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502C0044224C0B1400DA0D1E /* SubsonicArtworkDownloadDelegate.swift */; };
 		50C9D64E284FAA02007F18D0 /* SsArtistParserDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5086F886223BD68B00546F5A /* SsArtistParserDelegate.swift */; };
@@ -554,6 +555,7 @@
 		50CFBC542E464EEF00EAA7BC /* AppDelegateMainMenuExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CFBC532E464EDE00EAA7BC /* AppDelegateMainMenuExtension.swift */; };
 		C7E95B84474CA6A5CE25D04A /* AppDelegate+ForkSleepTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BFD60E6105862FBD9147F27 /* AppDelegate+ForkSleepTimer.swift */; };
 		9FEFE31CCA516A2538F28D44 /* YouTubeMusicDownloadCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3D5D52506A052EDF56B0C17 /* YouTubeMusicDownloadCoordinator.swift */; };
+		BBA534416618E50736E2B752 /* PlayQueueSyncCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA2C16F8FBFBDCB1EB02AB9 /* PlayQueueSyncCoordinator.swift */; };
 		50D54B6D2E30FFDB0078631E /* Magnitude.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D54B642E30F9350078631E /* Magnitude.swift */; };
 		50D54B6E2E30FFDB0078631E /* AudioAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D54B622E30F9350078631E /* AudioAnalyzer.swift */; };
 		50D54B6F2E30FFDB0078631E /* AmplitudeSpectrumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D54B612E30F9350078631E /* AmplitudeSpectrumView.swift */; };
@@ -928,6 +930,7 @@
 		5086F87E22399D1900546F5A /* SubsonicServerApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubsonicServerApi.swift; sourceTree = "<group>"; };
 		897037E435A119392BFB0C3C /* SubsonicArtistInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SubsonicArtistInfo.swift"; sourceTree = "<group>"; };
 		0B3A42956EF3987AF214AFBD /* SubsonicAlbumList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SubsonicAlbumList.swift"; sourceTree = "<group>"; };
+		71D28DF61C10FA344055487F /* SubsonicPlayQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SubsonicPlayQueue.swift"; sourceTree = "<group>"; };
 		5086F88022399F3700546F5A /* SubsonicLibrarySyncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubsonicLibrarySyncer.swift; sourceTree = "<group>"; };
 		5086F8822239A2B700546F5A /* ScrobbleSyncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrobbleSyncer.swift; sourceTree = "<group>"; };
 		5086F884223A1E4600546F5A /* SsPingParserDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SsPingParserDelegate.swift; sourceTree = "<group>"; };
@@ -1187,6 +1190,7 @@
 		50CFBC532E464EDE00EAA7BC /* AppDelegateMainMenuExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegateMainMenuExtension.swift; sourceTree = "<group>"; };
 		2BFD60E6105862FBD9147F27 /* AppDelegate+ForkSleepTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+ForkSleepTimer.swift"; sourceTree = "<group>"; };
 		B3D5D52506A052EDF56B0C17 /* YouTubeMusicDownloadCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "YouTubeMusicDownloadCoordinator.swift"; sourceTree = "<group>"; };
+		EBA2C16F8FBFBDCB1EB02AB9 /* PlayQueueSyncCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlayQueueSyncCoordinator.swift"; sourceTree = "<group>"; };
 		50D54B612E30F9350078631E /* AmplitudeSpectrumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmplitudeSpectrumView.swift; sourceTree = "<group>"; };
 		50D54B622E30F9350078631E /* AudioAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioAnalyzer.swift; sourceTree = "<group>"; };
 		50D54B632E30F9350078631E /* FFT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FFT.swift; sourceTree = "<group>"; };
@@ -1659,6 +1663,7 @@
 				50CFBC532E464EDE00EAA7BC /* AppDelegateMainMenuExtension.swift */,
 				2BFD60E6105862FBD9147F27 /* AppDelegate+ForkSleepTimer.swift */,
 				B3D5D52506A052EDF56B0C17 /* YouTubeMusicDownloadCoordinator.swift */,
+				EBA2C16F8FBFBDCB1EB02AB9 /* PlayQueueSyncCoordinator.swift */,
 				509001B72716C8F400A8056D /* AppDelegateNotificationExtensions.swift */,
 				509001B52716C7F600A8056D /* AppDelegateAlertExtensions.swift */,
 				50722746286794FC00910574 /* AppDelegateKeyboardCommands.swift */,
@@ -1706,6 +1711,7 @@
 				5086F87E22399D1900546F5A /* SubsonicServerApi.swift */,
 				897037E435A119392BFB0C3C /* SubsonicArtistInfo.swift */,
 				0B3A42956EF3987AF214AFBD /* SubsonicAlbumList.swift */,
+				71D28DF61C10FA344055487F /* SubsonicPlayQueue.swift */,
 				5086F88022399F3700546F5A /* SubsonicLibrarySyncer.swift */,
 				502C0044224C0B1400DA0D1E /* SubsonicArtworkDownloadDelegate.swift */,
 				501267B6264C058500E13F08 /* SsXmlParser.swift */,
@@ -2845,6 +2851,7 @@
 				50CFBC542E464EEF00EAA7BC /* AppDelegateMainMenuExtension.swift in Sources */,
 				C7E95B84474CA6A5CE25D04A /* AppDelegate+ForkSleepTimer.swift in Sources */,
 				9FEFE31CCA516A2538F28D44 /* YouTubeMusicDownloadCoordinator.swift in Sources */,
+				BBA534416618E50736E2B752 /* PlayQueueSyncCoordinator.swift in Sources */,
 				50C1714C2D106BEE00C0C53A /* PlaylistAddArtistDetailVC.swift in Sources */,
 				50C171442D0F07E300C0C53A /* PlaylistAddSongsVC.swift in Sources */,
 				50FA36532F560D670058AB56 /* SeekableTimeSlider.swift in Sources */,
@@ -3035,6 +3042,7 @@
 				50C9D64B284FAA02007F18D0 /* SubsonicServerApi.swift in Sources */,
 				B7A0D987587FF47CD0E122FC /* SubsonicArtistInfo.swift in Sources */,
 				2A98DF9E98E8D72A0BD04F1E /* SubsonicAlbumList.swift in Sources */,
+				1F271C9A3C0F656939A40BDB /* SubsonicPlayQueue.swift in Sources */,
 				50C9D65C284FAA0B007F18D0 /* GenreParserDelegate.swift in Sources */,
 				50C9D6D2284FAB0C007F18D0 /* StringHasher.swift in Sources */,
 				50C9D667284FAA0B007F18D0 /* PlaylistSongsParserDelegate.swift in Sources */,

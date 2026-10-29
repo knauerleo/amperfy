@@ -292,6 +292,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // Fork: YouTube Music downloads through the proxy of the active account
     YouTubeMusicJobMonitor.shared.configure(backendApi: getMeta(activeAccountInfo).backendApi)
     YouTubeMusicDownloadCoordinator.shared.start() // Fork: F-7 sync and notify downloads app-wide
+    PlayQueueSyncCoordinator.shared.start() // Fork: F-10 continue listening on another device
 
     guard AmperKit.shared.storage.settings.app.isLibrarySynced else {
       return true

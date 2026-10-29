@@ -1013,6 +1013,32 @@ final class SubsonicServerApi: URLCleanser, Sendable {
     }
   }
 
+  /// Fork (F-10): play queue of this user on the server (`savePlayQueue`), see SubsonicPlayQueue.swift.
+  /// `position` in milliseconds within the current song.
+  public func requestSavePlayQueue(
+    songIds: [String],
+    currentId: String,
+    position: Int
+  ) async throws -> APIDataResponse {
+    try await request { version in
+      var urlComp = try self.createAuthApiUrlComponent(version: version, forAction: "savePlayQueue")
+      for songId in songIds {
+        urlComp.addQueryItem(name: "id", value: songId)
+      }
+      urlComp.addQueryItem(name: "current", value: currentId)
+      urlComp.addQueryItem(name: "position", value: position)
+      return try self.createUrl(from: urlComp)
+    }
+  }
+
+  /// Fork (F-10): last saved play queue of this user (`getPlayQueue`, XML with `entry` songs).
+  public func requestGetPlayQueue() async throws -> APIDataResponse {
+    try await request { version in
+      let urlComp = try self.createAuthApiUrlComponent(version: version, forAction: "getPlayQueue")
+      return try self.createUrl(from: urlComp)
+    }
+  }
+
   private func createUrl(from urlComp: URLComponents) throws -> URL {
     if let url = urlComp.url {
       return url
