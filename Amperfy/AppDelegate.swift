@@ -135,6 +135,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
   func configureDefaultNavigationBarStyle() {
     UINavigationBar.appearance().shadowImage = UIImage()
+    ForkChrome.applyPhoneAppearance() // Fork: Drift navigation and tab bar on the iPhone (UI-18)
   }
 
   func configureBatteryMonitoring() {

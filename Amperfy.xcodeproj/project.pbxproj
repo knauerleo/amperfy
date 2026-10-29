@@ -528,6 +528,7 @@
 		79F473098113F79A9F321743 /* ArtworkColorCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54E3DA20351584F03B4F56F /* ArtworkColorCache.swift */; };
 		1ECF2B8AE2C18C3F54EE7703 /* DesignTokens.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEAA9A1F04DC510CCE1521D8 /* DesignTokens.swift */; };
 		C7B930439524B83C4F16241C /* ForkSurface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA1D847E00F6CDC080DB0FD /* ForkSurface.swift */; };
+		64DCFE877946853A7F28E6A3 /* ForkChrome.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9105BC345370E382FA73376 /* ForkChrome.swift */; };
 		1D79DD620FF92AE4C50F8438 /* ForkEmptyState.swift in Sources */ = {isa = PBXBuildFile; fileRef = F445C2B3D82138B9862CA980 /* ForkEmptyState.swift */; };
 		50C9D7102850759B007F18D0 /* OptionsButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5009863B2208CB650057A1A6 /* OptionsButton.swift */; };
 		50C9D7112850759B007F18D0 /* BasicTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50675E6C25F61163005737FD /* BasicTableCell.swift */; };
@@ -749,6 +750,7 @@
 		A54E3DA20351584F03B4F56F /* ArtworkColorCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArtworkColorCache.swift"; sourceTree = "<group>"; };
 		FEAA9A1F04DC510CCE1521D8 /* DesignTokens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DesignTokens.swift"; sourceTree = "<group>"; };
 		7DA1D847E00F6CDC080DB0FD /* ForkSurface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ForkSurface.swift"; sourceTree = "<group>"; };
+		D9105BC345370E382FA73376 /* ForkChrome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ForkChrome.swift"; sourceTree = "<group>"; };
 		F445C2B3D82138B9862CA980 /* ForkEmptyState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ForkEmptyState.swift"; sourceTree = "<group>"; };
 		500B2B302249607B00D14EF4 /* BackendProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackendProxy.swift; sourceTree = "<group>"; };
 		500B7D4221ECFCDD0083ED6F /* LibraryElementEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryElementEnum.swift; sourceTree = "<group>"; };
@@ -1463,6 +1465,7 @@
 				A54E3DA20351584F03B4F56F /* ArtworkColorCache.swift */,
 				FEAA9A1F04DC510CCE1521D8 /* DesignTokens.swift */,
 				7DA1D847E00F6CDC080DB0FD /* ForkSurface.swift */,
+				D9105BC345370E382FA73376 /* ForkChrome.swift */,
 				F445C2B3D82138B9862CA980 /* ForkEmptyState.swift */,
 				5002565625E69DC700674CE1 /* SpinnerViewController.swift */,
 				50675E6C25F61163005737FD /* BasicTableCell.swift */,
@@ -2996,6 +2999,7 @@
 				79F473098113F79A9F321743 /* ArtworkColorCache.swift in Sources */,
 				1ECF2B8AE2C18C3F54EE7703 /* DesignTokens.swift in Sources */,
 				C7B930439524B83C4F16241C /* ForkSurface.swift in Sources */,
+				64DCFE877946853A7F28E6A3 /* ForkChrome.swift in Sources */,
 				1D79DD620FF92AE4C50F8438 /* ForkEmptyState.swift in Sources */,
 				50BA930021CFDEBD00E5901D /* LibraryVC.swift in Sources */,
 				D3C6ABDCFB388514EB40FAA3 /* ForkLibraryVC.swift in Sources */,

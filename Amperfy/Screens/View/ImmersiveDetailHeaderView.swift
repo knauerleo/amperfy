@@ -212,7 +212,7 @@ final class ImmersiveDetailHeaderView: UIView {
       contentStack.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -DS.Space.s),
     ])
 
-    navTitleLabel.font = .systemFont(ofSize: 17, weight: .semibold)
+    navTitleLabel.font = DS.isPhone ? DS.Font.navTitle : .systemFont(ofSize: 17, weight: .semibold)
     navTitleLabel.textColor = .label
 
     registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, _) in
