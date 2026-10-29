@@ -4,8 +4,8 @@
 //
 //  Fork: player polish (design phase 5, measure 13).
 //  - Matched transition: the player zooms out of the mini player cover and back into it (iPhone).
-//  - The player scrolls as one page: cover and controls first, the lyrics card below,
-//    tap opens the full lyrics. The queue opens only with its button, pull down to get back.
+//  - The player scrolls as one page: cover and controls first, the lyrics card right below
+//    (it peeks out at the lower edge), tap opens the lyrics in full screen (UI-27). The queue opens only with its button, pull down to get back.
 //  The XIBs stay untouched, PopupPlayerVC only calls the hooks below.
 //
 //  This program is free software: you can redistribute it and/or modify
@@ -37,6 +37,8 @@ enum ForkPlayerTransition {
     guard isActive else { return false }
     // the player always opens on the cover, the queue is one tap away
     player.appDelegate.storage.settings.user.playerDisplayStyle = .large
+    // UI-27: lyrics open in full screen, the old lyrics over the cover would hide the card
+    player.appDelegate.storage.settings.user.isPlayerLyricsDisplayed = false
     player.modalPresentationStyle = .fullScreen
 
     // UI-10: with Reduce Motion the player fades in instead of zooming out of the cover
@@ -185,9 +187,20 @@ extension PopupPlayerVC {
   }
 
   /// Hook: after the large view switched between cover, lyrics and visualizer.
+  /// Also runs after the song info was synced (`refresh`), when the lyrics file may just have arrived.
   func forkRefreshLyricsCard() {
     largeCurrentlyPlayingView?.forkRefreshLyricsBackdrop(colors: artworkGradientColors)
     guard let card = forkLyricsCard else { return }
+    // UI-27: the first play of a song syncs its lyrics only after the card asked, load them now
+    if isLyricsCardAllowed, let song = player.currentlyPlaying?.asSong, song.id != card.songID,
+       song.lyricsRelFilePath != nil {
+      forkReloadLyricsCard()
+      return
+    }
+    if let fullScreen = presentedViewController as? LyricsFullScreenVC,
+       let lyrics = card.shownLyrics, fullScreen.songID != card.songID {
+      fullScreen.show(lyrics: lyrics, songID: card.songID)
+    }
     let isShown = isLyricsCardAllowed && card.hasLyrics && !isQueueShown &&
       !appDelegate.storage.settings.user.isPlayerLyricsDisplayed
     card.tint(with: artworkGradientColors)
@@ -214,10 +227,23 @@ extension PopupPlayerVC {
   @objc
   private func forkLyricsCardTapped() {
     DS.haptic(.light)
-    forkPlayerPage?.scrollToTop(animated: true)
-    appDelegate.storage.settings.user.isPlayerVisualizerDisplayed = false
-    appDelegate.storage.settings.user.isPlayerLyricsDisplayed = true
-    largeCurrentlyPlayingView?.display(element: .lyrics)
-    controlView?.refreshView()
+    forkShowFullScreenLyrics()
+  }
+
+  /// UI-27: the lyrics of the card in full screen.
+  func forkShowFullScreenLyrics() {
+    guard let card = forkLyricsCard, let lyrics = card.shownLyrics, presentedViewController == nil
+    else { return }
+    let fullScreen = LyricsFullScreenVC(lyrics: lyrics, songID: card.songID, colors: artworkGradientColors)
+    present(fullScreen, animated: true)
+  }
+
+  /// Hook in `createPlayerOptionsMenu`: one entry that opens the full-screen lyrics, instead of
+  /// showing and hiding the lyrics over the cover. Nothing when the song has no lyrics.
+  func forkAppendFullScreenLyricsAction(to menuActions: inout [UIMenuElement]) {
+    guard forkLyricsCard?.shownLyrics != nil else { return }
+    menuActions.append(UIAction(title: "Show Lyrics", image: .lyrics) { [weak self] _ in
+      self?.forkShowFullScreenLyrics()
+    })
   }
 }

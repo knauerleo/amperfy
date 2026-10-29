@@ -3920,6 +3920,54 @@
           }
         }
       }
+    },
+    "Close lyrics": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Songtext schließen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Close lyrics"
+          }
+        }
+      }
+    },
+    "No lyrics for this song": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kein Songtext für diesen Song"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No lyrics for this song"
+          }
+        }
+      }
+    },
+    "Pause": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pause"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

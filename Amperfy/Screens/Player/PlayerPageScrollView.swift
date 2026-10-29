@@ -4,7 +4,7 @@
 //
 //  Fork: the iPhone player scrolls as one page, like a streaming app. The first screen holds
 //  cover and controls (the two placeholders of the XIB, moved in here), the lyrics card follows
-//  below and is reached by scrolling down. Without lyrics, in the queue and in the full lyrics
+//  right below the controls and peeks out at the lower edge (UI-27). Without lyrics, in the queue and in the full lyrics
 //  the page does not scroll. Replaces the cover-only scroll view of UI-11.
 //
 //  This program is free software: you can redistribute it and/or modify
@@ -103,7 +103,8 @@ final class PlayerPageScrollView: UIScrollView {
       controlView.trailingAnchor.constraint(equalTo: rootView.layoutMarginsGuide.trailingAnchor),
       bottom,
 
-      card.topAnchor.constraint(equalTo: firstPage.bottomAnchor),
+      // UI-27: right below the controls, so its top peeks out at the lower edge
+      card.topAnchor.constraint(equalTo: controlView.bottomAnchor, constant: DS.Space.m),
       card.leadingAnchor.constraint(equalTo: frameLayoutGuide.leadingAnchor, constant: DS.Space.m),
       card.trailingAnchor.constraint(equalTo: frameLayoutGuide.trailingAnchor, constant: -DS.Space.m),
       pageEnd,

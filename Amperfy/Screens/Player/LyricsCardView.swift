@@ -2,9 +2,9 @@
 //  LyricsCardView.swift
 //  Amperfy
 //
-//  Fork: lyrics card below the player controls, reached by scrolling the player down.
+//  Fork: lyrics card right below the player controls, its top peeks out at the lower edge (UI-27).
 //  Shows a window of lines around the current one (current line white, the others dimmed),
-//  on a surface in the cover color. A tap opens the full lyrics view of the player.
+//  on a surface in the cover color. A tap opens the lyrics in full screen.
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -43,6 +43,9 @@ final class LyricsCardView: UIControl {
   var songID: String?
 
   var hasLyrics: Bool { lyrics?.line.contains { !$0.value.isEmpty } ?? false }
+
+  /// The lyrics shown, for the full-screen view (UI-27).
+  var shownLyrics: StructuredLyrics? { hasLyrics ? lyrics : nil }
 
   override init(frame: CGRect) {
     super.init(frame: frame)
