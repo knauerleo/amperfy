@@ -5,14 +5,6 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 
 ## Active
 
-- [ ] **UI-19 Mini-Player als schwebende Karte statt Glas** - Entscheidung 2026-10-29: umbauen, das Glas des `bottomAccessory` fällt weg (nur iPhone)
-  - Wie Spotify: Karte über der Tab-Bar mit Cover, Songtitel, Künstler, Play/Pause und 2-pt-Fortschritt unten in Mint. Kein Weiter-Knopf, keine weiteren Knöpfe
-  - Mockup („Drift Identität + Listen“, Boards „Albumseite“/„Alben-Liste“): Fläche „Erhöht“ #1E1E26, Radius 14, Schatten (0,5 Deckkraft, 8 pt Versatz, 24 pt Unschärfe), 60 pt hoch, 8 pt Rand links/rechts, Cover 44 pt mit Radius 8, Titel 14 Semibold, Künstler 12 in Text 2
-  - Geprüft: `UITabAccessory` hat nur `contentView`, keine API für Hintergrund, Form oder Schatten. Also eigene View über der Tab-Bar statt `bottomAccessory` (`TabBarVC`), Inhalte der Tabs bekommen unten Platz (`additionalSafeAreaInsets`), Tap öffnet den Player (Zoom-Übergang `ForkPlayerTransition` vom Cover der Karte), Wischen nach oben ebenso. Verhalten beim Verkleinern der Tab-Bar (`tabBarMinimizeBehavior`, UI-14 Inline-Modus) neu lösen, z. B. Karte bleibt und rückt nach unten. Ausgeblendet ohne laufenden Song. iPad und Mac behalten das `bottomAccessory`
-  - Tab-Bar selbst bleibt Glas (eigener Hintergrund würde das Glas ersetzen)
-
-## Waiting On
-
 - [ ] **F-16 CarPlay wieder einschalten** - Antrag bei Apple (developer.apple.com/contact/carplay, „CarPlay Audio App“), danach Entitlement in `Amperfy/Amperfy.entitlements` zurück
 
 ## Someday
@@ -85,3 +77,4 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [x] ~~**UI-15b Upstream-Texte auf Deutsch**~~ (2026-10-29) - FORK.md Abschnitt 10, Rest in UI-15c
 - [x] ~~**F-9b Album-Links in der Teilen-Erweiterung**~~ (2026-10-29) - FORK.md Abschnitt 10, Teilen auf dem iPhone noch nicht geprüft
 - [x] ~~**UI-22b Playlists auf Home öffnen die Playlist**~~ (2026-10-29) - FORK.md Abschnitt 10, Tap auf dem iPhone noch nicht geprüft
+- [x] ~~**UI-19 Mini-Player als schwebende Karte statt Glas**~~ (2026-10-29) - FORK.md Abschnitt 10, Abnahme per Screenshot offen, Verhalten beim Verkleinern der Tab-Bar auf dem iPhone noch nicht geprüft

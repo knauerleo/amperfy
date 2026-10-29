@@ -144,6 +144,7 @@ class TabBarVC: UITabBarController {
 
     miniPlayer!.tabAccessoryTraitChangeCB = configureTraitChangesForMiniPlayer
     configureTraitChangesForMiniPlayer()
+    forkInstallFloatingMiniPlayer() // Fork: floating card instead of the accessory on iPhone (UI-19)
 
     registerForTraitChanges(
       [UITraitUserInterfaceStyle.self, UITraitHorizontalSizeClass.self],
@@ -174,7 +175,7 @@ class TabBarVC: UITabBarController {
   var compactWidthConstraint: NSLayoutConstraint?
 
   func configureTraitChangesForMiniPlayer() {
-    guard let miniPlayer else { return }
+    guard let miniPlayer, !forkUsesFloatingMiniPlayer else { return } // Fork: UI-19
     let isInline = miniPlayer.glassContainer.traitCollection.tabAccessoryEnvironment == .inline
 
     if traitCollection.horizontalSizeClass == .regular {

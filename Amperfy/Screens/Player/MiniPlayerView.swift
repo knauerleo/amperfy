@@ -580,6 +580,7 @@ class MiniPlayerView: UIView {
     }
     playButtonTrailingConstraint?.isActive = true
     forkRefreshInlineLayout(isInline: isInline) // Fork: only cover, title, play when inline (UI-14)
+    forkApplyFloatingCardButtons() // Fork: no next button in the floating card (UI-19)
   }
 
   public func configureForMac() {
@@ -711,6 +712,7 @@ class MiniPlayerView: UIView {
 
   private var playButtonTrailingConstraint: NSLayoutConstraint?
   fileprivate var forkTitleEdgeConstraints = [NSLayoutConstraint]() // Fork: compact inline layout (UI-14)
+  fileprivate var forkIsFloatingCard = false // Fork: floating card on iPhone (UI-19)
 
   @objc
   private func miniPlayerGotTouched(_ recognizer: UITapGestureRecognizer) {
@@ -1105,5 +1107,38 @@ extension MiniPlayerView {
       center.isActive = false
       NSLayoutConstraint.activate(forkTitleEdgeConstraints)
     }
+  }
+
+  // MARK: Floating card (UI-19)
+
+  /// iPhone: the mini player sits in `FloatingMiniPlayerView` (60 pt) instead of the tab accessory.
+  /// Cover 44 pt with radius 8, title and artist, play. No next button, progress inset at the bottom.
+  func forkConfigureAsFloatingCard() {
+    forkIsFloatingCard = true
+    artworkImage.layer.cornerRadius = 8
+    artworkImage.clipsToBounds = true
+    for constraint in constraints {
+      switch (constraint.firstItem as? UIView, constraint.firstAttribute) {
+      case (artworkImage, .leading): constraint.constant = 8
+      case (artworkImage, .bottom): constraint.constant = -6
+      case (timeSlider, .leading): constraint.constant = 12
+      case (timeSlider, .trailing): constraint.constant = -12
+      default: break
+      }
+    }
+    refreshForTabAccessoryTraitChange()
+  }
+
+  /// Runs after every accessory trait change, which would bring the next button back.
+  fileprivate func forkApplyFloatingCardButtons() {
+    guard forkIsFloatingCard else { return }
+    nextButton.isHidden = true
+    playButtonTrailingConstraint?.isActive = false
+    playButtonTrailingConstraint = playButton.trailingAnchor.constraint(
+      equalTo: trailingAnchor,
+      constant: -12
+    )
+    playButtonTrailingConstraint?.isActive = true
+    accessibilityElements?.removeAll { ($0 as? UIView) === nextButton }
   }
 }
