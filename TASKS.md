@@ -75,3 +75,4 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [x] ~~**F-6b Crash beim Platzhalter-Tausch**~~ (2026-10-29) - FORK.md Abschnitt 10, Ursache aus dem Crash-Log, Ablauf auf dem iPhone nicht nachgestellt
 - [x] ~~**UI-23 Albumseite wie im Mockup**~~ (2026-10-29) - FORK.md Abschnitt 10, Zurück/„…“ bleiben die Glasknöpfe von iOS 26, auf dem iPhone noch nicht angesehen
 - [x] ~~**UI-25 Abspielen/Zufall-Zeile wie im Mockup**~~ (2026-10-29) - FORK.md Abschnitt 10, Anzahl unter dem großen Titel statt daneben (entschieden 2026-10-29), auf dem iPhone noch nicht angesehen
+- [x] ~~**F-19b Fehlende Songs auch bei Editionen auf YouTube Music**~~ (2026-10-29) - FORK.md Abschnitt 10, Meteora auf dem iPhone noch nicht geprüft

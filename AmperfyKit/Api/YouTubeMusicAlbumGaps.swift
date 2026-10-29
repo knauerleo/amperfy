@@ -73,12 +73,16 @@ public enum YouTubeMusicAlbumGapFinder {
         guard song.isYouTubeMusicPlaceholder,
               let hit = YouTubeMusicHitStore.shared.hit(forVideoId: videoId(of: song))
         else { return false }
-        return normalized(hit.album ?? "") == albumName
+        let hitAlbum = hit.album ?? ""
+        return normalized(hitAlbum) == albumName || editionBaseName(hitAlbum) == albumName
       }
 
     var result: YouTubeMusicAlbumGaps?
+    // an edition ("Meteora 20th Anniversary Edition" for "Meteora") only if no exact album turns up
+    var editionResult: YouTubeMusicAlbumGaps?
     var checkedAlbums = Set<String>()
     var hadError = false
+    let maxLocalTrack = album.songs.filter { !$0.isYouTubeMusicPlaceholder }.map(\.track).max() ?? 0
     for candidate in candidates.prefix(maxCandidates) {
       let ytAlbum: YouTubeAlbum
       do {
@@ -87,15 +91,24 @@ public enum YouTubeMusicAlbumGapFinder {
         hadError = true
         continue
       }
-      guard checkedAlbums.insert(ytAlbum.id).inserted,
-            normalized(ytAlbum.name) == albumName
-      else { continue }
-      result = YouTubeMusicAlbumGaps(
-        album: ytAlbum,
-        missing: missingSongs(of: ytAlbum, in: album, account: account, storage: storage)
-      )
-      break
+      guard checkedAlbums.insert(ytAlbum.id).inserted else { continue }
+      if normalized(ytAlbum.name) == albumName {
+        result = YouTubeMusicAlbumGaps(
+          album: ytAlbum,
+          missing: missingSongs(of: ytAlbum, in: album, account: account, storage: storage)
+        )
+        break
+      }
+      // the edition adds bonus tracks and demos: only the track numbers the local album covers
+      if editionResult == nil, maxLocalTrack > 0, editionBaseName(ytAlbum.name) == albumName {
+        editionResult = YouTubeMusicAlbumGaps(
+          album: ytAlbum,
+          missing: missingSongs(of: ytAlbum, in: album, account: account, storage: storage)
+            .filter { ($0.track ?? Int.max) <= maxLocalTrack }
+        )
+      }
     }
+    result = result ?? editionResult
     // a failed request is asked again next time, "no album" is kept
     if result != nil || !hadError { cache[album.id] = .some(result) }
     return result
@@ -142,6 +155,26 @@ public enum YouTubeMusicAlbumGapFinder {
       }
       return !localTitles.contains(normalized(song.title))
     }
+  }
+
+  /// Like `normalized`, without an edition suffix: "Meteora 20th Anniversary Edition",
+  /// "Hybrid Theory Bonus Edition", "Abbey Road Super Deluxe" all become the plain album name.
+  static func editionBaseName(_ text: String) -> String {
+    var result = text.folding(
+      options: [.caseInsensitive, .diacriticInsensitive, .widthInsensitive],
+      locale: nil
+    )
+    result = result.replacingOccurrences(
+      of: #"\s*[\(\[][^\)\]]*[\)\]]"#,
+      with: "",
+      options: .regularExpression
+    )
+    result = result.replacingOccurrences(
+      of: #"[\s\-:]+(\d+(st|nd|rd|th)\s+)?(anniversary|super deluxe|deluxe|bonus|expanded|special|remastered|remaster|collector'?s)(\s+(edition|version))?\s*$"#,
+      with: "",
+      options: .regularExpression
+    )
+    return normalized(result)
   }
 
   private static func videoId(of song: AbstractPlayable) -> String {
