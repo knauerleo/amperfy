@@ -571,7 +571,7 @@ class SearchVC: BasicTableViewController {
       albums = []
       playlists = []
       songs = []
-      tableView.separatorStyle = .singleLine
+      tableView.separatorStyle = DS.isPhone ? .none : .singleLine // Fork: no lines on the iPhone (UI-18)
       updateDataSource(animated: false)
       updateContentUnavailable()
       return
@@ -683,7 +683,7 @@ class SearchVC: BasicTableViewController {
       .compactMap { appDelegate.storage.main.context.object(with: $0) as? SongMO }
       .compactMap { Song(managedObject: $0) }
     forkDidUpdateResults()
-    tableView.separatorStyle = .singleLine
+    tableView.separatorStyle = DS.isPhone ? .none : .singleLine // Fork: no lines on the iPhone (UI-18)
     updateDataSource(animated: false)
     updateContentUnavailable()
   }

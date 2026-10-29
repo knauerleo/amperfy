@@ -83,7 +83,7 @@ class PlayableTableCell: BasicTableCell {
   private var ratingStackView: UIStackView?
   private var ratingStarViews: [UIImageView] = []
 
-  static let rowHeight: CGFloat = 48 + margin.bottom + margin.top
+  static var rowHeight: CGFloat { DS.isPhone ? ForkRowMetrics.songRowHeight : 48 + margin.bottom + margin.top } // Fork: UI-18
   private static let touchAnimation = 0.4
 
   private var style = PlayableTableCellStyle.none
@@ -381,6 +381,7 @@ class PlayableTableCell: BasicTableCell {
     } else {
       ratingStackView?.isHidden = true
     }
+    forkFinishRefresh(playable: playable, isTrackNumberStyle: isDislayAlbumTrackNumberStyle, isQueue: playerIndexCb != nil) // Fork: UI-18
   }
 
   private func configureTrackNumberLabel() {

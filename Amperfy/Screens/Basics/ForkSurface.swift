@@ -61,6 +61,8 @@ extension BasicTableViewController {
   func applyForkSurface() {
     guard ForkSurface.isEnabled, tableView.style == .plain else { return }
     tableView.backgroundColor = DS.Color.background
+    // UI-18: on the iPhone spacing separates the rows, not lines
+    if DS.isPhone { tableView.separatorStyle = .none }
   }
 
   override func tableView(

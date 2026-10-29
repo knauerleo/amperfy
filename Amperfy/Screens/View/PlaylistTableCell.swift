@@ -30,7 +30,7 @@ class PlaylistTableCell: BasicTableCell {
   @IBOutlet
   weak var infoLabel: UILabel!
 
-  static let rowHeight: CGFloat = 70.0 + margin.bottom + margin.top
+  static var rowHeight: CGFloat { DS.isPhone ? ForkRowMetrics.containerRowHeight : 70.0 + margin.bottom + margin.top } // Fork: UI-18
 
   private var playlist: Playlist?
   private var rootView: UITableViewController?
@@ -51,6 +51,6 @@ class PlaylistTableCell: BasicTableCell {
     infoLabel.textAlignment = (traitCollection.horizontalSizeClass == .regular) ? .right : .left
     accessoryType = .disclosureIndicator
     backgroundColor = .systemBackground
-    applyForkStyle() // Fork: streaming-style playlist rows
+    applyForkStyle(playlist: playlist, rootView: rootView) // Fork: streaming-style playlist rows
   }
 }

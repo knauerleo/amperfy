@@ -37,7 +37,7 @@ class GenericTableCell: BasicTableCell {
   @IBOutlet
   weak var infoLabelWidthConstraint: NSLayoutConstraint!
 
-  static let rowHeight: CGFloat = 48.0 + margin.bottom + margin.top
+  static var rowHeight: CGFloat { DS.isPhone ? ForkRowMetrics.containerRowHeight : 48.0 + margin.bottom + margin.top } // Fork: UI-18
   static let rowHeightWithoutImage: CGFloat = 28.0 + margin.bottom + margin.top
 
   private var container: PlayableContainable?
@@ -76,6 +76,6 @@ class GenericTableCell: BasicTableCell {
     }
     accessoryType = .disclosureIndicator
     backgroundColor = .systemBackground
-    applyForkStyle()
+    applyForkStyle(container: container, rootView: rootView) // Fork: streaming-style rows, "…" on the iPhone
   }
 }

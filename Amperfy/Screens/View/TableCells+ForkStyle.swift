@@ -19,14 +19,13 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+import AmperfyKit
 import UIKit
 
 extension PlayableTableCell {
-  /// Cover size in song lists and in the queue of the player (measure 10).
-  static let forkArtworkSize: CGFloat = 56
+  /// Cover size in song lists and in the queue of the player (measure 10, UI-18 on the iPhone).
+  static var forkArtworkSize: CGFloat { DS.isPhone ? ForkRowMetrics.songArtworkSize : 56 }
   static let forkQueueArtworkSize: CGFloat = 40
-  /// Size of the cover in the XIB, its height follows the row height (48 + margins).
-  private static let xibArtworkSize: CGFloat = 48
 
   func applyForkStyle() {
     applyForkFonts()
@@ -51,12 +50,13 @@ extension PlayableTableCell {
   }
 
   /// Cover size and radius, set on every refresh because `configureStyle` and
-  /// `EntityImageView.display` reset parts of it. The row height stays the same:
-  /// the cover reaches into the top and bottom margins.
+  /// `EntityImageView.display` reset parts of it. The cover follows the row height
+  /// between the margins of the XIB, so it reaches into them (or stays inside them).
   func forkApplyLayout(isQueue: Bool, isTrackNumberStyle: Bool) {
     #if !targetEnvironment(macCatalyst)
       let size = isQueue ? Self.forkQueueArtworkSize : Self.forkArtworkSize
-      let overhang = (size - Self.xibArtworkSize) / 2
+      let innerHeight = Self.rowHeight - BasicTableCell.margin.top - BasicTableCell.margin.bottom
+      let overhang = (size - innerHeight) / 2
       for constraint in entityImage.constraints
         where constraint.firstAttribute == .width && constraint.secondItem == nil {
         constraint.constant = size
@@ -72,20 +72,22 @@ extension PlayableTableCell {
       if !isTrackNumberStyle {
         titleContainerLeadingConstraint.constant = 10 + size + 8 // heart + artwork + offset
       }
-      entityImage.layer.cornerRadius = DS.Radius.small
+      entityImage.layer.cornerRadius = DS.isPhone ? DS.Radius.rowArtwork : DS.Radius.small
+      forkApplyPhoneOptionsButton()
     #endif
   }
 }
 
 extension GenericTableCell {
   /// Called on every `display`, so size class variations of the XIB never stick.
-  func applyForkStyle() {
+  func applyForkStyle(container: PlayableContainable? = nil, rootView: UITableViewController? = nil) {
     titleLabel.font = DS.Font.cellTitle
     subtitleLabel.font = DS.Font.cellSubtitle
     infoLabel.font = DS.Font.caption
     [titleLabel, subtitleLabel, infoLabel].forEach { $0?.adjustsFontForContentSizeCategory = true }
     // tapping the row is enough of a hint, the chevron only adds noise
     accessoryType = .none
+    applyForkPhoneStyle(container: container, rootView: rootView) // UI-18
   }
 }
 
@@ -112,7 +114,7 @@ extension PlaylistTableCell {
   private static let forkArtworkSize: CGFloat = 56
 
   /// Playlist rows like song rows: 56 pt collage, radius 4, no chevron (UI-3).
-  func applyForkStyle() {
+  func applyForkStyle(playlist: Playlist? = nil, rootView: UITableViewController? = nil) {
     nameLabel.font = DS.Font.songTitle
     infoLabel.font = DS.Font.cellSubtitle
     nameLabel.adjustsFontForContentSizeCategory = true
@@ -133,6 +135,7 @@ extension PlaylistTableCell {
       entityImage.clipsToBounds = true
       accessoryType = .none
       backgroundColor = .clear
+      applyForkPhoneStyle(playlist: playlist, rootView: rootView) // UI-18
     #endif
   }
 }
