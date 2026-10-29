@@ -24,6 +24,7 @@
 		D161A82E1DDE6046D0F873DB /* ListPlayHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B425CFD82315DC329870D955 /* ListPlayHeaderView.swift */; };
 		500B7D4921EDD6250083ED6F /* ViewCreator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B7D4821EDD6250083ED6F /* ViewCreator.swift */; };
 		500B97CD2B7BC680005554BF /* EntityPreviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500B97CC2B7BC67F005554BF /* EntityPreviewVC.swift */; };
+		B55488C69771F462512FF313 /* EntityPreviewVC+ForkStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B6B61CD5E082B7BA8676C7C /* EntityPreviewVC+ForkStyle.swift */; };
 		500B97D02B7C9555005554BF /* EntityPreviewVC.xib in Resources */ = {isa = PBXBuildFile; fileRef = 500B97CF2B7C9546005554BF /* EntityPreviewVC.xib */; };
 		500DA64B2F087221005578C7 /* CarPlayHomeTabExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500DA64A2F087221005578C7 /* CarPlayHomeTabExtension.swift */; };
 		500DA64D2F087307005578C7 /* CarPlayLibraryTabExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500DA64C2F087307005578C7 /* CarPlayLibraryTabExtension.swift */; };
@@ -55,6 +56,7 @@
 		502B8A532EE0D354004CA3AD /* AccountTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502B8A522EE0D354004CA3AD /* AccountTest.swift */; };
 		502B98ED2D03A02D000FE187 /* PlaylistEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502B98EC2D03A02D000FE187 /* PlaylistEditVC.swift */; };
 		502E56BC27561AD900638BD2 /* UserQueueSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502E56BB27561AD900638BD2 /* UserQueueSectionHeader.swift */; };
+		16233A88A9F658C35D1B064D /* QueueSectionHeaders+ForkStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE79945FF1C74B2D8C14ACFF /* QueueSectionHeaders+ForkStyle.swift */; };
 		502E56BD27561C2700638BD2 /* UserQueueSectionHeader.xib in Resources */ = {isa = PBXBuildFile; fileRef = 502E56BA27561AD900638BD2 /* UserQueueSectionHeader.xib */; };
 		50381FCF2D8EE7C6002DD0E7 /* SsIDsParserDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50381FCE2D8EE7C6002DD0E7 /* SsIDsParserDelegate.swift */; };
 		50381FD12D8F1623002DD0E7 /* IDsParserDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50381FD02D8F1623002DD0E7 /* IDsParserDelegate.swift */; };
@@ -693,6 +695,7 @@
 		B425CFD82315DC329870D955 /* ListPlayHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ListPlayHeaderView.swift"; sourceTree = "<group>"; };
 		500B7D4821EDD6250083ED6F /* ViewCreator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewCreator.swift; sourceTree = "<group>"; };
 		500B97CC2B7BC67F005554BF /* EntityPreviewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntityPreviewVC.swift; sourceTree = "<group>"; };
+		3B6B61CD5E082B7BA8676C7C /* EntityPreviewVC+ForkStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EntityPreviewVC+ForkStyle.swift"; sourceTree = "<group>"; };
 		500B97CF2B7C9546005554BF /* EntityPreviewVC.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EntityPreviewVC.xib; sourceTree = "<group>"; };
 		500BB45521CAA73700D367CF /* PersistentStorage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PersistentStorage.swift; sourceTree = "<group>"; };
 		500BB49621CAAA2700D367CF /* Amperfy.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Amperfy.xcdatamodel; sourceTree = "<group>"; };
@@ -776,6 +779,7 @@
 		502C0044224C0B1400DA0D1E /* SubsonicArtworkDownloadDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SubsonicArtworkDownloadDelegate.swift; sourceTree = "<group>"; };
 		502E56BA27561AD900638BD2 /* UserQueueSectionHeader.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserQueueSectionHeader.xib; sourceTree = "<group>"; };
 		502E56BB27561AD900638BD2 /* UserQueueSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserQueueSectionHeader.swift; sourceTree = "<group>"; };
+		CE79945FF1C74B2D8C14ACFF /* QueueSectionHeaders+ForkStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "QueueSectionHeaders+ForkStyle.swift"; sourceTree = "<group>"; };
 		50377A53266E130300F0C3F3 /* Amperfy v9.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Amperfy v9.xcdatamodel"; sourceTree = "<group>"; };
 		50381FCE2D8EE7C6002DD0E7 /* SsIDsParserDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SsIDsParserDelegate.swift; sourceTree = "<group>"; };
 		50381FD02D8F1623002DD0E7 /* IDsParserDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IDsParserDelegate.swift; sourceTree = "<group>"; };
@@ -1781,6 +1785,7 @@
 				CC3687DB9FA02B3728E2BF33 /* CurrentlyPlayingTableCell+Fork.swift */,
 				502E56BA27561AD900638BD2 /* UserQueueSectionHeader.xib */,
 				502E56BB27561AD900638BD2 /* UserQueueSectionHeader.swift */,
+				CE79945FF1C74B2D8C14ACFF /* QueueSectionHeaders+ForkStyle.swift */,
 				50A30E582B75026100722894 /* ContextQueueNextSectionHeader.xib */,
 				50A30E532B7408DB00722894 /* ContextQueueNextSectionHeader.swift */,
 			);
@@ -1966,6 +1971,7 @@
 				50DE29EA2B8FCEB700ABA78E /* LibraryNavigatorConfigurator.swift */,
 				500B97CF2B7C9546005554BF /* EntityPreviewVC.xib */,
 				500B97CC2B7BC67F005554BF /* EntityPreviewVC.swift */,
+				3B6B61CD5E082B7BA8676C7C /* EntityPreviewVC+ForkStyle.swift */,
 				5064F3962B96FBAE00DE61C1 /* NotificationDetailVC.xib */,
 				5064F3972B96FBAE00DE61C1 /* NotificationDetailVC.swift */,
 				50DEEE03265E25A40073FF20 /* MusicFoldersVC.swift */,
@@ -2704,8 +2710,10 @@
 				5074149D2EFFC772007AEC5D /* PlaybackModeAppEnum.swift in Sources */,
 				50DEEE0C265E3F9D0073FF20 /* DirectoriesVC.swift in Sources */,
 				500B97CD2B7BC680005554BF /* EntityPreviewVC.swift in Sources */,
+				B55488C69771F462512FF313 /* EntityPreviewVC+ForkStyle.swift in Sources */,
 				50791E7C28D32B8A006CE6E5 /* AlternativeURLAddDialogView.swift in Sources */,
 				502E56BC27561AD900638BD2 /* UserQueueSectionHeader.swift in Sources */,
+				16233A88A9F658C35D1B064D /* QueueSectionHeaders+ForkStyle.swift in Sources */,
 				50791E7A28D31090006CE6E5 /* ServerURLsSettingsView.swift in Sources */,
 				50C0FFEE0000000000A00001 /* CustomHTTPHeadersView.swift in Sources */,
 				50C16C0621E241B200F086F0 /* SearchVC.swift in Sources */,

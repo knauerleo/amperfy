@@ -47,5 +47,6 @@ class ContextQueuePrevSectionHeader: UIView {
     nameLabel.text = name
     nameLabel.isHidden = name.isEmpty
     nameLabel.applyAmperfyStyle()
+    applyForkStyle() // Fork: UI-9 fonts on DS.Font
   }
 }

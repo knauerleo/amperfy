@@ -29,10 +29,25 @@ extension PlayableTableCell {
   private static let xibArtworkSize: CGFloat = 48
 
   func applyForkStyle() {
+    applyForkFonts()
+    // size class variations of the XIB would bring back the fixed point sizes (UI-9)
+    registerForTraitChanges([UITraitHorizontalSizeClass.self, UITraitPreferredContentSizeCategory.self]) {
+      (self: Self, _) in
+      self.applyForkFonts()
+    }
+  }
+
+  private func applyForkFonts() {
     titleLabel.font = DS.Font.songTitle
     artistLabel.font = DS.Font.cellSubtitle
     titleLabel.adjustsFontForContentSizeCategory = true
     artistLabel.adjustsFontForContentSizeCategory = true
+    // UI-9: the remaining XIB fonts, the Mac keeps its own sizes
+    guard ForkSurface.isEnabled else { return }
+    trackNumberLabel.font = DS.Font.trackNumber
+    durationLabel.font = DS.Font.cellDuration
+    trackNumberLabel.adjustsFontForContentSizeCategory = true
+    durationLabel.adjustsFontForContentSizeCategory = true
   }
 
   /// Cover size and radius, set on every refresh because `configureStyle` and
@@ -63,10 +78,12 @@ extension PlayableTableCell {
 }
 
 extension GenericTableCell {
+  /// Called on every `display`, so size class variations of the XIB never stick.
   func applyForkStyle() {
     titleLabel.font = DS.Font.cellTitle
     subtitleLabel.font = DS.Font.cellSubtitle
     infoLabel.font = DS.Font.caption
+    [titleLabel, subtitleLabel, infoLabel].forEach { $0?.adjustsFontForContentSizeCategory = true }
     // tapping the row is enough of a hint, the chevron only adds noise
     accessoryType = .none
   }
@@ -117,5 +134,14 @@ extension PlaylistTableCell {
       accessoryType = .none
       backgroundColor = .clear
     #endif
+  }
+}
+
+extension DirectoryTableCell {
+  /// Folder and directory rows like the other list rows (UI-9).
+  func applyForkStyle() {
+    guard ForkSurface.isEnabled else { return }
+    infoLabel.font = DS.Font.cellTitle
+    infoLabel.adjustsFontForContentSizeCategory = true
   }
 }

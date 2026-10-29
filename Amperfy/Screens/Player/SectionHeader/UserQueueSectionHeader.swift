@@ -58,6 +58,7 @@ class UserQueueSectionHeader: UIView {
     nameLabel.text = name
     nameLabel.isHidden = false
     nameLabel.applyAmperfyStyle()
+    applyForkStyle() // Fork: UI-9 fonts on DS.Font
     rightButton.isHidden = false
     rightButton.isEnabled = true
     self.buttonPressAction = buttonPressAction

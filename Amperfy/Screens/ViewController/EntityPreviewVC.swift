@@ -948,6 +948,7 @@ class EntityPreviewVC: UIViewController {
     titleLabel.applyAmperfyStyle()
     artistLabel.applyAmperfyStyle()
     infoLabel.applyAmperfyStyle()
+    applyForkStyle() // Fork: UI-9 fonts on DS.Font
     gotoDetailsSymbol.isHidden = isNavigationDisallowed
 
     // The preview will size to the preferredContentSize, which can be useful

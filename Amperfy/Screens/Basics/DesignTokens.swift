@@ -72,10 +72,32 @@ enum DS {
         maximumPointSize: 16
       )
     }
+    /// Track number and duration in song rows (UI-9): digits keep their width.
+    static var trackNumber: UIFont { monospacedDigits(15, .medium, .subheadline, maximum: 18) }
+    static var cellDuration: UIFont { monospacedDigits(13, .regular, .footnote, maximum: 15) }
+    /// Section headers of the queue in the player. Their frame height is fixed, so they barely grow.
+    static var queueHeaderTitle: UIFont { scaled(16, .semibold, .headline, maximum: 17) }
+    static var queueHeaderSubtitle: UIFont { scaled(13, .regular, .subheadline, maximum: 14) }
+    /// Context menu preview (EntityPreviewVC).
+    static var previewTitle: UIFont { scaled(18, .semibold, .headline, maximum: 21) }
+    static var previewSubtitle: UIFont { scaled(15, .regular, .subheadline, maximum: 17) }
     /// Compact Home tiles (Recently Played grid) and shelf cells.
     static var tileTitle: UIFont { scaled(13, .semibold, .footnote, maximum: 16) }
     static var shelfTitle: UIFont { scaled(14, .semibold, .subheadline, maximum: 18) }
     static var shelfSubtitle: UIFont { scaled(13, .regular, .footnote, maximum: 16) }
+
+    private static func monospacedDigits(
+      _ size: CGFloat,
+      _ weight: UIFont.Weight,
+      _ style: UIFont.TextStyle,
+      maximum: CGFloat
+    )
+      -> UIFont {
+      UIFontMetrics(forTextStyle: style).scaledFont(
+        for: .monospacedDigitSystemFont(ofSize: size, weight: weight),
+        maximumPointSize: maximum
+      )
+    }
 
     private static func scaled(
       _ size: CGFloat,

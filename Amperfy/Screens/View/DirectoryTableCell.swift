@@ -101,5 +101,6 @@ class DirectoryTableCell: BasicTableCell {
     }
     accessoryType = .disclosureIndicator
     backgroundColor = .systemBackground
+    applyForkStyle() // Fork: UI-9 fonts on DS.Font
   }
 }

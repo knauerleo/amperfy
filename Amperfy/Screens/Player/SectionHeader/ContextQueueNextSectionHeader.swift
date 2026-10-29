@@ -64,6 +64,7 @@ class ContextQueueNextSectionHeader: UIView {
   func prepare(toWorkOnRootView: PopupPlayerVC?) {
     rootView = toWorkOnRootView
     contextNameLabel.applyAmperfyStyle()
+    applyForkStyle() // Fork: UI-9 fonts on DS.Font
     refresh()
   }
 

@@ -20,8 +20,6 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
   - Heute `PlaylistSelectorVC` + 14 VCs unter `PlaylistAdd/` im Originalstil. Neues Sheet: „Neue Playlist“ oben, zuletzt genutzte Playlists mit Cover, Rest alphabetisch
 - [ ] **UI-7 Login, Sync, Update im Drift-Stil**
   - `LoginVC` (3× `systemFont(ofSize:)`), `SyncVC`, `UpdateVC`, `LibrarySyncPopupVC`: Fläche `DS.Color.background`, Wellen-Glyph, Fortschritt in Label-Farbe
-- [ ] **UI-9 Restliche XIB-Schriften auf `DS.Font`**
-  - `PlayableTableCell.xib` (13), `GenericTableCell.xib` (8), Queue-Header (`ContextQueue…`, `UserQueueSectionHeader`), `EntityPreviewVC.xib` (Bitrate wird abgeschnitten), `DirectoryTableCell.xib`
 - [ ] **UI-10 Barrierefreiheit der Fork-Views**
   - Mini-Player: `accessibilityCustomActions` für Skip vor/zurück und Player öffnen
   - Labels für `DownloadJobCell`, `SearchStatusCell`, `NowPlayingBarsView`, Home/Search-Fork-Zellen. Skeletons für VoiceOver ausblenden
@@ -79,3 +77,4 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [x] ~~**UI-13 Bewegter Cover-Verlauf im Player**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**UI-14 Kompakter Mini-Player im Inline-Modus**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**UI-8 „Shuffle all“/„Play“-Zeile in Songs, Artists, Genres**~~ (2026-10-29) - FORK.md Abschnitt 10
+- [x] ~~**UI-9 Restliche XIB-Schriften auf `DS.Font`**~~ (2026-10-29) - FORK.md Abschnitt 10
