@@ -26,7 +26,7 @@ import UIKit
 
 class TabBarVC: UITabBarController {
   private var libraryGroup: UITabGroup?
-  private var searchTab: UISearchTab?
+  private var searchTab: UITab?
   private var homeTab: UITab?
   private let account: Account
 
@@ -46,17 +46,32 @@ class TabBarVC: UITabBarController {
     super.viewDidLoad()
     var fixTabs = [UITab]()
 
-    searchTab = UISearchTab { _ in
-      UINavigationController(
-        rootViewController: TabNavigatorItem.search
-          .getController(account: self.account)
-      )
+    // Fork: on the iPhone three equal tabs Home, Search, Library (search is no separate glass button)
+    if DS.isPhone {
+      searchTab = UITab(
+        title: String(localized: "Search", table: "Fork"),
+        image: TabNavigatorItem.search.icon,
+        identifier: "Tabs.\(TabNavigatorItem.search.title)"
+      ) { _ in
+        UINavigationController(
+          rootViewController: TabNavigatorItem.search
+            .getController(account: self.account)
+        )
+      }
+    } else {
+      let systemSearchTab = UISearchTab { _ in
+        UINavigationController(
+          rootViewController: TabNavigatorItem.search
+            .getController(account: self.account)
+        )
+      }
+      systemSearchTab.automaticallyActivatesSearch = true
+      searchTab = systemSearchTab
+      fixTabs.append(systemSearchTab)
     }
-    searchTab!.automaticallyActivatesSearch = true
-    fixTabs.append(searchTab!)
 
     homeTab = UITab(
-      title: TabNavigatorItem.home.title,
+      title: DS.isPhone ? String(localized: "Home", table: "Fork") : TabNavigatorItem.home.title,
       image: TabNavigatorItem.home.icon,
       identifier: "Tabs.\(TabNavigatorItem.home.title)"
     ) { _ in
@@ -66,6 +81,7 @@ class TabBarVC: UITabBarController {
       )
     }
     fixTabs.append(homeTab!)
+    if DS.isPhone, let searchTab { fixTabs.append(searchTab) }
 
     // all library tabs in the order arranged by the user, the ones not in use are hidden
     let librarySettings = appDelegate.storage.settings.accounts
@@ -86,7 +102,7 @@ class TabBarVC: UITabBarController {
       }
 
     libraryGroup = UITabGroup(
-      title: "Library",
+      title: DS.isPhone ? String(localized: "Library", table: "Fork") : "Library",
       image: .musicLibrary,
       identifier: "Tabs.Library",
       children: libraryTabs
@@ -99,6 +115,11 @@ class TabBarVC: UITabBarController {
 
     delegate = self
     tabs = fixTabs
+    if DS.isPhone {
+      // the appearance proxy does not reach the iOS 26 tab bar, the selected tab is mint as in the mockup
+      tabBar.tintColor = DS.Color.accent
+      tabBar.unselectedItemTintColor = DS.Color.text3
+    }
 
     NotificationCenter.default.addObserver(
       self,

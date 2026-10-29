@@ -4,8 +4,8 @@
 //
 //  Fork: player polish (design phase 5, measure 13).
 //  - Matched transition: the player zooms out of the mini player cover and back into it (iPhone).
-//  - Lyrics card below the cover, reached by scrolling (UI-11), tap opens the full lyrics.
-//  - Queue by swiping up on the player instead of the style switch, pull down to get back.
+//  - The player scrolls as one page: cover and controls first, the lyrics card below,
+//    tap opens the full lyrics. The queue opens only with its button, pull down to get back.
 //  The XIBs stay untouched, PopupPlayerVC only calls the hooks below.
 //
 //  This program is free software: you can redistribute it and/or modify
@@ -35,7 +35,7 @@ enum ForkPlayerTransition {
   /// Zoom transition from the mini player cover. Returns false where the sheet stays (iPad, Mac).
   static func prepare(_ player: PopupPlayerVC, sourceView: UIView) -> Bool {
     guard isActive else { return false }
-    // the player always opens on the cover, the queue is one swipe away
+    // the player always opens on the cover, the queue is one tap away
     player.appDelegate.storage.settings.user.playerDisplayStyle = .large
     player.modalPresentationStyle = .fullScreen
 
@@ -73,37 +73,31 @@ extension PopupPlayerVC {
   /// Hook at the end of `viewDidLoad`.
   func forkConfigurePlayer() {
     guard ForkPlayerTransition.isActive else { return }
-    addCloseGrabber()
 
-    let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(forkSwipedUp))
-    swipeUp.direction = .up
-    largeCurrentlyPlayingView?.addGestureRecognizer(swipeUp)
+    // Cover and controls move into a page that scrolls down to the lyrics card.
+    // The queue table stays outside, its bottom still follows the controls.
+    let page = PlayerPageScrollView(
+      header: forkMakeNowPlayingHeader(),
+      coverView: largePlayerPlaceholderView,
+      controlView: controlPlaceholderView,
+      rootView: view,
+      above: backgroundImage
+    )
+    page.delegate = self
+    page.card.addTarget(self, action: #selector(forkLyricsCardTapped), for: .touchUpInside)
+    tableView.bottomAnchor.constraint(equalTo: controlPlaceholderView.topAnchor).isActive = true
 
-    // UI-11: the card follows below the cover and is reached by scrolling, the cover keeps its height
-    if let largeView = largeCurrentlyPlayingView {
-      largeView.removeFromSuperview()
-      let scroller = PlayerCoverScrollView(largeView: largeView)
-      scroller.delegate = self
-      scroller.card.addTarget(self, action: #selector(forkLyricsCardTapped), for: .touchUpInside)
-      largePlayerPlaceholderView.addSubview(scroller)
-      NSLayoutConstraint.activate([
-        scroller.topAnchor.constraint(equalTo: largePlayerPlaceholderView.topAnchor),
-        scroller.bottomAnchor.constraint(equalTo: largePlayerPlaceholderView.bottomAnchor),
-        scroller.leadingAnchor.constraint(equalTo: largePlayerPlaceholderView.leadingAnchor),
-        scroller.trailingAnchor.constraint(equalTo: largePlayerPlaceholderView.trailingAnchor),
-      ])
-    }
     forkInstallSleepTimerChip()
     forkInstallAnimatedBackground()
     forkReloadLyricsCard()
   }
 
-  var forkCoverScroller: PlayerCoverScrollView? {
-    largePlayerPlaceholderView.subviews.lazy.compactMap { $0 as? PlayerCoverScrollView }.first
+  var forkPlayerPage: PlayerPageScrollView? {
+    view.subviews.lazy.compactMap { $0 as? PlayerPageScrollView }.first
   }
 
   var forkLyricsCard: LyricsCardView? {
-    forkCoverScroller?.card
+    forkPlayerPage?.card
   }
 
   private var isQueueShown: Bool {
@@ -121,43 +115,27 @@ extension PopupPlayerVC {
     return artwork
   }
 
-  /// Swiping down closes the player only on the cover, the queue and the lyrics scroll.
+  /// Swiping down closes the player only at the top of the page, the queue and the lyrics scroll.
   var forkAllowsInteractiveDismiss: Bool {
     !isQueueShown && !appDelegate.storage.settings.user.isPlayerLyricsDisplayed &&
-      (forkCoverScroller?.isAtCover ?? true)
+      (forkPlayerPage?.isAtTop ?? true)
   }
 
   // MARK: Queue
 
-  @objc
-  private func forkSwipedUp() {
-    guard !isQueueShown, !appDelegate.storage.settings.user.isPlayerLyricsDisplayed else { return }
-    forkShowQueue()
-  }
-
-  private func forkShowQueue() {
-    DS.haptic(.light)
-    forkCoverScroller?.scrollToCover(animated: false)
-    switchDisplayStyleOptionPersistent()
-    controlView?.refreshView()
+  /// Hook at the end of `changeDisplayStyleVisually`: the queue needs the page at its top.
+  func forkDisplayStyleChanged() {
+    forkRefreshLyricsCard()
   }
 
   /// Pulling the queue down past its top returns to the cover.
-  /// With the lyrics card below the cover, pulling up past the card opens the queue (UI-11).
   @objc
   func scrollViewWillEndDragging(
     _ scrollView: UIScrollView,
     withVelocity velocity: CGPoint,
     targetContentOffset: UnsafeMutablePointer<CGPoint>
   ) {
-    guard ForkPlayerTransition.isActive else { return }
-    if let scroller = scrollView as? PlayerCoverScrollView {
-      guard !isQueueShown, scroller.overscrollAtBottom > Self.queuePullDistance / 2 else { return }
-      targetContentOffset.pointee = .zero
-      forkShowQueue()
-      return
-    }
-    guard scrollView === tableView, isQueueShown else { return }
+    guard ForkPlayerTransition.isActive, scrollView === tableView, isQueueShown else { return }
     let overscroll = -(scrollView.contentOffset.y + scrollView.adjustedContentInset.top)
     guard overscroll > Self.queuePullDistance else { return }
     DS.haptic(.light)
@@ -170,33 +148,6 @@ extension PopupPlayerVC {
     guard ForkPlayerTransition.isActive else { return super.accessibilityPerformEscape() }
     closePopupPlayer()
     return true
-  }
-
-  // MARK: Close grabber
-
-  /// Replaces the grabber of the former sheet: shows that the player closes downwards.
-  private func addCloseGrabber() {
-    let button = UIButton(type: .custom)
-    button.translatesAutoresizingMaskIntoConstraints = false
-    button.accessibilityLabel = String(localized: "Close Player", table: "Fork")
-    button.addAction(UIAction { [weak self] _ in self?.closePopupPlayer() }, for: .touchUpInside)
-    let capsule = UIView()
-    capsule.translatesAutoresizingMaskIntoConstraints = false
-    capsule.isUserInteractionEnabled = false
-    capsule.backgroundColor = UIColor.label.withAlphaComponent(0.35)
-    capsule.layer.cornerRadius = 2.5
-    button.addSubview(capsule)
-    view.addSubview(button)
-    NSLayoutConstraint.activate([
-      button.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: -DS.Space.xs),
-      button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-      button.widthAnchor.constraint(equalToConstant: 64),
-      button.heightAnchor.constraint(equalToConstant: 24),
-      capsule.centerXAnchor.constraint(equalTo: button.centerXAnchor),
-      capsule.centerYAnchor.constraint(equalTo: button.centerYAnchor),
-      capsule.widthAnchor.constraint(equalToConstant: 36),
-      capsule.heightAnchor.constraint(equalToConstant: 5),
-    ])
   }
 
   // MARK: Lyrics card
@@ -235,10 +186,10 @@ extension PopupPlayerVC {
   func forkRefreshLyricsCard() {
     largeCurrentlyPlayingView?.forkRefreshLyricsBackdrop(colors: artworkGradientColors)
     guard let card = forkLyricsCard else { return }
-    let isShown = isLyricsCardAllowed && card.hasLyrics &&
+    let isShown = isLyricsCardAllowed && card.hasLyrics && !isQueueShown &&
       !appDelegate.storage.settings.user.isPlayerLyricsDisplayed
     card.tint(with: artworkGradientColors)
-    forkCoverScroller?.setCardShown(isShown)
+    forkPlayerPage?.setCardShown(isShown)
   }
 
   /// Hook in `applyGradientBackground`: surfaces that follow the cover color.
@@ -261,7 +212,7 @@ extension PopupPlayerVC {
   @objc
   private func forkLyricsCardTapped() {
     DS.haptic(.light)
-    forkCoverScroller?.scrollToCover(animated: true)
+    forkPlayerPage?.scrollToTop(animated: true)
     appDelegate.storage.settings.user.isPlayerVisualizerDisplayed = false
     appDelegate.storage.settings.user.isPlayerLyricsDisplayed = true
     largeCurrentlyPlayingView?.display(element: .lyrics)

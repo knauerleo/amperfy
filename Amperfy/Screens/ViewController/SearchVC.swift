@@ -268,6 +268,8 @@ class SearchVC: BasicTableViewController {
       placeholder: placeholder,
       scopeButtonTitles: scopeButtonTitles
     )
+    // Fork: on the iPhone search is a regular tab, its field stays visible under the title
+    if DS.isPhone { navigationItem.hidesSearchBarWhenScrolling = false }
 
     // Install the options button
     optionsButton = UIBarButtonItem.createOptionsBarButton()

@@ -31,6 +31,7 @@ extension PlayerControlView {
     audioInfoLabel.alpha = 0.6
     playTypeIcon.alpha = 0.6
     applyForkFonts()
+    forkInstallStreamingTransport()
     // size class variations of the XIB would bring back the fixed point sizes
     registerForTraitChanges([UITraitHorizontalSizeClass.self, UITraitPreferredContentSizeCategory.self]) {
       (self: Self, _) in

@@ -34,6 +34,7 @@ extension PopupPlayerVC {
   }
 
   func changeDisplayStyleVisually(to displayStyle: PlayerDisplayStyle, animated: Bool = true) {
+    forkDisplayStyleChanged() // Fork: page back to the top before the queue appears
     var viewToDisapper: UIView?
     var artworkToDisapper: UIView?
     var containerToDisapper: UIView?

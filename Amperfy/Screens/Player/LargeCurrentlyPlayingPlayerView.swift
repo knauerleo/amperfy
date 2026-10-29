@@ -125,7 +125,7 @@ class LargeCurrentlyPlayingPlayerView: UIView, UIGestureRecognizerDelegate {
     right: UIView.defaultMarginX
   )
 
-  private var rootView: PopupPlayerVC?
+  private(set) var rootView: PopupPlayerVC? // Fork: read by the streaming layout
   private var lyricsView: LyricsView?
   private var visualizerHostingView: SwiftUIContentView?
   private var displayElement: LargeDisplayElement = .artwork
@@ -434,6 +434,7 @@ class LargeCurrentlyPlayingPlayerView: UIView, UIGestureRecognizerDelegate {
     rootView?.refreshOptionButton(button: optionsButton, rootView: rootView)
     refreshRating()
     display(element: displayElement)
+    forkApplyStreamingLayout() // Fork: streaming layout (UI-20)
   }
 
   func refreshRating() {

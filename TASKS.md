@@ -65,3 +65,4 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [x] ~~**F-14 Widgets und Kontrollzentrum**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**UI-18 Identität + Listen**~~ (2026-10-29) - nur iPhone, FORK.md Abschnitt 10 und Abschnitt 2 „Design-Tokens“, Mini-Player-Karte offen in UI-19
 - [x] ~~**F-8 Ganzes Album / Künstler von YouTube laden**~~ (2026-10-29) - FORK.md Abschnitt 9 und 10, nur App-Seite, Server-Teil live
+- [x] ~~**UI-20 Drei Tabs, Player als scrollende Seite, Name „Drift“ im System**~~ (2026-10-29) - FORK.md Abschnitt 10, Mini-Player-Karte weiter offen in UI-19

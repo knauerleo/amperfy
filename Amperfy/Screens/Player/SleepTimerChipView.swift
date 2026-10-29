@@ -110,7 +110,9 @@ extension PopupPlayerVC {
   func forkInstallSleepTimerChip() {
     guard let controlView else { return }
     let chip = SleepTimerChipView()
-    view.addSubview(chip)
+    // inside the scrolling page next to the controls, so it scrolls with them
+    let host: UIView = forkPlayerPage ?? view
+    host.addSubview(chip)
     NSLayoutConstraint.activate([
       chip.centerXAnchor.constraint(equalTo: view.centerXAnchor),
       chip.topAnchor.constraint(equalTo: controlView.optionsStackView.bottomAnchor, constant: DS.Space.xs),

@@ -2,9 +2,9 @@
 //  LyricsCardView.swift
 //  Amperfy
 //
-//  Fork: lyrics card under the cover in the player (design phase 5, measure 13).
-//  Shows the current line and the next one, on a surface in the cover color.
-//  A tap opens the full lyrics view of the player.
+//  Fork: lyrics card below the player controls, reached by scrolling the player down.
+//  Shows a window of lines around the current one (current line white, the others dimmed),
+//  on a surface in the cover color. A tap opens the full lyrics view of the player.
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -25,11 +25,17 @@ import CoreMedia
 import UIKit
 
 final class LyricsCardView: UIControl {
-  static let height: CGFloat = 92
+  /// Lines shown at once: one before the current line, the current one and the following.
+  private static let visibleLineCount = 7
+  private static let linesBefore = 1
+  private static let dimmedAlpha: CGFloat = 0.45
 
   private let headerLabel = UILabel()
-  private let currentLabel = UILabel()
-  private let nextLabel = UILabel()
+  private let expandIcon = UIImageView()
+  private let linesContainer = UIView()
+  private let linesStack = UIStackView()
+  private let fadeMask = CAGradientLayer()
+  private var lineLabels = [UILabel]()
   private var lyrics: StructuredLyrics?
   private var shownIndex: Int?
 
@@ -41,38 +47,63 @@ final class LyricsCardView: UIControl {
   override init(frame: CGRect) {
     super.init(frame: frame)
     translatesAutoresizingMaskIntoConstraints = false
-    layer.cornerRadius = DS.Radius.large
+    layer.cornerRadius = DS.Radius.card
     layer.cornerCurve = .continuous
     clipsToBounds = true
     backgroundColor = Self.defaultSurfaceColor
 
     headerLabel.text = String(localized: "Lyrics", table: "Fork")
-    headerLabel.font = DS.Font.caption
-    headerLabel.textColor = UIColor.white.withAlphaComponent(0.7)
-    currentLabel.font = DS.Font.rowTitle.withBoldWeight()
-    currentLabel.textColor = .white
-    currentLabel.numberOfLines = 2
-    nextLabel.font = DS.Font.cellSubtitle
-    nextLabel.textColor = UIColor.white.withAlphaComponent(0.6)
-    nextLabel.numberOfLines = 1
-    for label in [headerLabel, currentLabel, nextLabel] {
-      label.adjustsFontForContentSizeCategory = true
-      label.adjustsFontSizeToFitWidth = true
-      label.minimumScaleFactor = 0.8
-    }
+    headerLabel.font = DS.Font.lyricsCardHeader
+    headerLabel.textColor = .white
+    headerLabel.adjustsFontForContentSizeCategory = true
+    expandIcon.image = UIImage(systemName: "arrow.up.left.and.arrow.down.right")
+    expandIcon.preferredSymbolConfiguration = UIImage.SymbolConfiguration(textStyle: .subheadline, scale: .medium)
+    expandIcon.tintColor = UIColor.white.withAlphaComponent(0.8)
+    expandIcon.contentMode = .center
+    expandIcon.setContentHuggingPriority(.required, for: .horizontal)
 
-    let stack = UIStackView(arrangedSubviews: [headerLabel, currentLabel, nextLabel])
-    stack.axis = .vertical
-    stack.spacing = 2
-    stack.isUserInteractionEnabled = false
-    stack.translatesAutoresizingMaskIntoConstraints = false
-    addSubview(stack)
+    let header = UIStackView(arrangedSubviews: [headerLabel, expandIcon])
+    header.axis = .horizontal
+    header.alignment = .center
+    header.isUserInteractionEnabled = false
+    header.translatesAutoresizingMaskIntoConstraints = false
+    addSubview(header)
+
+    linesStack.axis = .vertical
+    linesStack.spacing = DS.Space.s
+    linesStack.isUserInteractionEnabled = false
+    linesStack.translatesAutoresizingMaskIntoConstraints = false
+    for _ in 0 ..< Self.visibleLineCount {
+      let label = UILabel()
+      label.font = DS.Font.lyricsCardLine
+      label.adjustsFontForContentSizeCategory = true
+      label.numberOfLines = 0
+      label.textColor = UIColor.white.withAlphaComponent(Self.dimmedAlpha)
+      lineLabels.append(label)
+      linesStack.addArrangedSubview(label)
+    }
+    linesContainer.isUserInteractionEnabled = false
+    linesContainer.clipsToBounds = true
+    linesContainer.translatesAutoresizingMaskIntoConstraints = false
+    linesContainer.addSubview(linesStack)
+    // the lines fade out at the lower edge instead of being cut off
+    fadeMask.colors = [UIColor.black.cgColor, UIColor.black.cgColor, UIColor.clear.cgColor]
+    fadeMask.locations = [0, 0.75, 1]
+    linesContainer.layer.mask = fadeMask
+    addSubview(linesContainer)
+
     NSLayoutConstraint.activate([
       heightAnchor.constraint(equalToConstant: Self.height),
-      stack.leadingAnchor.constraint(equalTo: leadingAnchor, constant: DS.Space.m),
-      stack.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -DS.Space.m),
-      stack.centerYAnchor.constraint(equalTo: centerYAnchor),
-      stack.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: DS.Space.xs),
+      header.topAnchor.constraint(equalTo: topAnchor, constant: DS.Space.m),
+      header.leadingAnchor.constraint(equalTo: leadingAnchor, constant: DS.Space.m),
+      header.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -DS.Space.m),
+      linesContainer.topAnchor.constraint(equalTo: header.bottomAnchor, constant: DS.Space.m),
+      linesContainer.leadingAnchor.constraint(equalTo: leadingAnchor, constant: DS.Space.m),
+      linesContainer.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -DS.Space.m),
+      linesContainer.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -DS.Space.xs),
+      linesStack.topAnchor.constraint(equalTo: linesContainer.topAnchor),
+      linesStack.leadingAnchor.constraint(equalTo: linesContainer.leadingAnchor),
+      linesStack.trailingAnchor.constraint(equalTo: linesContainer.trailingAnchor),
     ])
     isAccessibilityElement = true
     accessibilityTraits = .button
@@ -81,6 +112,19 @@ final class LyricsCardView: UIControl {
 
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+
+  /// Fixed height, so the page does not jump while the lines change.
+  static var height: CGFloat {
+    UIFontMetrics(forTextStyle: .title3).scaledValue(for: 380)
+  }
+
+  override func layoutSubviews() {
+    super.layoutSubviews()
+    CATransaction.begin()
+    CATransaction.setDisableActions(true)
+    fadeMask.frame = linesContainer.bounds
+    CATransaction.commit()
   }
 
   override var isHighlighted: Bool {
@@ -95,8 +139,9 @@ final class LyricsCardView: UIControl {
     self.lyrics = lyrics
     shownIndex = nil
     if let lyrics, !lyrics.synced {
+      // unsynced: the beginning of the text, all lines readable
       let lines = lyrics.line.map(\.value).filter { !$0.isEmpty }
-      setLines(current: lines.first ?? "", next: lines.dropFirst().first)
+      setLines(Array(lines.prefix(Self.visibleLineCount)), current: nil)
     } else {
       update(time: CMTime(seconds: appDelegate.player.elapsedTime, preferredTimescale: 1000))
     }
@@ -109,13 +154,15 @@ final class LyricsCardView: UIControl {
     let index = lyrics.line.lastIndex { ($0.start ?? 0) <= milliseconds }
     guard index != shownIndex || shownIndex == nil else { return }
     shownIndex = index
-    if let index {
-      let next = lyrics.line[(index + 1)...].first { !$0.value.isEmpty }?.value
-      setLines(current: lyrics.line[index].value.isEmpty ? "♪" : lyrics.line[index].value, next: next)
-    } else {
+    let texts = lyrics.line.map { $0.value.isEmpty ? "♪" : $0.value }
+    guard let index else {
       // before the first line
-      setLines(current: "♪", next: lyrics.line.first { !$0.value.isEmpty }?.value)
+      setLines(Array(texts.prefix(Self.visibleLineCount)), current: nil)
+      return
     }
+    let start = max(0, index - Self.linesBefore)
+    let end = min(texts.count, start + Self.visibleLineCount)
+    setLines(Array(texts[start ..< end]), current: index - start)
   }
 
   /// Darkened cover color, so the white text stays readable in light and dark mode.
@@ -140,16 +187,15 @@ final class LyricsCardView: UIControl {
     )
   }
 
-  private func setLines(current: String, next: String?) {
-    currentLabel.text = current
-    nextLabel.text = next ?? " "
-    accessibilityLabel = String(localized: "Lyrics: \(current)", table: "Fork")
-  }
-}
-
-extension UIFont {
-  fileprivate func withBoldWeight() -> UIFont {
-    guard let descriptor = fontDescriptor.withSymbolicTraits(.traitBold) else { return self }
-    return UIFont(descriptor: descriptor, size: 0)
+  /// `current` is the index of the playing line in `lines`, nil shows all lines readable.
+  private func setLines(_ lines: [String], current: Int?) {
+    for (offset, label) in lineLabels.enumerated() {
+      label.isHidden = offset >= lines.count
+      label.text = offset < lines.count ? lines[offset] : nil
+      let isReadable = current == nil || current == offset
+      label.textColor = UIColor.white.withAlphaComponent(isReadable ? 1 : Self.dimmedAlpha)
+    }
+    let spoken = current.map { lines[$0] } ?? lines.first ?? ""
+    accessibilityLabel = String(localized: "Lyrics: \(spoken)", table: "Fork")
   }
 }

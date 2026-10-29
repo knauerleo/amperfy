@@ -246,6 +246,7 @@ class PlayerControlView: UIView {
     playerHandler?.refreshPrevNextButtons(previousButton: previousButton, nextButton: nextButton)
     playerHandler?.refreshDisplayPlaylistButton(displayPlaylistButton: displayPlaylistButton)
     refreshPlayerModeChangeButton()
+    forkRefreshStreamingTransport() // Fork: shuffle, repeat, play circle (UI-20)
   }
 
   func createPlaybackRateMenu() -> UIMenuElement {
@@ -466,9 +467,9 @@ extension PlayerControlView: MusicPlayable {
 
   func didArtworkChange() {}
 
-  func didShuffleChange() {}
+  func didShuffleChange() { forkRefreshStreamingTransport() } // Fork (UI-20)
 
-  func didRepeatChange() {}
+  func didRepeatChange() { forkRefreshStreamingTransport() } // Fork (UI-20)
 
   func didPlaybackRateChange() {}
 }
