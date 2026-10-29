@@ -4,7 +4,7 @@
 //
 //  Fork (UI-27b): no option row under the transport on the iPhone, like in streaming apps.
 //  The queue is a small symbol at the right below the controls, the sleep timer chip sits at the
-//  left of the same line. AirPlay, volume, player mode and the player options moved into the
+//  left of the same line. AirPlay, player mode and the player options moved into the
 //  "…" menu at the top of the player. The row of the XIB is only hidden.
 //
 //  This program is free software: you can redistribute it and/or modify
@@ -100,7 +100,8 @@ extension PlayerControlView {
 
 extension PopupPlayerVC {
   /// Hook in `refreshOptionButton`: the player part of the "…" menu at the top (iPhone only).
-  /// Output first (AirPlay, volume, mode), the song actions follow, the player options at the end.
+  /// Output first (AirPlay, mode), the song actions follow, the player options at the end.
+  /// No volume: the app always plays at full volume, the system volume rules.
   func forkPlayerMenu(songActions: [UIMenuElement]) -> [UIMenuElement] {
     guard ForkPlayerTransition.isActive, let controlView else { return songActions }
 
@@ -111,12 +112,6 @@ extension PopupPlayerVC {
     ) { [weak controlView] _ in
       guard let controlView else { return }
       controlView.airplayButtonPushed(controlView.airplayButton)
-    })
-    output.append(UIAction(
-      title: String(localized: "Volume", table: "Fork"),
-      image: UIImage(systemName: "speaker.wave.2")
-    ) { [weak self] _ in
-      self?.forkShowVolumeSlider()
     })
     // the mode switch only exists with podcasts, like its button in the row
     if player.podcastItemCount > 0 || player.playerMode == .podcast {
@@ -132,7 +127,7 @@ extension PopupPlayerVC {
 
     return [
       UIMenu(options: .displayInline, children: output),
-      UIMenu(options: .displayInline, children: songActions),
+      UIMenu(options: .displayInline, children: Self.forkWithoutLyricsAndRating(songActions)),
       UIMenu(
         title: String(localized: "Player", table: "Fork"),
         options: .displayInline,
@@ -141,25 +136,16 @@ extension PopupPlayerVC {
     ]
   }
 
-  /// Volume slider as a popover at the "…" button, the hidden row button cannot anchor it.
-  private func forkShowVolumeSlider() {
-    guard let source = largeCurrentlyPlayingView?.optionsButton else { return }
-    let popover = SliderMenuPopover()
-    let sliderView = popover.sliderMenuView
-    sliderView.frame = CGRect(x: 0, y: 0, width: 250, height: 50)
-    sliderView.slider.minimumValue = 0
-    sliderView.slider.maximumValue = 100
-    sliderView.slider.value = player.volume * 100
-    sliderView.sliderValueChangedCB = { [weak self] in
-      self?.player.volume = Float(sliderView.slider.value) / 100
+  /// UI-27: on the player the lyrics are the card below the controls, no menu entry for them.
+  /// No rating either, the player only has the heart.
+  private static func forkWithoutLyricsAndRating(_ elements: [UIMenuElement]) -> [UIMenuElement] {
+    elements.compactMap { element in
+      if element.image === UIImage.lyrics { return nil }
+      guard let menu = element as? UIMenu else { return element }
+      if menu.image === UIImage.starEmpty || menu.image === UIImage.starFill { return nil }
+      let children = forkWithoutLyricsAndRating(menu.children)
+      return children.isEmpty ? nil : menu.replacingChildren(children)
     }
-    popover.modalPresentationStyle = .popover
-    popover.preferredContentSize = sliderView.frame.size
-    guard let presentation = popover.popoverPresentationController else { return }
-    presentation.permittedArrowDirections = [.up, .down]
-    presentation.delegate = popover
-    presentation.sourceView = source
-    present(popover, animated: true)
   }
 }
 

@@ -80,3 +80,4 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [x] ~~**UI-24 Alben-Liste wie im Mockup**~~ (2026-10-29) - FORK.md Abschnitt 10, Raster bleibt, Anzahl unter dem Titel, auf dem iPhone noch nicht angesehen
 - [x] ~~**UI-27a Lyrics-Karte sichtbar, Songtext im Vollbild**~~ (2026-10-29) - FORK.md Abschnitt 10, auf dem iPhone noch nicht angesehen
 - [x] ~~**UI-27b Optionszeile unter den Controls entfernt**~~ (2026-10-29) - FORK.md Abschnitt 10, Warteschlange als Symbol rechts, Rest im „…“ oben, Sleep-Timer-Chip links daneben; auf dem iPhone noch nicht angesehen
+- [x] ~~**UI-27c „…“-Menü ausgedünnt**~~ (2026-10-29) - FORK.md Abschnitt 10, ohne Lautstärke, Songtext und Bewertung

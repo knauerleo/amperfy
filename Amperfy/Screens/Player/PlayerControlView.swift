@@ -309,7 +309,7 @@ class PlayerControlView: UIView {
     menuActions.append(appDelegate.createSleepTimerMenu(refreshCB: nil))
     menuActions.append(createPlaybackRateMenu())
 
-    if ForkPlayerTransition.isActive { rootView?.forkAppendFullScreenLyricsAction(to: &menuActions) } else if rootView?.largeCurrentlyPlayingView?.isLyricsButtonAllowedToDisplay ?? false { // Fork: full-screen lyrics (UI-27)
+    if !ForkPlayerTransition.isActive, rootView?.largeCurrentlyPlayingView?.isLyricsButtonAllowedToDisplay ?? false { // Fork: iPhone has the lyrics card instead (UI-27)
       if !appDelegate.storage.settings.user.isPlayerLyricsDisplayed ||
         appDelegate.storage.settings.user.playerDisplayStyle != .large {
         let showLyricsAction = UIAction(title: "Show Lyrics", image: .lyrics, handler: { _ in

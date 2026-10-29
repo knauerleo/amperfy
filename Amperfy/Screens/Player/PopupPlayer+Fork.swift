@@ -247,12 +247,4 @@ extension PopupPlayerVC {
     present(fullScreen, animated: true)
   }
 
-  /// Hook in `createPlayerOptionsMenu`: one entry that opens the full-screen lyrics, instead of
-  /// showing and hiding the lyrics over the cover. Nothing when the song has no lyrics.
-  func forkAppendFullScreenLyricsAction(to menuActions: inout [UIMenuElement]) {
-    guard forkLyricsCard?.shownLyrics != nil else { return }
-    menuActions.append(UIAction(title: "Show Lyrics", image: .lyrics) { [weak self] _ in
-      self?.forkShowFullScreenLyrics()
-    })
-  }
 }
