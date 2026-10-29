@@ -210,9 +210,11 @@ class ArtistsVC: SingleSnapshotFetchedResultsTableViewController<ArtistMO> {
     snapshotDidChange = {
       self.updateContentUnavailable()
     }
+    forkInstallPlayHeader() // Fork: UI-8 "Shuffle all" / "Play" row
   }
 
   func updateContentUnavailable() {
+    forkRefreshPlayHeader() // Fork: UI-8
     if fetchedResultsController.fetchedObjects?.count ?? 0 == 0 {
       if fetchedResultsController.isSearchActive {
         contentUnavailableConfiguration = UIContentUnavailableConfiguration.search()

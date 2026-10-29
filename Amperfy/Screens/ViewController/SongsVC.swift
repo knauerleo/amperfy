@@ -32,7 +32,7 @@ class SongsVC: SingleFetchedResultsTableViewController<SongMO> {
   }
 
   private var fetchedResultsController: SongsFetchedResultsController!
-  private var detailHeaderView: LibraryElementDetailTableHeaderView?
+  private var detailHeaderView: ListPlayHeader? // Fork: UI-8 play row like the detail pages
   private var optionsButton: UIBarButtonItem!
   public var displayFilter: DisplayCategoryFilter = .all
   private var sortType: SongElementSortType = .name
@@ -77,7 +77,7 @@ class SongsVC: SingleFetchedResultsTableViewController<SongMO> {
       isInfoAlwaysHidden: false,
       shuffleContextCb: handleHeaderShuffle
     )
-    detailHeaderView = LibraryElementDetailTableHeaderView.createTableHeader(
+    detailHeaderView = ListPlayHeaderView.createTableHeader( // Fork: UI-8
       rootView: self,
       configuration: playShuffleInfoConfig
     )
