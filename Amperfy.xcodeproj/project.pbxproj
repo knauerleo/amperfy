@@ -513,6 +513,7 @@
 		50C9D6D3284FAB0C007F18D0 /* JSONConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5029288826564F3600DA3A8F /* JSONConverter.swift */; };
 		50C9D6D4284FAB88007F18D0 /* PlayerDownloadPreparationHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50048F9427590FAD0087EDFB /* PlayerDownloadPreparationHandler.swift */; };
 		50C9D6D5284FAB88007F18D0 /* NowPlayingInfoCenterHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501171352756A8E100B7C08D /* NowPlayingInfoCenterHandler.swift */; };
+		1171FEF239788320B4D7C246 /* PlayerDurationResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB51DFB538D88FAE9442AD6B /* PlayerDurationResolver.swift */; };
 		50C9D6D6284FAB88007F18D0 /* PlayerFacade.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5011712F27565B2A00B7C08D /* PlayerFacade.swift */; };
 		50C9D6D7284FAB88007F18D0 /* PlayerNotificationAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509D55E8280FDAE100E0E0B5 /* PlayerNotificationAdapter.swift */; };
 		50C9D6D8284FAB88007F18D0 /* PlayerUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501171292743F25300B7C08D /* PlayerUtil.swift */; };
@@ -787,6 +788,7 @@
 		501171312756778300B7C08D /* RemoteCommandCenterHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteCommandCenterHandler.swift; sourceTree = "<group>"; };
 		501171332756A73000B7C08D /* AudioSessionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSessionHandler.swift; sourceTree = "<group>"; };
 		501171352756A8E100B7C08D /* NowPlayingInfoCenterHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingInfoCenterHandler.swift; sourceTree = "<group>"; };
+		DB51DFB538D88FAE9442AD6B /* PlayerDurationResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlayerDurationResolver.swift"; sourceTree = "<group>"; };
 		50120A2026280C9200B037B1 /* FetchedResultsControllers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchedResultsControllers.swift; sourceTree = "<group>"; };
 		50120A2426281C1900B037B1 /* BasicTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicTableViewController.swift; sourceTree = "<group>"; };
 		7049C69DC0AAE33A2158D8F5 /* SearchDebouncer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDebouncer.swift; sourceTree = "<group>"; };
@@ -2525,6 +2527,7 @@
 				5011712B2744FDD700B7C08D /* PlayQueueHandler.swift */,
 				501171312756778300B7C08D /* RemoteCommandCenterHandler.swift */,
 				501171352756A8E100B7C08D /* NowPlayingInfoCenterHandler.swift */,
+				DB51DFB538D88FAE9442AD6B /* PlayerDurationResolver.swift */,
 				501171332756A73000B7C08D /* AudioSessionHandler.swift */,
 				50048F9427590FAD0087EDFB /* PlayerDownloadPreparationHandler.swift */,
 				50048F962759186A0087EDFB /* EmbeddedArtworkExtractor.swift */,
@@ -3380,6 +3383,7 @@
 				50C9D6BC284FAA87007F18D0 /* EmbeddedArtwork.swift in Sources */,
 				50CEC63E2D1EDCE500D0E696 /* RadioMO+CoreDataClass.swift in Sources */,
 				50C9D6D5284FAB88007F18D0 /* NowPlayingInfoCenterHandler.swift in Sources */,
+				1171FEF239788320B4D7C246 /* PlayerDurationResolver.swift in Sources */,
 				50C9D669284FAA0B007F18D0 /* AmpacheXmlParser.swift in Sources */,
 				50C9D6A3284FAA77007F18D0 /* MigrationPolicyV4toV5.swift in Sources */,
 				50C9D6DD284FAB88007F18D0 /* BackendAudioPlayer.swift in Sources */,

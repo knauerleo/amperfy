@@ -212,6 +212,7 @@ public class AmperKit {
     curPlayer.addNotifier(notifier: playerRemoteCommandCenterHandler!)
     playerNotificationAdapter = PlayerNotificationAdapter(notificationHandler: notificationHandler)
     curPlayer.addNotifier(notifier: playerNotificationAdapter!)
+    PlayerDurationResolver.install(musicPlayer: curPlayer, storage: storage, getBackendApiCB: { self.getMeta($0).backendApi }) // Fork: F-18
 
     return facadeImpl
   }

@@ -339,6 +339,7 @@ class BackendAudioPlayer: NSObject {
 
   func seek(toSecond: Double) {
     if currentPlayUrl != "", player?.getState() == .playing || player?.getState() == .paused {
+      guard forkCanSeek else { return } // Fork: F-18 a stream without length can't seek
       seekTimeWhenStarted = nil
       player?.seek(to: toSecond)
     } else {

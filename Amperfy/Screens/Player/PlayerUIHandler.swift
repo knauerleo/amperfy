@@ -421,7 +421,7 @@ class PlayerUIHandler: NSObject {
     timeSlider.sliderStyle = .thumbless
     if let currentlyPlaying = player.currentlyPlaying {
       let supportTimeInteraction = !currentlyPlaying.isRadio
-      timeSlider.isEnabled = supportTimeInteraction && (style != .miniPlayeriOS)
+      timeSlider.isEnabled = supportTimeInteraction && (style != .miniPlayeriOS) && player.forkCanSeek // Fork: F-18
       timeSlider.minimumValue = 0.0
       timeSlider.maximumValue = Float(player.duration)
       if !timeSlider.isTracking, supportTimeInteraction {

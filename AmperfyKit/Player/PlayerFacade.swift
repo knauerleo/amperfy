@@ -174,6 +174,7 @@ public protocol PlayerFacade {
   var contextName: String { get }
   var elapsedTime: Double { get }
   var duration: Double { get }
+  var forkCanSeek: Bool { get } // Fork: F-18
   var isShuffle: Bool { get }
   func toggleShuffle()
   var playbackRate: PlaybackRate { get }
@@ -424,8 +425,10 @@ class PlayerFacadeImpl: PlayerFacade {
   }
 
   var duration: Double {
-    backendAudioPlayer.duration
+    PlayerDurationResolver.displayDuration(stream: backendAudioPlayer.duration, of: currentlyPlaying) // Fork: F-18
   }
+
+  var forkCanSeek: Bool { backendAudioPlayer.forkCanSeek } // Fork: F-18
 
   var isShuffle: Bool {
     playerStatus.isShuffle

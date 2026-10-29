@@ -99,7 +99,7 @@ public class NowPlayingInfoCenterHandler {
       MPMediaItemPropertyAlbumTitle: albumTitle,
       MPMediaItemPropertyArtist: nowPlaying.artist,
 
-      MPMediaItemPropertyPlaybackDuration: backendAudioPlayer.duration,
+      MPMediaItemPropertyPlaybackDuration: PlayerDurationResolver.displayDuration(stream: backendAudioPlayer.duration, of: playable), // Fork: F-18
       MPNowPlayingInfoPropertyElapsedPlaybackTime: backendAudioPlayer.elapsedTime,
       MPNowPlayingInfoPropertyIsLiveStream: playable.isRadio,
 
