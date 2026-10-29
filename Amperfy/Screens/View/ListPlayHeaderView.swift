@@ -40,8 +40,8 @@ extension LibraryElementDetailTableHeaderView: ListPlayHeader {}
 
 final class ListPlayHeaderView: UIView, ListPlayHeader {
   private static let playButtonSize: CGFloat = 48
-  /// UI-18 (iPhone): "Play" and "Shuffle" as pills.
-  private static let pillHeight: CGFloat = 40
+  /// UI-18 (iPhone): "Play" and "Shuffle" as pills. UI-25: 44 pt, equal width.
+  private static let pillHeight: CGFloat = 44
   static var frameHeight: CGFloat {
     (DS.isPhone ? pillHeight : playButtonSize) + DS.Space.xs + DS.Space.s
   }
@@ -52,6 +52,13 @@ final class ListPlayHeaderView: UIView, ListPlayHeader {
   private var config: PlayShuffleInfoConfiguration
   private var contextProvider: ContextProvider?
   private var isLoading = false
+  /// UI-25: the count goes under the large title of this view controller (iPhone, iOS 26).
+  private weak var titleOwner: UIViewController?
+
+  private var isCountInTitle: Bool {
+    guard DS.isPhone, #available(iOS 26.0, *) else { return false }
+    return true
+  }
 
   private let infoLabel = UILabel()
   private let shuffleButton = UIButton(type: .system)
@@ -73,6 +80,8 @@ final class ListPlayHeaderView: UIView, ListPlayHeader {
       )
     }
     let header = ListPlayHeaderView(configuration: configuration, width: rootView.view.bounds.width)
+    header.titleOwner = rootView
+    header.refresh()
     rootView.tableView.tableHeaderView = header
     return header
   }
@@ -96,6 +105,8 @@ final class ListPlayHeaderView: UIView, ListPlayHeader {
     )
     let header = ListPlayHeaderView(configuration: config, width: rootView.view.bounds.width)
     header.contextProvider = contextProvider
+    header.titleOwner = rootView
+    header.refresh()
     rootView.tableView.tableHeaderView = header
     return header
   }
@@ -170,6 +181,7 @@ final class ListPlayHeaderView: UIView, ListPlayHeader {
   }
 
   /// UI-18: "Play" as an accent pill, "Shuffle" as a raised pill, the count on the right.
+  /// UI-25: both pills share the full width, the count moves under the large title.
   private func setupPhonePills() {
     infoLabel.font = DS.Font.rowSubtitle
     infoLabel.adjustsFontForContentSizeCategory = true
@@ -203,11 +215,16 @@ final class ListPlayHeaderView: UIView, ListPlayHeader {
       button.setContentCompressionResistancePriority(.required, for: .horizontal)
     }
 
-    let row = UIStackView(arrangedSubviews: [playButton, shuffleButton, infoLabel])
+    let row = UIStackView(arrangedSubviews: isCountInTitle ?
+      [playButton, shuffleButton] : [playButton, shuffleButton, infoLabel])
     row.axis = .horizontal
     row.alignment = .center
     row.spacing = DS.Space.xs
-    row.setCustomSpacing(DS.Space.s, after: shuffleButton)
+    if isCountInTitle {
+      row.distribution = .fillEqually
+    } else {
+      row.setCustomSpacing(DS.Space.s, after: shuffleButton)
+    }
     row.translatesAutoresizingMaskIntoConstraints = false
     addSubview(row)
     NSLayoutConstraint.activate([
@@ -245,6 +262,10 @@ final class ListPlayHeaderView: UIView, ListPlayHeader {
 
   func refresh() {
     infoLabel.text = config.infoCB?() ?? ""
+    if #available(iOS 26.0, *), isCountInTitle, let titleOwner {
+      let count = infoLabel.text ?? ""
+      titleOwner.navigationItem.largeSubtitle = count.isEmpty ? nil : count
+    }
     shuffleButton.isHidden = config.isShuffleHidden
     shuffleButton.isEnabled = !isLoading && (
       !config.isShuffleOnContextNeccessary || appDelegate.storage.settings.user

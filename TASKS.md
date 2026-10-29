@@ -18,8 +18,6 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
   - Filter-Chips (34 pt, rund): „Zuletzt hinzugefügt“ (aktiv in Mint), „Favoriten“, „Geladen“
   - Abspielen/Zufall-Zeile auch bei Alben (heute nur Songs, Künstler, Genres)
   - Entschieden 2026-10-29: Das Raster aus UI-2 bleibt, keine Liste wie im Mockup
-- [ ] **UI-25 Abspielen/Zufall-Zeile wie im Mockup** - Boards „Alben-Liste“ und „Drift Identität“
-  - Zwei gleich breite Pillen über die volle Breite, 44 pt hoch (heute 40 pt, nebeneinander links, Anzahl rechts in der Zeile); die Anzahl wandert neben den großen Titel (siehe UI-24)
 - [ ] **UI-26 Player nach UI-21 abnehmen** - Screenshot nötig, dann Feinschliff. 2026-10-29: Kopfzeile 20 statt 8 pt unter der Safe Area (FORK.md Abschnitt 10)
 
 ## Backlog (ganz hinten)
@@ -76,3 +74,4 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [x] ~~**F-20 Albumseite nach Tracknummer sortiert**~~ (2026-10-29) - FORK.md Abschnitt 10, auf dem iPhone noch nicht geprüft
 - [x] ~~**F-6b Crash beim Platzhalter-Tausch**~~ (2026-10-29) - FORK.md Abschnitt 10, Ursache aus dem Crash-Log, Ablauf auf dem iPhone nicht nachgestellt
 - [x] ~~**UI-23 Albumseite wie im Mockup**~~ (2026-10-29) - FORK.md Abschnitt 10, Zurück/„…“ bleiben die Glasknöpfe von iOS 26, auf dem iPhone noch nicht angesehen
+- [x] ~~**UI-25 Abspielen/Zufall-Zeile wie im Mockup**~~ (2026-10-29) - FORK.md Abschnitt 10, Anzahl unter dem großen Titel statt daneben (entschieden 2026-10-29), auf dem iPhone noch nicht angesehen
