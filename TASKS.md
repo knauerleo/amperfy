@@ -13,6 +13,9 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 
 ### Oberfläche
 
+- [ ] **UI-19 Mini-Player als schwebende Karte** - Rest von UI-18
+  - Mockup: Fläche „Erhöht“, Radius 14, Schatten, Fortschritt 2 pt Mint (Fortschritt und Farbe sind erledigt). Der Mini-Player ist das `bottomAccessory` der iOS-26-Tab-Bar, das System zeichnet dort Liquid Glass und Form. Eine eigene Karte hieße, die Accessory-Logik (`TabBarVC`, Inline-Modus UI-14) umzubauen
+  - Ebenso offen: Tab-Bar „in Grund mit leichter Transparenz“ – ein eigener Hintergrund würde das Glas ersetzen, darum nur die Farben
 - [ ] **UI-15b Upstream-Texte auf Deutsch** - Rest von UI-15
   - Fork-Texte stehen in `Amperfy/Fork.xcstrings` (Tabelle `Fork`). Offen: Upstream-Literale (UIKit-Menüs, Alerts, `SwipeActionType`-Namen, SwiftUI-Einstellungen, XIBs), dafür eine `Localizable.xcstrings` bzw. XIB-Strings
   - Ebenfalls offen: vom Fork nur umbenannte Upstream-Texte (`HomeSection` „Recently Played“/„Recently Added“, Menüeinträge in `EntityPreviewVC`, Swipe-Namen, „Tap to reopen Drift“) und die `EventLogger`-Themen
@@ -60,3 +63,4 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [x] ~~**F-2 Server-URL automatisch umschalten**~~ (2026-10-29) - überflüssig – seit F-1 nur noch die Domain
 - [x] ~~**UI-16 Entscheidung iPad/Mac**~~ (2026-10-29) - Fork-Design nur auf dem iPhone, iPad und Mac bleiben im Upstream-Stil, FORK.md Abschnitt 10 und „Arbeitsweise“
 - [x] ~~**F-14 Widgets und Kontrollzentrum**~~ (2026-10-29) - FORK.md Abschnitt 10
+- [x] ~~**UI-18 Identität + Listen**~~ (2026-10-29) - nur iPhone, FORK.md Abschnitt 10 und Abschnitt 2 „Design-Tokens“, Mini-Player-Karte offen in UI-19
