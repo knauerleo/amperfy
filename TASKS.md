@@ -34,8 +34,6 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
   - Erstes Extension-Target: Link aus YouTube Music/Safari annehmen, Video-ID auslesen, `POST /api/get`
 - [ ] **F-14 Widgets und Kontrollzentrum**
   - Neues Widget-Target. Interaktive Widgets „Zuletzt gehört“, „Favoriten mischen“, Taste im Kontrollzentrum. App Intents gibt es schon (`AmperfyAppShortcuts`)
-- [ ] **F-15 Spotlight-Indexierung**
-  - Alben, Künstler, Playlists als `CSSearchableItem`, Tap öffnet die Detailseite
 - [ ] **F-17 Crossfade**
   - Engine `AudioStreaming` (AVAudioEngine) lädt den nächsten Song schon vor. Größter Eingriff in AmperfyKit, zuletzt
 
@@ -67,3 +65,4 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [x] ~~**F-12 Mixe aus lokalen Daten**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**F-13 Statistik / Jahresrückblick**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**F-10 Weiterhören auf anderem Gerät (`savePlayQueue`/`getPlayQueue`)**~~ (2026-10-29) - FORK.md Abschnitt 10
+- [x] ~~**F-15 Spotlight-Indexierung**~~ (2026-10-29) - FORK.md Abschnitt 10

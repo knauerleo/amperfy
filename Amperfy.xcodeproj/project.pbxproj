@@ -404,6 +404,7 @@
 		50C9D670284FAA4D007F18D0 /* LibraryStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50BA930521D5715D00E5901D /* LibraryStorage.swift */; };
 		F9B8E090F2D0A66DE3BE1942 /* LibraryStorage+ForkHome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CBB663C5523D06770B559AE /* LibraryStorage+ForkHome.swift */; };
 		E42EA01DD6301D9103A73379 /* LibraryStorage+ForkAlbumLists.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8F132409820C0DA1C8F198C /* LibraryStorage+ForkAlbumLists.swift */; };
+		5CFCD6B58A770357340F7379 /* LibraryStorage+ForkSpotlight.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0D874A3D66B16AFF2056D30 /* LibraryStorage+ForkSpotlight.swift */; };
 		5A202E2C3142E5847B1268DD /* LibraryStorage+ForkMixes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B719CEE5CFB76F1B7F582DE1 /* LibraryStorage+ForkMixes.swift */; };
 		2C5620EA0D79CDFA1581A235 /* LibraryStorage+ForkStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB52D32F46C56024A936B4F /* LibraryStorage+ForkStats.swift */; };
 		93496E273E175C8F9921C884 /* LibraryStorage+ForkLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA6E357950B7A39E04A767D /* LibraryStorage+ForkLibrary.swift */; };
@@ -556,6 +557,7 @@
 		C7E95B84474CA6A5CE25D04A /* AppDelegate+ForkSleepTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BFD60E6105862FBD9147F27 /* AppDelegate+ForkSleepTimer.swift */; };
 		9FEFE31CCA516A2538F28D44 /* YouTubeMusicDownloadCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3D5D52506A052EDF56B0C17 /* YouTubeMusicDownloadCoordinator.swift */; };
 		BBA534416618E50736E2B752 /* PlayQueueSyncCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA2C16F8FBFBDCB1EB02AB9 /* PlayQueueSyncCoordinator.swift */; };
+		9B1A459227B8FAEC6FBF19C6 /* SpotlightIndexer.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA73B339974206200A83FAB /* SpotlightIndexer.swift */; };
 		50D54B6D2E30FFDB0078631E /* Magnitude.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D54B642E30F9350078631E /* Magnitude.swift */; };
 		50D54B6E2E30FFDB0078631E /* AudioAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D54B622E30F9350078631E /* AudioAnalyzer.swift */; };
 		50D54B6F2E30FFDB0078631E /* AmplitudeSpectrumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50D54B612E30F9350078631E /* AmplitudeSpectrumView.swift */; };
@@ -1105,6 +1107,7 @@
 		50BA930521D5715D00E5901D /* LibraryStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryStorage.swift; sourceTree = "<group>"; };
 		4CBB663C5523D06770B559AE /* LibraryStorage+ForkHome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryStorage+ForkHome.swift"; sourceTree = "<group>"; };
 		E8F132409820C0DA1C8F198C /* LibraryStorage+ForkAlbumLists.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryStorage+ForkAlbumLists.swift"; sourceTree = "<group>"; };
+		A0D874A3D66B16AFF2056D30 /* LibraryStorage+ForkSpotlight.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryStorage+ForkSpotlight.swift"; sourceTree = "<group>"; };
 		B719CEE5CFB76F1B7F582DE1 /* LibraryStorage+ForkMixes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryStorage+ForkMixes.swift"; sourceTree = "<group>"; };
 		1AB52D32F46C56024A936B4F /* LibraryStorage+ForkStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryStorage+ForkStats.swift"; sourceTree = "<group>"; };
 		BBA6E357950B7A39E04A767D /* LibraryStorage+ForkLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryStorage+ForkLibrary.swift"; sourceTree = "<group>"; };
@@ -1191,6 +1194,7 @@
 		2BFD60E6105862FBD9147F27 /* AppDelegate+ForkSleepTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+ForkSleepTimer.swift"; sourceTree = "<group>"; };
 		B3D5D52506A052EDF56B0C17 /* YouTubeMusicDownloadCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "YouTubeMusicDownloadCoordinator.swift"; sourceTree = "<group>"; };
 		EBA2C16F8FBFBDCB1EB02AB9 /* PlayQueueSyncCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlayQueueSyncCoordinator.swift"; sourceTree = "<group>"; };
+		CAA73B339974206200A83FAB /* SpotlightIndexer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SpotlightIndexer.swift"; sourceTree = "<group>"; };
 		50D54B612E30F9350078631E /* AmplitudeSpectrumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmplitudeSpectrumView.swift; sourceTree = "<group>"; };
 		50D54B622E30F9350078631E /* AudioAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioAnalyzer.swift; sourceTree = "<group>"; };
 		50D54B632E30F9350078631E /* FFT.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FFT.swift; sourceTree = "<group>"; };
@@ -1664,6 +1668,7 @@
 				2BFD60E6105862FBD9147F27 /* AppDelegate+ForkSleepTimer.swift */,
 				B3D5D52506A052EDF56B0C17 /* YouTubeMusicDownloadCoordinator.swift */,
 				EBA2C16F8FBFBDCB1EB02AB9 /* PlayQueueSyncCoordinator.swift */,
+				CAA73B339974206200A83FAB /* SpotlightIndexer.swift */,
 				509001B72716C8F400A8056D /* AppDelegateNotificationExtensions.swift */,
 				509001B52716C7F600A8056D /* AppDelegateAlertExtensions.swift */,
 				50722746286794FC00910574 /* AppDelegateKeyboardCommands.swift */,
@@ -1931,6 +1936,7 @@
 				50BA930521D5715D00E5901D /* LibraryStorage.swift */,
 				4CBB663C5523D06770B559AE /* LibraryStorage+ForkHome.swift */,
 				E8F132409820C0DA1C8F198C /* LibraryStorage+ForkAlbumLists.swift */,
+				A0D874A3D66B16AFF2056D30 /* LibraryStorage+ForkSpotlight.swift */,
 				B719CEE5CFB76F1B7F582DE1 /* LibraryStorage+ForkMixes.swift */,
 				1AB52D32F46C56024A936B4F /* LibraryStorage+ForkStats.swift */,
 				BBA6E357950B7A39E04A767D /* LibraryStorage+ForkLibrary.swift */,
@@ -2852,6 +2858,7 @@
 				C7E95B84474CA6A5CE25D04A /* AppDelegate+ForkSleepTimer.swift in Sources */,
 				9FEFE31CCA516A2538F28D44 /* YouTubeMusicDownloadCoordinator.swift in Sources */,
 				BBA534416618E50736E2B752 /* PlayQueueSyncCoordinator.swift in Sources */,
+				9B1A459227B8FAEC6FBF19C6 /* SpotlightIndexer.swift in Sources */,
 				50C1714C2D106BEE00C0C53A /* PlaylistAddArtistDetailVC.swift in Sources */,
 				50C171442D0F07E300C0C53A /* PlaylistAddSongsVC.swift in Sources */,
 				50FA36532F560D670058AB56 /* SeekableTimeSlider.swift in Sources */,
@@ -3007,6 +3014,7 @@
 				50C9D670284FAA4D007F18D0 /* LibraryStorage.swift in Sources */,
 				F9B8E090F2D0A66DE3BE1942 /* LibraryStorage+ForkHome.swift in Sources */,
 				E42EA01DD6301D9103A73379 /* LibraryStorage+ForkAlbumLists.swift in Sources */,
+				5CFCD6B58A770357340F7379 /* LibraryStorage+ForkSpotlight.swift in Sources */,
 				5A202E2C3142E5847B1268DD /* LibraryStorage+ForkMixes.swift in Sources */,
 				2C5620EA0D79CDFA1581A235 /* LibraryStorage+ForkStats.swift in Sources */,
 				93496E273E175C8F9921C884 /* LibraryStorage+ForkLibrary.swift in Sources */,

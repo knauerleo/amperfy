@@ -96,6 +96,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
       // Save it off for later when we become active.
       appDelegate.quickActionsManager.savedShortCutItemForLaterUse(savedShortCutItem: shortcutItem)
     }
+    connectionOptions.userActivities.forEach { SpotlightIndexer.shared.open(userActivity: $0) } // Fork: F-15
     // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
     // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
     // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
@@ -284,6 +285,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
       type: .info,
       userActivity.activityType
     )
+    SpotlightIndexer.shared.open(userActivity: userActivity) // Fork: F-15 tapped Spotlight result
   }
 
   func scene(
