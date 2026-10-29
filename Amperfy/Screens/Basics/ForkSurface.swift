@@ -68,7 +68,7 @@ extension BasicTableViewController {
     willDisplayHeaderView view: UIView,
     forSection section: Int
   ) {
-    super.tableView(tableView, willDisplayHeaderView: view, forSection: section)
+    // no super call: UITableViewController does not implement this delegate method
     guard tableView.style == .plain else { return }
     ForkSurface.applyHeaderBackground(view)
   }
