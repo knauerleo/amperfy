@@ -193,7 +193,9 @@ extension PlayerControlView {
   private static let optionsTopSpacing: CGFloat = 28
   /// Added to the control placeholder so the rows keep their place at the bottom.
   static var forkStreamingExtraHeight: CGFloat {
-    ForkPlayerTransition.isActive ? (transportTopSpacing - 22) + (optionsTopSpacing - 20) : 0
+    // UI-27b: minus the option row, only the small queue line stays
+    ForkPlayerTransition.isActive ?
+      (transportTopSpacing - 22) + (optionsTopSpacing - 20) - forkCompactSavedHeight : 0
   }
 
   private var forkTransportStack: UIStackView? {
@@ -246,6 +248,7 @@ extension PlayerControlView {
     playButton.tintColor = .systemBackground
     playButton.imageView?.tintColor = .systemBackground
     forkSpaceOutStreamingRows(transport: stack)
+    forkInstallCompactOptions(transport: stack)
     forkRefreshStreamingTransport()
   }
 
@@ -267,6 +270,7 @@ extension PlayerControlView {
       imageView.tintColor = .systemBackground
       playButton.bringSubviewToFront(imageView)
     }
+    forkRefreshQueueButton()
     let player = appDelegate.player
     let isMusic = player.playerMode == .music
     for button in forkToggleButtons {

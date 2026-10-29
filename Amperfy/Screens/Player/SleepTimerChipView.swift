@@ -2,7 +2,7 @@
 //  SleepTimerChipView.swift
 //  Amperfy
 //
-//  Fork (UI-12): chip under the player controls while a sleep timer runs,
+//  Fork (UI-12, UI-27b): chip left of the queue symbol under the player controls while a sleep timer runs,
 //  e.g. "Pauses at 23:40". A tap opens the sleep timer menu (change or turn off).
 //
 //  This program is free software: you can redistribute it and/or modify
@@ -24,11 +24,6 @@ import UIKit
 
 final class SleepTimerChipView: UIButton {
   static let height: CGFloat = 30
-  /// Extra height of the control placeholder while the chip is shown.
-  static let reservedHeight: CGFloat = height + DS.Space.xs
-
-  /// Called when the chip appears or disappears, so the player can make room for it.
-  var onVisibilityChange: ((Bool) -> ())?
 
   private var refreshTimer: Timer?
   private var shownText: String?
@@ -86,9 +81,7 @@ final class SleepTimerChipView: UIButton {
     }
     shownText = text
     let isShown = text != nil
-    guard isHidden == isShown else { return }
     isHidden = !isShown
-    onVisibilityChange?(isShown)
   }
 
   private var currentText: String? {
@@ -106,25 +99,18 @@ final class SleepTimerChipView: UIButton {
 // MARK: - PopupPlayerVC
 
 extension PopupPlayerVC {
-  /// Called from `forkConfigurePlayer`: chip below the option row of the controls.
+  /// Called from `forkConfigurePlayer`. UI-27b: the option row is gone, the chip sits at the left
+  /// of the queue symbol's line and needs no extra height.
   func forkInstallSleepTimerChip() {
-    guard let controlView else { return }
+    guard let controlView, let queue = controlView.forkQueueButton else { return }
     let chip = SleepTimerChipView()
     // inside the scrolling page next to the controls, so it scrolls with them
     let host: UIView = forkPlayerPage ?? view
     host.addSubview(chip)
     NSLayoutConstraint.activate([
-      chip.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-      chip.topAnchor.constraint(equalTo: controlView.optionsStackView.bottomAnchor, constant: DS.Space.xs),
+      chip.leadingAnchor.constraint(equalTo: controlView.layoutMarginsGuide.leadingAnchor),
+      chip.trailingAnchor.constraint(lessThanOrEqualTo: queue.leadingAnchor, constant: -DS.Space.xs),
+      chip.centerYAnchor.constraint(equalTo: queue.centerYAnchor),
     ])
-    let baseHeight = controlPlaceholderHeightConstraint.constant
-    chip.onVisibilityChange = { [weak self] isShown in
-      guard let self else { return }
-      controlPlaceholderHeightConstraint.constant = baseHeight +
-        (isShown ? SleepTimerChipView.reservedHeight : 0)
-      UIView.animate(withDuration: 0.25) {
-        self.view.layoutIfNeeded()
-      }
-    }
   }
 }

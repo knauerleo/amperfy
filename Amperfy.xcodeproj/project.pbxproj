@@ -50,6 +50,7 @@
 		FA96F61DA89B88D3B58C1F7F /* PlayerPageScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD0CF2FBBFFA13B912A0FC16 /* PlayerPageScrollView.swift */; };
 		F69235E58EEBDEC2B487B197 /* PopupPlayer+Fork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C7BADBB35D25E4737974A6B /* PopupPlayer+Fork.swift */; };
 		ED3B0ED1A8315CDD49E4497B /* PopupPlayer+ForkStreaming.swift in Sources */ = {isa = PBXBuildFile; fileRef = 931EFA55BF60BA38421C62B1 /* PopupPlayer+ForkStreaming.swift */; };
+		824E8D6A561465C0306C9658 /* PopupPlayer+ForkOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6BB820FA0549D2FF432B7FA /* PopupPlayer+ForkOptions.swift */; };
 		5019441D2B7ACB0800082D2E /* PopupPlayer+Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5019441C2B7ACB0800082D2E /* PopupPlayer+Animations.swift */; };
 		501A7D4D26820B080055A51B /* PodcastsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501A7D4C26820B080055A51B /* PodcastsVC.swift */; };
 		501A7D4F26820B3F0055A51B /* PodcastDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501A7D4E26820B3F0055A51B /* PodcastDetailVC.swift */; };
@@ -820,6 +821,7 @@
 		FD0CF2FBBFFA13B912A0FC16 /* PlayerPageScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlayerPageScrollView.swift"; sourceTree = "<group>"; };
 		5C7BADBB35D25E4737974A6B /* PopupPlayer+Fork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PopupPlayer+Fork.swift"; sourceTree = "<group>"; };
 		931EFA55BF60BA38421C62B1 /* PopupPlayer+ForkStreaming.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PopupPlayer+ForkStreaming.swift"; sourceTree = "<group>"; };
+		B6BB820FA0549D2FF432B7FA /* PopupPlayer+ForkOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PopupPlayer+ForkOptions.swift"; sourceTree = "<group>"; };
 		5019441C2B7ACB0800082D2E /* PopupPlayer+Animations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PopupPlayer+Animations.swift"; sourceTree = "<group>"; };
 		501999DB26806B8600F72D37 /* NotificationBannerCustomization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationBannerCustomization.swift; sourceTree = "<group>"; };
 		501A7D1E26808A9D0055A51B /* podcast_episodes.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = podcast_episodes.xml; sourceTree = "<group>"; };
@@ -1650,6 +1652,7 @@
 				FD0CF2FBBFFA13B912A0FC16 /* PlayerPageScrollView.swift */,
 				5C7BADBB35D25E4737974A6B /* PopupPlayer+Fork.swift */,
 				931EFA55BF60BA38421C62B1 /* PopupPlayer+ForkStreaming.swift */,
+				B6BB820FA0549D2FF432B7FA /* PopupPlayer+ForkOptions.swift */,
 				5019441C2B7ACB0800082D2E /* PopupPlayer+Animations.swift */,
 				50A30E572B7501E600722894 /* SectionHeader */,
 				501944162B78F97F00082D2E /* LargeCurrentlyPlayingPlayerView.xib */,
@@ -3153,6 +3156,7 @@
 				FA96F61DA89B88D3B58C1F7F /* PlayerPageScrollView.swift in Sources */,
 				F69235E58EEBDEC2B487B197 /* PopupPlayer+Fork.swift in Sources */,
 				ED3B0ED1A8315CDD49E4497B /* PopupPlayer+ForkStreaming.swift in Sources */,
+				824E8D6A561465C0306C9658 /* PopupPlayer+ForkOptions.swift in Sources */,
 				505362D12C23682500846C53 /* AlbumsCollectionVC.swift in Sources */,
 				EF9BA333B81B7C8E3FCEE179 /* AlbumsCollectionVC+Fork.swift in Sources */,
 				9D3D798A6466DF0E75D60C3B /* AlbumsCollectionVC+ForkHeader.swift in Sources */,
