@@ -21,10 +21,6 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 
 - [ ] **F-8 Ganzes Album / Künstler von YouTube laden**
   - Braucht einen Endpunkt im Songpicker (`album_id`, `kind`). In der App: Menüeintrag am YouTube-Treffer „Ganzes Album laden“
-- [ ] **F-14 Widgets und Kontrollzentrum**
-  - Neues Widget-Target. Interaktive Widgets „Zuletzt gehört“, „Favoriten mischen“, Taste im Kontrollzentrum. App Intents gibt es schon (`AmperfyAppShortcuts`)
-  - Blockiert (2026-10-29): Die App Group lässt sich nicht registrieren, solange im Developer-Account die neue Program License Agreement nicht akzeptiert ist („PLA Update available“). Danach erneut bauen
-  - Code auf Branch `f14-widgets` (WIP, nie kompiliert, Target noch nicht im Projekt)
 - [ ] **F-17 Crossfade**
   - Engine `AudioStreaming` (AVAudioEngine) lädt den nächsten Song schon vor. Größter Eingriff in AmperfyKit, zuletzt
   - Analysiert (2026-10-29): nicht mit einzeiligen Hooks machbar, `BackendAudioPlayer` braucht zwei Kanäle. Umsetzungsplan in FORK.md, „Roadmap“ › „Crossfade (TASKS F-17): Umsetzungsplan“
@@ -63,3 +59,4 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [x] ~~**UI-15 Deutsche Texte per String Catalog**~~ (2026-10-29) - FORK.md Abschnitt 10, nur Fork-Texte, Rest in UI-15b
 - [x] ~~**F-2 Server-URL automatisch umschalten**~~ (2026-10-29) - überflüssig – seit F-1 nur noch die Domain
 - [x] ~~**UI-16 Entscheidung iPad/Mac**~~ (2026-10-29) - Fork-Design nur auf dem iPhone, iPad und Mac bleiben im Upstream-Stil, FORK.md Abschnitt 10 und „Arbeitsweise“
+- [x] ~~**F-14 Widgets und Kontrollzentrum**~~ (2026-10-29) - FORK.md Abschnitt 10
