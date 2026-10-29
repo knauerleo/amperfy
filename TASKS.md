@@ -18,7 +18,7 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
   - Mockup: Fläche „Erhöht“, Radius 14, Schatten, Fortschritt 2 pt Mint (Fortschritt und Farbe sind erledigt). Der Mini-Player ist das `bottomAccessory` der iOS-26-Tab-Bar, das System zeichnet dort Liquid Glass und Form. Eine eigene Karte hieße, die Accessory-Logik (`TabBarVC`, Inline-Modus UI-14) umzubauen
   - Ebenso offen: Tab-Bar „in Grund mit leichter Transparenz“ – ein eigener Hintergrund würde das Glas ersetzen, darum nur die Farben
 - [ ] **UI-15c Restliche Upstream-Texte auf Deutsch** - Rest von UI-15b
-  - Offen: Alerts in Upstream-VCs (Texte direkt in `UIAlertController`), XIB-Texte (bräuchten `Base.lproj`, XIBs bleiben unangetastet), Texte mit Einsetzungen („Rating: \\(rating)“), Titel von Untermenüs („More Queue Options“ ist ein `UIMenu`, dessen Titel nur lesbar ist), `EventLogger`-Themen, Upstream-Texte außerhalb der Engstellen von UI-15b. Neue Texte in `Amperfy/Localizable.xcstrings` eintragen, sie greifen dann über `ForkMenuText.upstream`
+  - Offen: Alerts in Upstream-VCs (Texte direkt in `UIAlertController`), XIB-Texte (bräuchten `Base.lproj`, XIBs bleiben unangetastet), Texte mit Einsetzungen („Rating: \(rating)“), Titel von Untermenüs („More Queue Options“ ist ein `UIMenu`, dessen Titel nur lesbar ist), `EventLogger`-Themen, Upstream-Texte außerhalb der Engstellen von UI-15b. Neue Texte in `Amperfy/Localizable.xcstrings` eintragen, sie greifen dann über `ForkMenuText.upstream`
 
 ### Features
 
