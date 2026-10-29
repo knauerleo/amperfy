@@ -385,7 +385,7 @@ Die App spricht nur noch Subsonic mit dem Login-Host. Die Songpicker-API (`/api/
 **Bekannte Grenzen:**
 
 - `getYtJobs` kennt nur Jobs, die über den Subsonic-Proxy gestartet wurden, ab der Einführung des Endpunkts (2026-10-29).
-- Ob der Proxy weiterlädt, wenn die App nach dem ersten Byte trennt, ist mit der Pi-Session noch zu bestätigen.
+- Auf dem iPhone getestet (2026-10-29): Test Connection, YouTube-Treffer ohne ☁︎, Abspielen nach ~9 s, Job in Downloads, Song nach ~35 s in Recently Added, keine Fake-Einträge in Albums/Artists. „In Sammlung laden“ ohne Abspielen kommt auf `fertig`, der Proxy lädt also weiter, wenn die App nach dem ersten Byte trennt.
 - Die Download-Liste zeigt das Video-Thumbnail von i.ytimg.com (4:3), die Songs selbst das Cover über `getCoverArt`.
 - Nach einem Account-Wechsel konfiguriert sich der Monitor erst neu, wenn Suche oder Library geöffnet werden.
 
