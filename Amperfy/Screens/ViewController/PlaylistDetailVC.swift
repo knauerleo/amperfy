@@ -243,6 +243,7 @@ class PlaylistDetailVC: SingleSnapshotFetchedResultsTableViewController<Playlist
     }
 
     navigationItem.rightBarButtonItems = [optionsButton, edititingBarButton].compactMap { $0 }
+    forkMergeEditIntoOptions() // Fork: one "…" menu on the iPhone (UI-18)
   }
 
   func convertIndexPathToPlayContext(songIndexPath: IndexPath) -> PlayContext? {

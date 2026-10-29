@@ -251,6 +251,7 @@ class PlaylistsVC: SingleSnapshotFetchedResultsTableViewController<PlaylistMO> {
       barButtons.append(editButtonItem)
     }
     navigationItem.rightBarButtonItems = barButtons
+    forkMergeEditIntoOptions() // Fork: one "…" menu on the iPhone (UI-18)
   }
 
   func createCell(
