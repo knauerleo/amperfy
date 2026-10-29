@@ -273,7 +273,7 @@ Maßnahmen 12 und 13 aus `DESIGN-AUDIT.md`, Roadmap Punkte 3 und 4 (Download-Üb
 
 **Bekannte Grenzen:**
 
-- Die Karte nimmt dem Cover Höhe weg (Stack-View aus der XIB). Auf kleinen iPhones wird das Cover dadurch kleiner.
+- Die Karte nimmt dem Cover Höhe weg (Stack-View aus der XIB). Auf kleinen iPhones wird das Cover dadurch kleiner. Behoben mit UI-11 (Abschnitt 10).
 - Das Feld `started` von `/api/jobs` ist nur geraten (Unix-Zeit oder ISO 8601). Fehlt es, sortiert die Liste
   fertige Jobs ohne Zeitangabe ans Ende.
 - Die Zwischen-Commits `d3c1ec2b` bis `be5d7705` haben die neuen Dateien unvollständig im Projekt eingetragen,
@@ -401,6 +401,7 @@ Die App spricht nur noch Subsonic mit dem Login-Host. Die Songpicker-API (`/api/
 | F-3 | `SubsonicArtistInfo.swift` (neu, AmperfyKit), `SubsonicServerApi.swift`, `ArtistHighlightsView.swift`, `ArtistDetailVC.swift` | `requestArtistInfo2(id:)` (JSON, 12 ähnliche Künstler), Parser `SubsonicArtistInfo` (Bio ohne HTML und ohne „Read more on Last.fm“), `BackendProxy.forkArtistInfo(artistId:)`. Auf der Künstlerseite unter der Diskografie: „Fans Also Like“ als runde Kacheln (nur Künstler aus der eigenen Bibliothek, Tap öffnet die Seite), darunter „About“ mit 4 Zeilen, Tap klappt auf und zu. Hook `contentDidChange` (1 Zeile), weil die Daten nach dem Header kommen. Das Künstlerbild im Header kommt schon über `getCoverArt` (`ar-…`), `largeImageUrl` wird nur geparst |
 | F-4 | `SubsonicArtistInfo.swift`, `SubsonicServerApi.swift`, `ArtistHighlightsView.swift` | `requestTopSongs(artistName:count:)` (JSON), `BackendProxy.forkTopSongIds`. Liefern die eigenen `playCount`s weniger als 5 Songs, füllt „Popular“ mit den Last.fm-Top-Songs aus der Bibliothek auf (ohne Doppelte, offline nur gecachte). Songs ohne eigene Plays zeigen das Album statt „0 plays“ |
 | UI-6 | `LyricsView+Fork.swift` (neu), `LyricsView.swift`, `LyricTableCell.swift`, `LargeCurrentlyPlayingPlayerView.swift`, `LyricsCardView.swift`, `PopupPlayer+Fork.swift`, `DesignTokens.swift` | Volle Lyrics im Player (nur iPhone) wie die Karte: Zeilen in `DS.Font.lyricsLine` (24 bold, max 34), linksbündig, aktuelle Zeile weiß, übrige 45 % Weiß, auf einer abgerundeten Fläche (`LyricsBackdropView`) in der abgedunkelten Cover-Farbe (`LyricsCardView.surfaceColor`). Tap auf eine Zeile springt wie bisher dorthin. Hooks: `forkCardStyle` + 1 Zeile in `reloadViewModels`, die beiden Attributed Strings des Zellmodells nicht mehr `private`, 1 Zeile in `prepare`. Die Lyrics-Seitenleiste (iPad/Mac, `LyricsVC`) bleibt im Originalstil |
+| UI-11 | `PlayerCoverScrollView.swift` (neu), `PopupPlayer+Fork.swift` | Die Lyrics-Karte steckt nicht mehr im Stack der XIB. Die große Player-Ansicht liegt in einer Scroll-View mit der vollen Höhe des Platzhalters, die Karte folgt darunter (16 pt Rand). Hat der Song Lyrics, scrollt man nach oben zur Karte, sonst scrollt nichts. Über das Ende der Karte hinausziehen öffnet die Queue (statt des Wischers nach oben, der bei scrollbarem Cover nicht mehr greift). Waagrechte Wischer auf dem Cover (Skip) starten kein Scrollen. Schließen per Herunterwischen nur, wenn das Cover ganz oben steht |
 
 ### Hilfsskript
 
