@@ -367,6 +367,7 @@
 		924C3A5106973CAF2D5E92BD /* YouTubeMusicJobMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E21FE95408900B8E814BD39 /* YouTubeMusicJobMonitor.swift */; };
 		8B4BAC794538A4B8AF01ED4B /* SongpickerClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A42BFC033C14B5C648BE2F3D /* SongpickerClient.swift */; };
 		CCBF0351B12ABC9569AD47EF /* BackendProxy+ForkShare.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A35660F813FF3FE6A2B22D4 /* BackendProxy+ForkShare.swift */; };
+		4AF83C43549C3EBEC5ACF620 /* BackendProxy+ForkYouTubeAlbum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 019B34FBB37542488A963DD9 /* BackendProxy+ForkYouTubeAlbum.swift */; };
 		50C9D647284FAA02007F18D0 /* SsMusicFolderParserDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DEEDFF265D46CB0073FF20 /* SsMusicFolderParserDelegate.swift */; };
 		50C9D648284FAA02007F18D0 /* SsPingParserDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5086F884223A1E4600546F5A /* SsPingParserDelegate.swift */; };
 		50C9D649284FAA02007F18D0 /* SubsonicVersion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50E964A925E8E20E00E3210F /* SubsonicVersion.swift */; };
@@ -1135,6 +1136,7 @@
 		1E21FE95408900B8E814BD39 /* YouTubeMusicJobMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "YouTubeMusicJobMonitor.swift"; sourceTree = "<group>"; };
 		A42BFC033C14B5C648BE2F3D /* SongpickerClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SongpickerClient.swift"; sourceTree = "<group>"; };
 		7A35660F813FF3FE6A2B22D4 /* BackendProxy+ForkShare.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BackendProxy+ForkShare.swift"; sourceTree = "<group>"; };
+		019B34FBB37542488A963DD9 /* BackendProxy+ForkYouTubeAlbum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BackendProxy+ForkYouTubeAlbum.swift"; sourceTree = "<group>"; };
 		50BA92F721CC318D00E5901D /* PlayableTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayableTableCell.swift; sourceTree = "<group>"; };
 		80531DC3A51437B29F0727F9 /* PlayableTableCell+NowPlaying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PlayableTableCell+NowPlaying.swift"; sourceTree = "<group>"; };
 		37B3F295C576D297B2C71F01 /* NowPlayingBarsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NowPlayingBarsView.swift"; sourceTree = "<group>"; };
@@ -1786,6 +1788,7 @@
 				1E21FE95408900B8E814BD39 /* YouTubeMusicJobMonitor.swift */,
 				A42BFC033C14B5C648BE2F3D /* SongpickerClient.swift */,
 				7A35660F813FF3FE6A2B22D4 /* BackendProxy+ForkShare.swift */,
+				019B34FBB37542488A963DD9 /* BackendProxy+ForkYouTubeAlbum.swift */,
 				509A7D8128059A0D009791D1 /* BackgroundLibrarySyncer.swift */,
 				5040B2C5269D947F00911451 /* BackgroundFetchTriggeredSyncer.swift */,
 				5086F87422384B5500546F5A /* Subsonic */,
@@ -3313,6 +3316,7 @@
 				924C3A5106973CAF2D5E92BD /* YouTubeMusicJobMonitor.swift in Sources */,
 				8B4BAC794538A4B8AF01ED4B /* SongpickerClient.swift in Sources */,
 				CCBF0351B12ABC9569AD47EF /* BackendProxy+ForkShare.swift in Sources */,
+				4AF83C43549C3EBEC5ACF620 /* BackendProxy+ForkYouTubeAlbum.swift in Sources */,
 				50C9D6EB284FAD51007F18D0 /* PodcastsShowType.swift in Sources */,
 				50C9D71828508005007F18D0 /* CommonString.swift in Sources */,
 				50C9D63F284FA9C7007F18D0 /* ScrobbleSyncer.swift in Sources */,
