@@ -193,7 +193,11 @@ final class YouTubeArtistVC: UITableViewController {
         isLoading = false
         loadError = error.localizedDescription
         tableView.reloadData()
-        showUnavailable(text: error.localizedDescription)
+        // no artist for a plain YouTube upload: asking again won't help
+        showUnavailable(
+          text: error.localizedDescription,
+          canRetry: !((error as? YouTubeAlbumError)?.isPermanent ?? false)
+        )
       }
     }
   }
@@ -209,13 +213,13 @@ final class YouTubeArtistVC: UITableViewController {
     }
   }
 
-  private func showUnavailable(text: String) {
+  private func showUnavailable(text: String, canRetry: Bool = true) {
     tableView.tableHeaderView = nil
     var config = UIContentUnavailableConfiguration.empty()
     config.image = UIImage(systemName: "exclamationmark.icloud")
     config.text = String(localized: "Artist Not Available", table: "Fork")
     config.secondaryText = text
-    if appDelegate.storage.settings.user.isOnlineMode {
+    if appDelegate.storage.settings.user.isOnlineMode, canRetry {
       var button = UIButton.Configuration.filled()
       button.title = String(localized: "Try Again", table: "Fork")
       button.baseBackgroundColor = DS.Color.surfaceRaised

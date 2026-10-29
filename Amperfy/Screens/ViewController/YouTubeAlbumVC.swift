@@ -30,6 +30,9 @@ import UIKit
 
 final class YouTubeAlbumVC: UITableViewController {
   private static let refreshInterval: Duration = .seconds(10)
+  /// The Navidrome ID follows the scan about 35 s after a download, songs that were in the
+  /// library before may never get one. So it is awaited this long after the last finished song.
+  private static let navidromeIdWait: TimeInterval = 120
 
   private let account: Account
   /// `ytm-album-…` or `ytm-<videoId>` (the album of that song).
@@ -37,6 +40,10 @@ final class YouTubeAlbumVC: UITableViewController {
   private var album: YouTubeAlbum?
   private var isLoading = false
   private var loadError: String?
+  private var canRetry = true
+  /// Until then `getYtAlbum` is asked again for missing Navidrome IDs.
+  private var navidromeIdDeadline: Date?
+  private var isVisible = false
   /// Text of the pill after the download was started ("6 downloading, 9 already there").
   private var downloadSummary: String?
   private var isDownloadRunning = false
@@ -89,11 +96,13 @@ final class YouTubeAlbumVC: UITableViewController {
 
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
+    isVisible = true
     startRefreshing()
   }
 
   override func viewDidDisappear(_ animated: Bool) {
     super.viewDidDisappear(animated)
+    isVisible = false
     refreshTask?.cancel()
     refreshTask = nil
   }
@@ -123,13 +132,18 @@ final class YouTubeAlbumVC: UITableViewController {
         loadError = nil
         let isFirstLoad = album == nil
         guard newAlbum != album else { return }
+        noteFinishedSongs(old: album, new: newAlbum)
         album = newAlbum
         updateHeader()
         tableView.reloadData()
         if isFirstLoad { loadCover() }
+        startRefreshing()
       } catch {
         // a failed refresh keeps the shown album
-        if album == nil { loadError = error.localizedDescription }
+        if album == nil {
+          loadError = error.localizedDescription
+          canRetry = !((error as? YouTubeAlbumError)?.isPermanent ?? false)
+        }
       }
     }
   }
@@ -142,24 +156,43 @@ final class YouTubeAlbumVC: UITableViewController {
     }
   }
 
-  /// `getYtAlbum` again every 10 s while the screen is visible and something still changes:
-  /// a song loads, or a downloaded song has no Navidrome ID yet (about 35 s after the job).
+  /// `getYtAlbum` again every 10 s while the screen is visible and something still changes,
+  /// stops by itself when nothing does (started again by a download or a finished job).
   private func startRefreshing() {
-    refreshTask?.cancel()
+    guard isVisible, refreshTask == nil || refreshTask?.isCancelled == true, needsRefresh
+    else { return }
     refreshTask = Task { @MainActor [weak self] in
       while !Task.isCancelled {
         try? await Task.sleep(for: Self.refreshInterval)
         guard let self, !Task.isCancelled else { return }
-        if needsRefresh { load(isSilent: true) }
+        guard needsRefresh else {
+          refreshTask = nil
+          return
+        }
+        load(isSilent: true)
       }
     }
   }
 
+  /// A song still has a job on the proxy (`ytState` wartet/lädt/speichert; `downloaded` is
+  /// what counts once it is done), a job the monitor saw finish is not yet `downloaded`, or
+  /// downloaded songs lack their Navidrome ID within 2 min after the last finished one.
   private var needsRefresh: Bool {
     guard let album else { return false }
-    return album.songs.contains { song in
-      let status = status(of: song)
-      return status.isLoading || (status == .inLibrary && song.navidromeId == nil)
+    if album.songs.contains(where: { !$0.downloaded && $0.status.isLoading }) { return true }
+    if album.songs.contains(where: { !$0.downloaded && jobStatuses[$0.videoId] == .inLibrary }) {
+      return true
+    }
+    guard let navidromeIdDeadline, navidromeIdDeadline > Date() else { return false }
+    return album.songs.contains { $0.downloaded && $0.navidromeId == nil }
+  }
+
+  /// Songs that became `downloaded` start the wait for their Navidrome ID.
+  private func noteFinishedSongs(old: YouTubeAlbum?, new: YouTubeAlbum) {
+    guard let old else { return }
+    let wasDownloaded = Set(old.songs.filter(\.downloaded).map(\.id))
+    if new.songs.contains(where: { $0.downloaded && !wasDownloaded.contains($0.id) }) {
+      navidromeIdDeadline = Date().addingTimeInterval(Self.navidromeIdWait)
     }
   }
 
@@ -184,7 +217,7 @@ final class YouTubeAlbumVC: UITableViewController {
     config.image = UIImage(systemName: "exclamationmark.icloud")
     config.text = String(localized: "Album Not Available", table: "Fork")
     config.secondaryText = text
-    if appDelegate.storage.settings.user.isOnlineMode {
+    if appDelegate.storage.settings.user.isOnlineMode, canRetry {
       var button = UIButton.Configuration.filled()
       button.title = String(localized: "Try Again", table: "Fork")
       button.baseBackgroundColor = DS.Color.surfaceRaised
@@ -193,6 +226,7 @@ final class YouTubeAlbumVC: UITableViewController {
       config.button = button
       config.buttonProperties.primaryAction = UIAction { [weak self] _ in
         self?.loadError = nil
+        self?.canRetry = true
         self?.load(isSilent: false)
       }
     }
@@ -238,6 +272,7 @@ final class YouTubeAlbumVC: UITableViewController {
     updateJobStatuses()
     updateHeader()
     refreshVisibleRows()
+    startRefreshing()
   }
 
   @objc
@@ -319,6 +354,7 @@ final class YouTubeAlbumVC: UITableViewController {
     self.album = album.updated(with: download)
     updateHeader()
     tableView.reloadData()
+    startRefreshing()
   }
 
   private func openArtist() {

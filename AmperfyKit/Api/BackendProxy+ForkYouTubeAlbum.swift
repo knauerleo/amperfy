@@ -220,6 +220,43 @@ public struct YouTubeAlbumDownload: Sendable, Equatable {
   }
 }
 
+// MARK: - YouTubeAlbumError
+
+/// A failed `getYtAlbum`/`getYtArtist`/`downloadYtAlbum`. The proxy names the reason with the
+/// stable short code `ytError`; its `message` is German and only shown for unknown codes.
+public struct YouTubeAlbumError: LocalizedError, Sendable {
+  public let code: String
+  public let serverMessage: String
+
+  /// No album or artist exists for the song (e.g. a plain YouTube upload): asking again won't help.
+  public var isPermanent: Bool {
+    ["missing_id", "invalid_id", "song_not_found", "no_album", "no_artist"].contains(code)
+  }
+
+  public var errorDescription: String? {
+    switch code {
+    case "missing_id":
+      return String(localized: "No YouTube Music ID was sent.", table: "Fork")
+    case "invalid_id":
+      return String(localized: "This is not a valid YouTube Music ID.", table: "Fork")
+    case "song_not_found":
+      return String(localized: "YouTube Music doesn't know this song.", table: "Fork")
+    case "no_album":
+      return String(localized: "There is no album for this video on YouTube Music.", table: "Fork")
+    case "no_artist":
+      return String(localized: "There is no artist for this video on YouTube Music.", table: "Fork")
+    case "album_not_found":
+      return String(localized: "YouTube Music doesn't know this album, or it isn't reachable right now.", table: "Fork")
+    case "artist_not_found":
+      return String(localized: "YouTube Music doesn't know this artist, or it isn't reachable right now.", table: "Fork")
+    case "yt_unavailable":
+      return String(localized: "YouTube Music isn't reachable right now. Try again later.", table: "Fork")
+    default:
+      return serverMessage
+    }
+  }
+}
+
 // MARK: - YouTubeAlbumJSON
 
 enum YouTubeAlbumJSON {
@@ -232,19 +269,18 @@ enum YouTubeAlbumJSON {
     if response["status"] as? String != "ok" {
       let error = response["error"] as? [String: Any]
       let message = (error?["message"] as? String).flatMap { $0.isEmpty ? nil : $0 }
-      throw SongpickerError.server(
-        message ?? String(localized: "The proxy reported an error", table: "Fork")
+      throw YouTubeAlbumError(
+        code: (error?["ytError"] as? String) ?? "",
+        serverMessage: message ?? String(localized: "The proxy reported an error", table: "Fork")
       )
     }
     guard let payload = response[key] as? [String: Any] else { throw SongpickerError.noProxy }
     return payload
   }
 
-  /// A JSON list, or a single object where XML-to-JSON conversions drop the array.
+  /// `song`/`album` are always arrays in the JSON of the proxy, also with 0 or 1 entries.
   static func list(_ value: Any?) -> [[String: Any]] {
-    if let list = value as? [[String: Any]] { return list }
-    if let single = value as? [String: Any] { return [single] }
-    return []
+    (value as? [[String: Any]]) ?? []
   }
 
   static func bool(_ value: Any?) -> Bool {

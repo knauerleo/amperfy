@@ -3472,6 +3472,134 @@
           }
         }
       }
+    },
+    "No YouTube Music ID was sent.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Es wurde keine YouTube-Music-ID mitgeschickt."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No YouTube Music ID was sent."
+          }
+        }
+      }
+    },
+    "There is no album for this video on YouTube Music.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zu diesem Video gibt es kein Album bei YouTube Music."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "There is no album for this video on YouTube Music."
+          }
+        }
+      }
+    },
+    "There is no artist for this video on YouTube Music.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zu diesem Video gibt es keinen Künstler bei YouTube Music."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "There is no artist for this video on YouTube Music."
+          }
+        }
+      }
+    },
+    "This is not a valid YouTube Music ID.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Das ist keine gültige YouTube-Music-ID."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This is not a valid YouTube Music ID."
+          }
+        }
+      }
+    },
+    "YouTube Music doesn't know this album, or it isn't reachable right now.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "YouTube Music kennt dieses Album nicht oder ist gerade nicht erreichbar."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "YouTube Music doesn't know this album, or it isn't reachable right now."
+          }
+        }
+      }
+    },
+    "YouTube Music doesn't know this artist, or it isn't reachable right now.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "YouTube Music kennt diesen Künstler nicht oder ist gerade nicht erreichbar."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "YouTube Music doesn't know this artist, or it isn't reachable right now."
+          }
+        }
+      }
+    },
+    "YouTube Music doesn't know this song.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "YouTube Music kennt diesen Song nicht."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "YouTube Music doesn't know this song."
+          }
+        }
+      }
+    },
+    "YouTube Music isn't reachable right now. Try again later.": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "YouTube Music ist gerade nicht erreichbar. Versuch es später noch mal."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "YouTube Music isn't reachable right now. Try again later."
+          }
+        }
+      }
     }
   },
   "version": "1.0"
