@@ -27,6 +27,9 @@ import UIKit
 final class ImmersiveDetailHeaderView: UIView {
   private static let playButtonSize: CGFloat = 52
   private static let maxArtworkSize: CGFloat = 260
+  // UI-23: album page on the iPhone as in the mockup
+  private static let albumPlayButtonSize: CGFloat = 56
+  private static let albumArtworkSize: CGFloat = 220
 
   private let config: DetailHeaderConfiguration
   /// Optional extra action, e.g. an artist radio. Shown left in the action row.
@@ -54,6 +57,19 @@ final class ImmersiveDetailHeaderView: UIView {
   private var offsetObservation: NSKeyValueObservation?
   private var lastLayoutWidth: CGFloat = 0
   private var backdropColors: [UIColor] = []
+
+  /// UI-23: album page on the iPhone. Playlists, genres and artists keep their header.
+  private var isAlbumStyle: Bool {
+    DS.isPhone && config.entityContainer is Album
+  }
+
+  private var maxArtworkSize: CGFloat {
+    isAlbumStyle ? Self.albumArtworkSize : Self.maxArtworkSize
+  }
+
+  private var artworkCornerRadius: CGFloat {
+    isAlbumStyle ? DS.Radius.card : DS.Radius.medium
+  }
 
   // MARK: - Creation
 
@@ -107,17 +123,18 @@ final class ImmersiveDetailHeaderView: UIView {
     addSubview(backdropView)
 
     artworkView.translatesAutoresizingMaskIntoConstraints = false
-    artworkView.layer.cornerRadius = DS.Radius.medium
+    artworkView.layer.cornerRadius = artworkCornerRadius
     let artworkShadowContainer = UIView()
     artworkShadowContainer.translatesAutoresizingMaskIntoConstraints = false
     artworkShadowContainer.layer.shadowColor = UIColor.black.cgColor
-    artworkShadowContainer.layer.shadowOpacity = 0.35
-    artworkShadowContainer.layer.shadowRadius = 18
-    artworkShadowContainer.layer.shadowOffset = CGSize(width: 0, height: 8)
+    // UI-23: mockup shadow 0.55 / 24 pt offset / 48 pt blur (shadowRadius is half the blur)
+    artworkShadowContainer.layer.shadowOpacity = isAlbumStyle ? 0.55 : 0.35
+    artworkShadowContainer.layer.shadowRadius = isAlbumStyle ? 24 : 18
+    artworkShadowContainer.layer.shadowOffset = CGSize(width: 0, height: isAlbumStyle ? 24 : 8)
     artworkShadowContainer.addSubview(artworkView)
     let artworkRow = UIView()
     artworkRow.addSubview(artworkShadowContainer)
-    let sizeConstraint = artworkView.widthAnchor.constraint(equalToConstant: Self.maxArtworkSize)
+    let sizeConstraint = artworkView.widthAnchor.constraint(equalToConstant: maxArtworkSize)
     artworkSizeConstraint = sizeConstraint
     NSLayoutConstraint.activate([
       sizeConstraint,
@@ -176,9 +193,10 @@ final class ImmersiveDetailHeaderView: UIView {
     playButton.accessibilityLabel = String(localized: "Play", table: "Fork")
     playButton.addTarget(self, action: #selector(playPressed), for: .touchUpInside)
     playButton.translatesAutoresizingMaskIntoConstraints = false
+    let playSize = isAlbumStyle ? Self.albumPlayButtonSize : Self.playButtonSize
     NSLayoutConstraint.activate([
-      playButton.widthAnchor.constraint(equalToConstant: Self.playButtonSize),
-      playButton.heightAnchor.constraint(equalToConstant: Self.playButtonSize),
+      playButton.widthAnchor.constraint(equalToConstant: playSize),
+      playButton.heightAnchor.constraint(equalToConstant: playSize),
     ])
 
     let spacer = UIView()
@@ -254,7 +272,7 @@ final class ImmersiveDetailHeaderView: UIView {
       container: container,
       cornerRadius: .small
     )
-    artworkView.layer.cornerRadius = container is Artist ? artworkSize / 2 : DS.Radius.medium
+    artworkView.layer.cornerRadius = container is Artist ? artworkSize / 2 : artworkCornerRadius
 
     titleLabel.text = container.name
     navTitleLabel.text = container.name
@@ -268,7 +286,7 @@ final class ImmersiveDetailHeaderView: UIView {
       subtitleButton.isHidden = true
     }
 
-    let infoText = container.info(
+    let infoText = albumInfoText ?? container.info(
       for: container.account?.apiType.asServerApiType,
       details: DetailInfoType(type: .long, settings: appDelegate.storage.settings)
     )
@@ -301,7 +319,27 @@ final class ImmersiveDetailHeaderView: UIView {
   }
 
   private var artworkSize: CGFloat {
-    artworkSizeConstraint?.constant ?? Self.maxArtworkSize
+    artworkSizeConstraint?.constant ?? maxArtworkSize
+  }
+
+  /// UI-23: "Album · 2000 · 12 Songs · 37 Min" instead of the upstream long info
+  /// ("12 Songs · Cached · Year 2000 · Genre: Rock · 37m"). Missing parts are left out.
+  private var albumInfoText: String? {
+    guard isAlbumStyle, let album = config.entityContainer as? Album else { return nil }
+    var parts = [String(localized: "Album", table: "Fork")]
+    if album.year > 0 {
+      parts.append(String(album.year))
+    }
+    if album.songCount == 1 {
+      parts.append(String(localized: "1 Song", table: "Fork"))
+    } else if album.songCount > 1 {
+      parts.append(String(localized: "\(album.songCount) Songs", table: "Fork"))
+    }
+    let minutes = Int((Double(album.duration) / 60).rounded())
+    if minutes > 0 {
+      parts.append(String(localized: "\(minutes) Min", table: "Fork"))
+    }
+    return parts.joined(separator: " · ")
   }
 
   private func refreshBackdropColors(
@@ -365,7 +403,7 @@ final class ImmersiveDetailHeaderView: UIView {
 
   private func updateArtworkSize() {
     let available = bounds.width - 2 * 64
-    artworkSizeConstraint?.constant = max(160, min(Self.maxArtworkSize, available))
+    artworkSizeConstraint?.constant = max(160, min(maxArtworkSize, available))
     if config.entityContainer is Artist {
       artworkView.layer.cornerRadius = artworkSize / 2
     }

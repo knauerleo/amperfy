@@ -93,6 +93,7 @@ class AlbumDetailVC: SingleSnapshotFetchedResultsTableViewController<SongMO> {
     tableView.rowHeight = PlayableTableCell.rowHeight
     // Catalyst also need an estimate to calculate the correct height before scrolling
     tableView.estimatedRowHeight = PlayableTableCell.rowHeight
+    forkApplyAlbumRowHeight() // Fork: UI-23
     tableView.sectionFooterHeight = 0.0
     tableView.estimatedSectionFooterHeight = 0.0
     tableView.sectionHeaderHeight = 0.0

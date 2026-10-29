@@ -13,11 +13,6 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 
 - [ ] **UI-15c Restliche Upstream-Texte auf Deutsch** - Rest von UI-15b
   - Offen: Alerts in Upstream-VCs (Texte direkt in `UIAlertController`), XIB-Texte (bräuchten `Base.lproj`, XIBs bleiben unangetastet), Texte mit Einsetzungen („Rating: \(rating)“), Titel von Untermenüs („More Queue Options“ ist ein `UIMenu`, dessen Titel nur lesbar ist), `EventLogger`-Themen, Upstream-Texte außerhalb der Engstellen von UI-15b. Neue Texte in `Amperfy/Localizable.xcstrings` eintragen, sie greifen dann über `ForkMenuText.upstream`
-- [ ] **UI-23 Albumseite wie im Mockup** - Abgleich mit „Drift Identität + Listen“, Board „Albumseite“ (2026-10-29, aus dem Code, nicht am Gerät)
-  - Cover 220 pt (heute bis 260 pt, Breite − 128), Radius 14 statt 8 (`DS.Radius.card` statt `medium`), Schatten kräftiger (Mockup 0,55 Deckkraft, 24 pt Versatz, 48 pt Unschärfe; heute 0,35 / 8 / 18)
-  - Play-Knopf 56 statt 52 pt; Trackzeilen auf der Albumseite 56 statt 60 pt
-  - Infozeile als „Album · 2000 · 12 Songs · 37 Min“ (heute `info(.long)` des Upstreams, Inhalt prüfen)
-  - Zurück und „…“ oben als runde, halbdunkle 44-pt-Knöpfe über dem Farbverlauf (iOS 26 zeichnet Glas-Knöpfe, ggf. so lassen)
 - [ ] **UI-24 Alben-Liste wie im Mockup** - Board „Alben-Liste“
   - Großer Titel „Alben“ mit der Anzahl rechts auf derselben Grundlinie, oben rechts Sortieren/Filtern
   - Filter-Chips (34 pt, rund): „Zuletzt hinzugefügt“ (aktiv in Mint), „Favoriten“, „Geladen“
@@ -80,3 +75,4 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [x] ~~**UI-19 Mini-Player als schwebende Karte statt Glas**~~ (2026-10-29) - FORK.md Abschnitt 10, per Screenshot abgenommen; Tab-Bar verkleinert sich auf dem iPhone nicht mehr, die Karte schwebt fest darüber (2026-10-29)
 - [x] ~~**F-20 Albumseite nach Tracknummer sortiert**~~ (2026-10-29) - FORK.md Abschnitt 10, auf dem iPhone noch nicht geprüft
 - [x] ~~**F-6b Crash beim Platzhalter-Tausch**~~ (2026-10-29) - FORK.md Abschnitt 10, Ursache aus dem Crash-Log, Ablauf auf dem iPhone nicht nachgestellt
+- [x] ~~**UI-23 Albumseite wie im Mockup**~~ (2026-10-29) - FORK.md Abschnitt 10, Zurück/„…“ bleiben die Glasknöpfe von iOS 26, auf dem iPhone noch nicht angesehen

@@ -4,6 +4,7 @@
 //
 //  Fork (TASKS F-5): "Similar on YouTube Music" below the songs of an album, from the similar
 //  artists of the album artist (see YouTubeMusicSuggestions). Only online and with YouTube Music on.
+//  Fork (TASKS UI-23): track rows 56 pt on the iPhone.
 //  Fork (TASKS F-19): above it the songs of the album that are only on YouTube Music
 //  (`YouTubeAlbumGapsView`). Both load independently, the footer shows what is there.
 //
@@ -26,6 +27,13 @@ import UIKit
 
 extension AlbumDetailVC {
   private static let footerStackTag = 0x4619
+
+  /// UI-23: track rows 56 pt on the iPhone, other song lists keep 60 pt.
+  func forkApplyAlbumRowHeight() {
+    guard DS.isPhone else { return }
+    tableView.rowHeight = ForkRowMetrics.albumTrackRowHeight
+    tableView.estimatedRowHeight = ForkRowMetrics.albumTrackRowHeight
+  }
 
   func forkLoadYouTubeShelf() {
     let artistName = album.artist?.name ?? album.subtitle ?? ""

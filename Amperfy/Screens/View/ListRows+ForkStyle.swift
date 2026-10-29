@@ -30,6 +30,8 @@ import UIKit
 enum ForkRowMetrics {
   /// Row heights on the iPhone. Spacing separates the rows, not lines.
   static let songRowHeight: CGFloat = 60
+  /// UI-23: album page, track number instead of a cover.
+  static let albumTrackRowHeight: CGFloat = 56
   static let containerRowHeight: CGFloat = 72
   static let songArtworkSize: CGFloat = 48
   static let containerArtworkSize: CGFloat = 56
