@@ -121,7 +121,7 @@ class LibraryNavigatorConfigurator: NSObject {
     self.account = account
     self.offsetData = offsetData
     self.libraryItems = Dictionary(uniqueKeysWithValues: LibraryDisplayType.allCases.map {
-      ($0, LibraryNavigatorItem(title: $0.displayName, library: $0))
+      ($0, LibraryNavigatorItem(title: ForkMenuText.upstream($0.displayName), library: $0))
     })
     self.editor = ReorderableListEditor(items: [], checkedItems: [])
     self.layoutConfig = layoutConfig
@@ -345,7 +345,7 @@ class LibraryNavigatorConfigurator: NSObject {
     contentView: inout UIListContentConfiguration,
     libraryItem: LibraryDisplayType
   ) {
-    contentView.text = libraryItem.displayName
+    contentView.text = ForkMenuText.upstream(libraryItem.displayName) // Fork: UI-15b
     contentView.image = libraryItem.image.withRenderingMode(.alwaysTemplate)
     if libraryItem == .podcasts {
       // special case for podcast icon

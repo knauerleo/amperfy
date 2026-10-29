@@ -19,6 +19,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+import AmperfyKit
 import Foundation
 import SwiftUI
 
@@ -39,11 +40,11 @@ struct SettingsSection<Content: View>: View {
 
   var body: some View {
     if let footer = footer, let header = header {
-      Section(content: content, header: { Text(header) }, footer: { Text(footer) })
+      Section(content: content, header: { Text(ForkMenuText.upstream(header)) }, footer: { Text(ForkMenuText.upstream(footer)) })
     } else if let header = header {
-      Section(content: content, header: { Text(header) })
+      Section(content: content, header: { Text(ForkMenuText.upstream(header)) })
     } else if let footer = footer {
-      Section(content: content, footer: { Text(footer) })
+      Section(content: content, footer: { Text(ForkMenuText.upstream(footer)) })
     } else {
       Section(content: content)
     }

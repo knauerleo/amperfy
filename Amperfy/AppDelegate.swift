@@ -238,7 +238,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     Task {
       await localNotificationManager.notifyDebugAndWait(
         title: "\(ForkBrand.name) Restart",
-        body: "Tap to reopen \(ForkBrand.name)"
+        body: String(localized: "Tap to reopen \(ForkBrand.name)", table: "Fork")
       )
       stopForInit()
       // close Amperfy

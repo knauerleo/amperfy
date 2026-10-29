@@ -19,6 +19,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+import AmperfyKit
 import Foundation
 
 import SwiftUI
@@ -31,7 +32,7 @@ struct SecondaryText: View {
   }
 
   var body: some View {
-    Text(text)
+    Text(ForkMenuText.upstream(text)) // Fork: UI-15b
       .foregroundStyle(Color.secondaryLabel)
       .help(text)
   }

@@ -75,7 +75,7 @@ final class HomeEditorVC: UICollectionViewController {
       [weak self] cell, _, section in
       guard let self else { return }
       var content = cell.defaultContentConfiguration()
-      content.text = section.title
+      content.text = ForkMenuText.upstream(section.title) // Fork: UI-15b
       // taller rows for a larger hit target
       content.directionalLayoutMargins.top = 12
       content.directionalLayoutMargins.bottom = 12

@@ -202,7 +202,7 @@ final class HomeVC: UICollectionViewController {
       else {
         return nil
       }
-      header.title = section.title
+      header.title = ForkMenuText.upstream(section.title) // Fork: UI-15b
       if section == .randomAlbums {
         header.showsRefreshButton = true
         header.setRefreshHandler { [weak self] in self?.refreshRandomAlbumsSection() }

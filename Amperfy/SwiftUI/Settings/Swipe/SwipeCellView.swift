@@ -33,7 +33,7 @@ struct SwipeCellView: View {
   var body: some View {
     HStack {
       Image(uiImage: colorScheme == .light ? swipe.image : swipe.image.invertedImage())
-      Text(swipe.settingsName)
+      Text(ForkMenuText.upstream(swipe.settingsName))
       Spacer()
     }
     .contentShape(Rectangle())

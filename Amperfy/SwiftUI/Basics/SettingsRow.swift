@@ -19,6 +19,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+import AmperfyKit
 import Foundation
 import SwiftUI
 
@@ -51,7 +52,7 @@ struct SettingsRow<Content: View>: View {
     if orientation == .horizontal {
       HStack {
         if let title {
-          Text(title)
+          Text(ForkMenuText.upstream(title)) // Fork: UI-15b
         }
         Spacer()
         detail()
@@ -59,7 +60,7 @@ struct SettingsRow<Content: View>: View {
     } else {
       VStack(alignment: .leading) {
         if let title {
-          Text(title)
+          Text(ForkMenuText.upstream(title)) // Fork: UI-15b
             .padding([.bottom], 2)
         }
         detail()
@@ -125,7 +126,7 @@ struct SettingsButtonRow: View {
 
   var body: some View {
     Button(action: action) {
-      Text(title)
+      Text(ForkMenuText.upstream(title)) // Fork: UI-15b
     }.foregroundColor(actionType.foregroundColor)
   }
 }

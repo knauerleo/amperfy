@@ -75,7 +75,13 @@ public enum ForkMenuText {
   ]
 
   public static func title(_ title: String) -> String {
-    titles[title] ?? title
+    titles[title] ?? upstream(title)
+  }
+
+  /// UI-15b: an upstream literal in the app's language, from the table `Localizable` of the app
+  /// (`Amperfy/Localizable.xcstrings`). Unknown texts stay as they are.
+  public static func upstream(_ text: String) -> String {
+    Bundle.main.localizedString(forKey: text, value: text, table: "Localizable")
   }
 
   /// Renames the actions in place, including those in submenus.

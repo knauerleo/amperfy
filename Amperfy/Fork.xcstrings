@@ -3776,6 +3776,22 @@
           }
         }
       }
+    },
+    "Tap to reopen %@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tippen, um %@ wieder zu öffnen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap to reopen %@"
+          }
+        }
+      }
     }
   },
   "version": "1.0"

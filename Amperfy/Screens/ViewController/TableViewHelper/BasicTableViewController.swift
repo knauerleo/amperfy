@@ -340,7 +340,7 @@ class BasicTableViewController: KeyCommandTableViewController {
     -> UIContextualAction {
     let action = UIContextualAction(
       style: .normal,
-      title: actionType.displayName
+      title: ForkMenuText.upstream(actionType.displayName) // Fork: UI-15b
     ) { action, view, completionHandler in
       Haptics.success
         .vibrate(isHapticsEnabled: self.appDelegate.storage.settings.user.isHapticsEnabled)

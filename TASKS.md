@@ -17,9 +17,8 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [ ] **UI-19 Mini-Player als schwebende Karte** - Rest von UI-18
   - Mockup: Fläche „Erhöht“, Radius 14, Schatten, Fortschritt 2 pt Mint (Fortschritt und Farbe sind erledigt). Der Mini-Player ist das `bottomAccessory` der iOS-26-Tab-Bar, das System zeichnet dort Liquid Glass und Form. Eine eigene Karte hieße, die Accessory-Logik (`TabBarVC`, Inline-Modus UI-14) umzubauen
   - Ebenso offen: Tab-Bar „in Grund mit leichter Transparenz“ – ein eigener Hintergrund würde das Glas ersetzen, darum nur die Farben
-- [ ] **UI-15b Upstream-Texte auf Deutsch** - Rest von UI-15
-  - Fork-Texte stehen in `Amperfy/Fork.xcstrings` (Tabelle `Fork`). Offen: Upstream-Literale (UIKit-Menüs, Alerts, `SwipeActionType`-Namen, SwiftUI-Einstellungen, XIBs), dafür eine `Localizable.xcstrings` bzw. XIB-Strings
-  - Ebenfalls offen: vom Fork nur umbenannte Upstream-Texte (`HomeSection` „Recently Played“/„Recently Added“, Menüeinträge in `EntityPreviewVC`, Swipe-Namen, „Tap to reopen Drift“) und die `EventLogger`-Themen
+- [ ] **UI-15c Restliche Upstream-Texte auf Deutsch** - Rest von UI-15b
+  - Offen: Alerts in Upstream-VCs (Texte direkt in `UIAlertController`), XIB-Texte (bräuchten `Base.lproj`, XIBs bleiben unangetastet), Texte mit Einsetzungen („Rating: \\(rating)“), Titel von Untermenüs („More Queue Options“ ist ein `UIMenu`, dessen Titel nur lesbar ist), `EventLogger`-Themen, Upstream-Texte außerhalb der Engstellen von UI-15b. Neue Texte in `Amperfy/Localizable.xcstrings` eintragen, sie greifen dann über `ForkMenuText.upstream`
 
 ### Features
 
@@ -71,3 +70,4 @@ Regeln aus `DESIGN-AUDIT.md` §7 gelten weiter: neue Dateien statt Umbauten, XIB
 - [x] ~~**UI-21 Player luftiger**~~ (2026-10-29) - FORK.md Abschnitt 10, Abnahme per Screenshot offen
 - [x] ~~**UI-22 Album auf Home öffnet das Album**~~ (2026-10-29) - FORK.md Abschnitt 10
 - [x] ~~**F-19 Fehlende Album-Songs von YouTube**~~ (2026-10-29) - FORK.md Abschnitt 10, auf dem iPhone noch nicht geprüft
+- [x] ~~**UI-15b Upstream-Texte auf Deutsch**~~ (2026-10-29) - FORK.md Abschnitt 10, Rest in UI-15c

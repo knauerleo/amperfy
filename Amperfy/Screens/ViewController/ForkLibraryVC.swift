@@ -325,7 +325,7 @@ final class ForkLibraryVC: UICollectionViewController {
         cell.display(container: entry.container)
       case let .category(type):
         cell.display(
-          title: type.displayName,
+          title: ForkMenuText.upstream(type.displayName),
           generatedArtwork: GradientArtworkView(
             colors: [UIColor.systemGray2, UIColor.systemGray4],
             symbol: type.image
